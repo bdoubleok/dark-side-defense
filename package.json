@@ -1,0 +1,26 @@
+{
+  "name": "dark-side-defense",
+  "version": "1.0.0",
+  "description": "Interactive playbook for Seattle Seahawks' Super Bowl LX championship defense, adapted for CFB 26",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python3 -m http.server 3000",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "football",
+    "defense",
+    "playbook",
+    "seahawks",
+    "cfb26",
+    "ncaa",
+    "mike-macdonald",
+    "dark-side"
+  ],
+  "author": "Dark Side Defense",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/dark-side-defense.git"
+  }
+}
