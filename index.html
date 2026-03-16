@@ -8,6 +8,12 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
+        html {
+            height: 100%;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+        }
+        
         :root {
             --dark-navy: #0a0e27;
             --electric-blue: #00d4ff;
@@ -26,7 +32,9 @@
             color: var(--text-primary);
             min-height: 100vh;
             overflow-x: hidden;
+            overflow-y: auto;
             position: relative;
+            -webkit-overflow-scrolling: touch;
         }
 
         body::before {
@@ -400,17 +408,63 @@
         }
 
         @media (max-width: 768px) {
+            body {
+                min-height: 100vh;
+                height: auto;
+            }
+            
+            .container {
+                padding: 1rem;
+                min-height: 100vh;
+            }
+            
             h1 { font-size: 2.5rem; }
-            .situation-selector { grid-template-columns: repeat(2, 1fr); }
-            .plays-grid { grid-template-columns: 1fr; }
+            .situation-selector { 
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+            .plays-grid { 
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
             .play-name { font-size: 1.1rem; }
             .frequency { font-size: 1.4rem; }
+            
+            .situation-btn {
+                min-height: 80px;
+            }
+            
+            .play-card {
+                margin-bottom: 1rem;
+            }
         }
 
         @media (max-width: 480px) {
-            .container { padding: 1rem; }
-            h1 { font-size: 2rem; }
-            .situation-selector { grid-template-columns: 1fr; }
+            .container { 
+                padding: 0.75rem;
+                min-height: 100vh;
+            }
+            h1 { 
+                font-size: 1.8rem;
+                line-height: 1.2;
+            }
+            .situation-selector { 
+                grid-template-columns: 1fr;
+                gap: 0.6rem;
+            }
+            
+            .situation-btn {
+                padding: 0.8rem;
+                min-height: 70px;
+            }
+            
+            .play-card {
+                padding: 1rem;
+            }
+            
+            .philosophy-panel {
+                padding: 1rem;
+            }
         }
 
         /* Pressure Toggle */
