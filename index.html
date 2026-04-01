@@ -2195,6 +2195,17 @@ const personnelData = {
         let pressureLog = JSON.parse(localStorage.getItem('pressureLog') || '[]');
         let totalPlays = parseInt(localStorage.getItem('totalPlays') || '0');
 
+        function escapeHTML(value) {
+            const htmlEscapes = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            };
+            return String(value).replace(/[&<>"']/g, char => htmlEscapes[char]);
+        }
+
         // Get unique formations from current situation
         function getAvailableFormations() {
             const situation = gamePlanData[currentSituation];
@@ -3375,17 +3386,23 @@ const personnelData = {
             if (pressureLog.length === 0) {
                 logList.innerHTML = '<div style="color: var(--text-secondary); text-align: center; padding: 1rem;">No pressures logged yet</div>';
             } else {
-                logList.innerHTML = pressureLog.map((p, index) => `
-                    <div class="log-entry">
-                        <span class="success-indicator ${p.success}"></span>
-                        Q${p.quarter}, ${p.time} - ${p.name}
-                        <div style="float: right;">
-                            <span class="success-btn success" onclick="updatePressureSuccess(${index}, 'success')" title="Success">✓</span>
-                            <span class="success-btn neutral" onclick="updatePressureSuccess(${index}, 'neutral')" title="Neutral">-</span>
-                            <span class="success-btn failure" onclick="updatePressureSuccess(${index}, 'failure')" title="Failure">✗</span>
+                logList.innerHTML = pressureLog.map((p, index) => {
+                    const safeName = escapeHTML(p.name ?? '');
+                    const safeTime = escapeHTML(p.time ?? '');
+                    const safeQuarter = escapeHTML(p.quarter ?? '?');
+                    const safeSuccess = ['success', 'neutral', 'failure'].includes(p.success) ? p.success : 'neutral';
+                    return `
+                        <div class="log-entry">
+                            <span class="success-indicator ${safeSuccess}"></span>
+                            Q${safeQuarter}, ${safeTime} - ${safeName}
+                            <div style="float: right;">
+                                <span class="success-btn success" onclick="updatePressureSuccess(${index}, 'success')" title="Success">✓</span>
+                                <span class="success-btn neutral" onclick="updatePressureSuccess(${index}, 'neutral')" title="Neutral">-</span>
+                                <span class="success-btn failure" onclick="updatePressureSuccess(${index}, 'failure')" title="Failure">✗</span>
+                            </div>
                         </div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             }
             
             pressureCount.textContent = pressureLog.length;
