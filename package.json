@@ -5,6 +5,7 @@
   "main": "index.html",
   "scripts": {
     "dev": "python3 -m http.server 3000",
+    "test": "node tests/decision_controls.test.js",
     "deploy": "vercel --prod"
   },
   "keywords": [
