@@ -3159,24 +3159,24 @@ const personnelData = {
                     <div class="check-item">
                         <div class="check-label">QB Quality</div>
                         <div class="quick-selector">
-                            <div class="quick-btn" onclick="setQBQuality('elite')">Elite</div>
-                            <div class="quick-btn" onclick="setQBQuality('average')">Average</div>
-                            <div class="quick-btn" onclick="setQBQuality('backup')">Backup</div>
+                            <div class="quick-btn" onclick="setQBQuality('elite', this)">Elite</div>
+                            <div class="quick-btn" onclick="setQBQuality('average', this)">Average</div>
+                            <div class="quick-btn" onclick="setQBQuality('backup', this)">Backup</div>
                         </div>
                     </div>
                     <div class="check-item">
                         <div class="check-label">Last 3 Plays</div>
                         <div class="quick-selector">
-                            <div class="quick-btn" onclick="setLastPlays('zones')">3+ Zones</div>
-                            <div class="quick-btn" onclick="setLastPlays('mixed')">Mixed</div>
-                            <div class="quick-btn" onclick="setLastPlays('blitz')">Blitzed</div>
+                            <div class="quick-btn" onclick="setLastPlays('zones', this)">3+ Zones</div>
+                            <div class="quick-btn" onclick="setLastPlays('mixed', this)">Mixed</div>
+                            <div class="quick-btn" onclick="setLastPlays('blitz', this)">Blitzed</div>
                         </div>
                     </div>
                     <div class="check-item">
                         <div class="check-label">4-Man Rush Working?</div>
                         <div class="quick-selector">
-                            <div class="quick-btn" onclick="setRushWorking('yes')">Yes</div>
-                            <div class="quick-btn" onclick="setRushWorking('no')">No</div>
+                            <div class="quick-btn" onclick="setRushWorking('yes', this)">Yes</div>
+                            <div class="quick-btn" onclick="setRushWorking('no', this)">No</div>
                         </div>
                     </div>
                 `;
@@ -3198,30 +3198,30 @@ const personnelData = {
             }
         }
 
-        function setQBQuality(quality) {
+        function setQBQuality(quality, target) {
             decisionState.qbQuality = quality;
             document.querySelectorAll('#decisionChecks .quick-selector .quick-btn').forEach(btn => {
                 btn.classList.remove('selected');
             });
-            event.target.classList.add('selected');
+            target.classList.add('selected');
             updateDecisionResult();
         }
 
-        function setLastPlays(type) {
+        function setLastPlays(type, target) {
             decisionState.lastPlays = type;
-            event.target.parentElement.querySelectorAll('.quick-btn').forEach(btn => {
+            target.parentElement.querySelectorAll('.quick-btn').forEach(btn => {
                 btn.classList.remove('selected');
             });
-            event.target.classList.add('selected');
+            target.classList.add('selected');
             updateDecisionResult();
         }
 
-        function setRushWorking(status) {
+        function setRushWorking(status, target) {
             decisionState.rushWorking = status;
-            event.target.parentElement.querySelectorAll('.quick-btn').forEach(btn => {
+            target.parentElement.querySelectorAll('.quick-btn').forEach(btn => {
                 btn.classList.remove('selected');
             });
-            event.target.classList.add('selected');
+            target.classList.add('selected');
             updateDecisionResult();
         }
 
