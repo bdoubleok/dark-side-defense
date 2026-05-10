@@ -2192,8 +2192,62 @@ const personnelData = {
             strength: 'none'
         };
         let selectedFormation = 'all'; // New: tracks formation filter
-        let pressureLog = JSON.parse(localStorage.getItem('pressureLog') || '[]');
-        let totalPlays = parseInt(localStorage.getItem('totalPlays') || '0');
+        const VALID_PRESSURE_RESULTS = new Set(['success', 'neutral', 'failure']);
+
+        function normalizePressureSuccess(successType) {
+            return VALID_PRESSURE_RESULTS.has(successType) ? successType : 'neutral';
+        }
+
+        function normalizePressureLogEntry(entry) {
+            if (!entry || typeof entry !== 'object') return null;
+
+            const quarter = Number.parseInt(entry.quarter, 10);
+
+            return {
+                name: typeof entry.name === 'string' ? entry.name : String(entry.name ?? ''),
+                quarter: Number.isFinite(quarter) ? quarter : '',
+                time: typeof entry.time === 'string' ? entry.time : String(entry.time ?? ''),
+                situation: typeof entry.situation === 'string' ? entry.situation : currentSituation,
+                success: normalizePressureSuccess(entry.success)
+            };
+        }
+
+        function loadPressureLog() {
+            try {
+                const storedLog = localStorage.getItem('pressureLog');
+                if (!storedLog) return [];
+
+                const parsedLog = JSON.parse(storedLog);
+                if (!Array.isArray(parsedLog)) return [];
+
+                return parsedLog.map(normalizePressureLogEntry).filter(Boolean);
+            } catch (error) {
+                console.warn('Unable to load pressure log from localStorage:', error);
+                return [];
+            }
+        }
+
+        function loadTotalPlays(fallbackTotal) {
+            try {
+                const storedTotal = Number.parseInt(localStorage.getItem('totalPlays'), 10);
+                return Number.isFinite(storedTotal) && storedTotal >= fallbackTotal ? storedTotal : fallbackTotal;
+            } catch (error) {
+                console.warn('Unable to load total plays from localStorage:', error);
+                return fallbackTotal;
+            }
+        }
+
+        function savePressureTrackerState() {
+            try {
+                localStorage.setItem('pressureLog', JSON.stringify(pressureLog));
+                localStorage.setItem('totalPlays', totalPlays.toString());
+            } catch (error) {
+                console.warn('Unable to save pressure tracker state to localStorage:', error);
+            }
+        }
+
+        let pressureLog = loadPressureLog();
+        let totalPlays = loadTotalPlays(pressureLog.length);
 
         // Get unique formations from current situation
         function getAvailableFormations() {
@@ -2869,8 +2923,7 @@ const personnelData = {
             
             pressureLog = [];
             totalPlays = 0;
-            localStorage.setItem('pressureLog', JSON.stringify(pressureLog));
-            localStorage.setItem('totalPlays', '0');
+            savePressureTrackerState();
             updatePressureTracker();
         }
 
@@ -3343,26 +3396,38 @@ const personnelData = {
         }
 
         function logPressure(name, quarter, time, successType = 'neutral') {
+            const quarterNumber = Number.parseInt(quarter, 10);
+
             pressureLog.push({
-                name: name,
-                quarter: quarter,
-                time: time,
+                name: typeof name === 'string' ? name : String(name ?? ''),
+                quarter: Number.isFinite(quarterNumber) ? quarterNumber : '',
+                time: typeof time === 'string' ? time : String(time ?? ''),
                 situation: currentSituation,
-                success: successType
+                success: normalizePressureSuccess(successType)
             });
             
             totalPlays++;
             
-            localStorage.setItem('pressureLog', JSON.stringify(pressureLog));
-            localStorage.setItem('totalPlays', totalPlays.toString());
+            savePressureTrackerState();
             
             updatePressureTracker();
         }
 
         function updatePressureSuccess(index, successType) {
-            pressureLog[index].success = successType;
-            localStorage.setItem('pressureLog', JSON.stringify(pressureLog));
+            if (!pressureLog[index]) return;
+
+            pressureLog[index].success = normalizePressureSuccess(successType);
+            savePressureTrackerState();
             updatePressureTracker();
+        }
+
+        function createPressureSuccessButton(index, successType, label, title) {
+            const button = document.createElement('span');
+            button.className = `success-btn ${successType}`;
+            button.title = title;
+            button.textContent = label;
+            button.onclick = () => updatePressureSuccess(index, successType);
+            return button;
         }
 
         function updatePressureTracker() {
@@ -3372,20 +3437,36 @@ const personnelData = {
             const successRate = document.getElementById('successRate');
             const totalPlaysCount = document.getElementById('totalPlaysCount');
             
+            logList.textContent = '';
+
             if (pressureLog.length === 0) {
-                logList.innerHTML = '<div style="color: var(--text-secondary); text-align: center; padding: 1rem;">No pressures logged yet</div>';
+                const emptyState = document.createElement('div');
+                emptyState.style.color = 'var(--text-secondary)';
+                emptyState.style.textAlign = 'center';
+                emptyState.style.padding = '1rem';
+                emptyState.textContent = 'No pressures logged yet';
+                logList.appendChild(emptyState);
             } else {
-                logList.innerHTML = pressureLog.map((p, index) => `
-                    <div class="log-entry">
-                        <span class="success-indicator ${p.success}"></span>
-                        Q${p.quarter}, ${p.time} - ${p.name}
-                        <div style="float: right;">
-                            <span class="success-btn success" onclick="updatePressureSuccess(${index}, 'success')" title="Success">✓</span>
-                            <span class="success-btn neutral" onclick="updatePressureSuccess(${index}, 'neutral')" title="Neutral">-</span>
-                            <span class="success-btn failure" onclick="updatePressureSuccess(${index}, 'failure')" title="Failure">✗</span>
-                        </div>
-                    </div>
-                `).join('');
+                pressureLog.forEach((p, index) => {
+                    const entry = document.createElement('div');
+                    entry.className = 'log-entry';
+
+                    const indicator = document.createElement('span');
+                    indicator.classList.add('success-indicator', normalizePressureSuccess(p.success));
+
+                    const label = document.createTextNode(` Q${p.quarter}, ${p.time} - ${p.name}`);
+
+                    const controls = document.createElement('div');
+                    controls.style.float = 'right';
+                    controls.appendChild(createPressureSuccessButton(index, 'success', '✓', 'Success'));
+                    controls.appendChild(createPressureSuccessButton(index, 'neutral', '-', 'Neutral'));
+                    controls.appendChild(createPressureSuccessButton(index, 'failure', '✗', 'Failure'));
+
+                    entry.appendChild(indicator);
+                    entry.appendChild(label);
+                    entry.appendChild(controls);
+                    logList.appendChild(entry);
+                });
             }
             
             pressureCount.textContent = pressureLog.length;
