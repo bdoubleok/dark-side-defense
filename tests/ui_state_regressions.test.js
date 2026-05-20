@@ -205,7 +205,7 @@ function testPassingDownsDoNotReusePriorAnswers() {
   context.setRushWorking('no');
   assert(elements.get('decisionResult').innerHTML.includes('PRESSURE NOW'));
 
-  clickSituation(elements, 'Obvious Passing');
+  clickSituation(elements, 'Obvious');
   context.switchView('pressures');
 
   assert(elements.get('decisionResult').innerHTML.includes('COMPLETE ALL CHECKS ABOVE'));
