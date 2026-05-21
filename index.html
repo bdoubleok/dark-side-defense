@@ -1159,8 +1159,9 @@
         <div class="pressure-tracker" id="pressureTracker" style="display: none;">
             <div class="tracker-header">
                 <div class="tracker-title">📊 Pressure Log</div>
-                <div style="display: flex; gap: 0.5rem;">
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: flex-end;">
                     <div class="log-btn" onclick="showLogDialog()">+ Log Pressure</div>
+                    <div class="log-btn" onclick="logDefensivePlay()">+ Non-Pressure Play</div>
                     <div class="log-btn" style="background: rgba(255, 0, 85, 0.15); border-color: rgba(255, 0, 85, 0.5);" onclick="clearPressureLog()">Clear Log</div>
                 </div>
             </div>
@@ -2874,6 +2875,20 @@ const personnelData = {
             updatePressureTracker();
         }
 
+        function normalizeTotalPlays() {
+            if (totalPlays < pressureLog.length) {
+                totalPlays = pressureLog.length;
+                localStorage.setItem('totalPlays', totalPlays.toString());
+            }
+        }
+
+        function logDefensivePlay() {
+            normalizeTotalPlays();
+            totalPlays++;
+            localStorage.setItem('totalPlays', totalPlays.toString());
+            updatePressureTracker();
+        }
+
         // Pressure data for each situation
         const pressureData = {
             standardDowns: {
@@ -3343,6 +3358,7 @@ const personnelData = {
         }
 
         function logPressure(name, quarter, time, successType = 'neutral') {
+            normalizeTotalPlays();
             pressureLog.push({
                 name: name,
                 quarter: quarter,
@@ -3371,6 +3387,7 @@ const personnelData = {
             const pressureRate = document.getElementById('pressureRate');
             const successRate = document.getElementById('successRate');
             const totalPlaysCount = document.getElementById('totalPlaysCount');
+            normalizeTotalPlays();
             
             if (pressureLog.length === 0) {
                 logList.innerHTML = '<div style="color: var(--text-secondary); text-align: center; padding: 1rem;">No pressures logged yet</div>';
