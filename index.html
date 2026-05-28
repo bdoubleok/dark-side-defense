@@ -1056,7 +1056,10 @@
         </div>
 
         <div class="nav-container">
-            <div class="section-title">Select Situation</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;">
+                <div class="section-title" style="margin-bottom:0">Select Situation</div>
+                <button onclick="openGlobalSearch()" style="padding:.4rem .85rem;background:rgba(0,212,255,0.1);border:2px solid rgba(0,212,255,0.35);border-radius:8px;color:#00d4ff;font-family:'Rajdhani',sans-serif;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(0,212,255,0.2)'" onmouseout="this.style.background='rgba(0,212,255,0.1)'">⌕ Search All</button>
+            </div>
             <div class="situation-selector" id="situationSelector"></div>
         </div>
 
@@ -1188,6 +1191,18 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Global Cross-Situation Search Modal -->
+    <div id="globalSearchModal" class="global-search-modal" style="display:none" onclick="if(event.target===this)closeGlobalSearch()">
+      <div class="global-search-inner">
+        <div class="global-search-header">
+          <input type="search" id="globalSearchInput" placeholder="Search all situations — coverage, formation, tag…" autocomplete="off">
+          <button class="global-search-close" onclick="closeGlobalSearch()">✕ Close</button>
+        </div>
+        <div class="global-search-meta" id="globalSearchMeta">Type to search across all 11 situations and plays.</div>
+        <div class="global-search-results" id="globalSearchResults"></div>
+      </div>
     </div>
 
     <script>
@@ -3664,6 +3679,69 @@ const personnelData = {
         }
         */
 
+        // ── Global cross-situation search ──────────────────────────
+        function selectSituation(key) {
+            currentSituation = key;
+            currentView = 'coverages';
+            selectedFormation = 'all';
+            document.getElementById('coveragesToggle').classList.add('active');
+            document.getElementById('pressuresToggle').classList.remove('active');
+            renderSituationSelector();
+            renderPlays();
+            renderStats();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openGlobalSearch() {
+            var modal = document.getElementById('globalSearchModal');
+            modal.style.display = 'flex';
+            setTimeout(function() { document.getElementById('globalSearchInput').focus(); }, 50);
+            document.getElementById('globalSearchResults').innerHTML = '';
+            document.getElementById('globalSearchMeta').textContent = 'Type to search across all 11 situations and plays.';
+            document.getElementById('globalSearchInput').value = '';
+        }
+
+        function closeGlobalSearch() {
+            document.getElementById('globalSearchModal').style.display = 'none';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeGlobalSearch();
+        });
+
+        document.getElementById('globalSearchInput').addEventListener('input', function() {
+            var q = this.value.trim().toLowerCase();
+            var results = document.getElementById('globalSearchResults');
+            var meta = document.getElementById('globalSearchMeta');
+            if (q.length < 2) {
+                results.innerHTML = '';
+                meta.textContent = 'Type to search across all 11 situations and plays.';
+                return;
+            }
+            var total = 0;
+            var html = '';
+            Object.keys(gamePlanData).forEach(function(key) {
+                var sit = gamePlanData[key];
+                var matches = sit.plays.filter(function(p) {
+                    return (p.name + ' ' + p.coverage + ' ' + p.description + ' ' + (p.tags || []).join(' ') + ' ' + p.formation).toLowerCase().indexOf(q) !== -1;
+                });
+                if (matches.length === 0) return;
+                total += matches.length;
+                html += '<div class="gs-situation-group">';
+                html += '<div class="gs-situation-label">' + sit.label + ' — ' + sit.subtitle + '</div>';
+                matches.forEach(function(p) {
+                    html += '<div class="gs-result-item" onclick="closeGlobalSearch();selectSituation(\'' + key + '\')">';
+                    html += '<div class="gs-result-name">' + p.name + '</div>';
+                    html += '<div class="gs-result-freq">' + p.frequency + '</div>';
+                    html += '<div class="gs-result-coverage">' + p.formation + ' · ' + p.coverage + '</div>';
+                    html += '</div>';
+                });
+                html += '</div>';
+            });
+            results.innerHTML = html || '<div class="gs-no-results">No plays match "' + q + '"</div>';
+            meta.textContent = total > 0 ? total + ' result' + (total !== 1 ? 's' : '') + ' across all situations' : '';
+        });
+
         init();
     </script>
 
@@ -3672,279 +3750,483 @@ const personnelData = {
      Content from dark-side-defense-playbook.html not in the above
      ============================================================ -->
 <style>
+/* ============================================================
+   CFB '26 / MADDEN '26 REFERENCE — Cyberpunk Theme
+   ============================================================ */
 #playbook-reference {
-  --bg: #0d1117;
-  --bg2: #161b22;
-  --bg3: #21262d;
-  --border: #30363d;
-  --text: #e6edf3;
-  --muted: #8b949e;
-  --accent: #58a6ff;
-  --pound: #388bfd;
-  --stuff: #a371f7;
-  --lock: #f85149;
-  --danger: #f0883e;
-  --pressure: #d29922;
-  --rz: #da3633;
-  --pack: #3fb950;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  background: var(--bg);
+  --pound: #00d4ff;
+  --stuff: #b10fff;
+  --lock: #00ff88;
+  --danger: #ff8800;
+  --pressure: #ff0055;
+  --rz: #ff3355;
+  --pack: #ffcc00;
+  --bg2: rgba(42,47,74,0.4);
+  --bg3: rgba(42,47,74,0.6);
+  --border: rgba(139,147,176,0.2);
+  --text: #e8edf5;
+  --muted: #8b93b0;
+  --accent: #00d4ff;
+  font-family: 'Rajdhani', sans-serif;
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0a0e27 100%);
   color: var(--text);
   line-height: 1.55;
   font-size: 15px;
-  margin-top: 3rem;
+  margin-top: 0;
 }
 #playbook-reference a { color: var(--accent); text-decoration: none; }
 #playbook-reference a:hover { text-decoration: underline; }
 #playbook-reference .pb-divider {
   text-align: center;
-  padding: 2rem 1.5rem 1rem;
-  border-top: 2px solid rgba(0, 212, 255, 0.3);
-  background: linear-gradient(135deg, rgba(0,212,255,.06), rgba(88,166,255,.06));
+  padding: 3rem 1.5rem 2rem;
+  border-top: 2px solid rgba(0,212,255,0.5);
+  background: linear-gradient(135deg, rgba(0,212,255,.08), rgba(177,15,255,.08));
 }
 #playbook-reference .pb-divider h2 {
-  font-size: 1.2rem;
+  font-size: 2.5rem;
   font-weight: 700;
-  color: var(--accent);
+  background: linear-gradient(135deg, #00d4ff, #b10fff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   text-transform: uppercase;
   letter-spacing: 3px;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
 }
-#playbook-reference .pb-divider p { color: var(--muted); font-size: .82rem; margin-bottom: 0; }
+#playbook-reference .pb-divider p {
+  color: var(--muted);
+  font-size: .78rem;
+  font-family: 'Space Mono', monospace;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 0;
+}
 #playbook-reference .topnav {
-  background: rgba(13,17,23,.96);
-  border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(8px);
+  background: rgba(10,14,39,0.95);
+  border-bottom: 2px solid rgba(42,47,74,0.8);
+  backdrop-filter: blur(10px);
 }
 #playbook-reference .topnav-inner {
   display: flex;
   align-items: center;
-  gap: .5rem;
-  padding: .5rem .75rem;
+  gap: .4rem;
+  padding: .75rem;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
 }
 #playbook-reference .topnav a {
   white-space: nowrap;
-  font-size: .72rem;
-  font-weight: 600;
+  font-size: .7rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: .03em;
+  letter-spacing: .05em;
   color: var(--muted);
-  padding: .35rem .55rem;
+  padding: .4rem .65rem;
   border-radius: 6px;
+  border: 1px solid transparent;
   text-decoration: none;
+  transition: all 0.2s ease;
 }
 #playbook-reference .topnav a:hover,
-#playbook-reference .topnav a:focus { color: var(--text); background: var(--bg3); }
-#playbook-reference .wrap { max-width: 920px; margin: 0 auto; padding: 1rem 1rem 3rem; }
-#playbook-reference .search-bar { padding: .6rem 0; background: var(--bg); }
+#playbook-reference .topnav a:focus {
+  color: var(--accent);
+  background: rgba(0,212,255,0.1);
+  border-color: rgba(0,212,255,0.3);
+}
+#playbook-reference .wrap { max-width: 1200px; margin: 0 auto; padding: 1.5rem 1.5rem 4rem; }
+#playbook-reference .search-bar { padding: .75rem 0; }
 #playbook-reference .search-bar input {
   width: 100%;
-  padding: .6rem .85rem;
-  border: 1px solid var(--border);
+  padding: .75rem 1rem;
+  border: 2px solid var(--border);
   border-radius: 8px;
   background: var(--bg2);
   color: var(--text);
-  font-size: .95rem;
-  font-family: inherit;
+  font-size: 1rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  backdrop-filter: blur(5px);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+#playbook-reference .search-bar input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 15px rgba(0,212,255,0.2);
 }
 #playbook-reference .search-bar input::placeholder { color: var(--muted); }
-#playbook-reference .filter-chips { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .5rem; }
+#playbook-reference .filter-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .6rem; }
 #playbook-reference .chip {
-  font-size: .7rem;
+  font-size: .72rem;
   font-weight: 700;
-  padding: .25rem .5rem;
-  border-radius: 999px;
-  border: 1px solid var(--border);
+  padding: .35rem .75rem;
+  border-radius: 8px;
+  border: 2px solid var(--border);
   background: var(--bg2);
   color: var(--muted);
   cursor: pointer;
   user-select: none;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  transition: all 0.3s ease;
 }
-#playbook-reference .chip.active { color: #fff; border-color: transparent; }
-#playbook-reference .chip[data-f="all"].active { background: var(--bg3); color: var(--text); }
-#playbook-reference .chip[data-f="pound"].active { background: var(--pound); }
-#playbook-reference .chip[data-f="stuff"].active { background: var(--stuff); }
-#playbook-reference .chip[data-f="lock"].active { background: var(--lock); }
-#playbook-reference .chip[data-f="danger"].active { background: var(--danger); }
-#playbook-reference .chip[data-f="pressure"].active { background: var(--pressure); color: #0d1117; }
-#playbook-reference .chip[data-f="rz"].active { background: var(--rz); }
-#playbook-reference .chip[data-f="pack"].active { background: var(--pack); color: #0d1117; }
-#playbook-reference section { margin-bottom: 1rem; }
+#playbook-reference .chip:hover { border-color: rgba(139,147,176,0.4); color: var(--text); }
+#playbook-reference .chip.active { color: #fff; }
+#playbook-reference .chip[data-f="all"].active { background: var(--bg3); border-color: rgba(139,147,176,0.4); color: var(--text); }
+#playbook-reference .chip[data-f="pound"].active  { background: rgba(0,212,255,.15); border-color: var(--pound); color: var(--pound); box-shadow: 0 0 12px rgba(0,212,255,.3); }
+#playbook-reference .chip[data-f="stuff"].active  { background: rgba(177,15,255,.15); border-color: var(--stuff); color: var(--stuff); box-shadow: 0 0 12px rgba(177,15,255,.3); }
+#playbook-reference .chip[data-f="lock"].active   { background: rgba(0,255,136,.15); border-color: var(--lock); color: var(--lock); box-shadow: 0 0 12px rgba(0,255,136,.3); }
+#playbook-reference .chip[data-f="danger"].active { background: rgba(255,136,0,.15); border-color: var(--danger); color: var(--danger); box-shadow: 0 0 12px rgba(255,136,0,.3); }
+#playbook-reference .chip[data-f="pressure"].active { background: rgba(255,0,85,.15); border-color: var(--pressure); color: var(--pressure); box-shadow: 0 0 12px rgba(255,0,85,.3); }
+#playbook-reference .chip[data-f="rz"].active     { background: rgba(255,51,85,.15); border-color: var(--rz); color: var(--rz); box-shadow: 0 0 12px rgba(255,51,85,.3); }
+#playbook-reference .chip[data-f="pack"].active   { background: rgba(255,204,0,.15); border-color: var(--pack); color: var(--pack); box-shadow: 0 0 12px rgba(255,204,0,.3); }
+#playbook-reference section { margin-bottom: 1.2rem; }
 #playbook-reference .section-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: .5rem;
   width: 100%;
-  padding: .75rem 1rem;
+  padding: 1rem 1.25rem;
   background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  color: var(--text);
-  font-size: 1rem;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  color: var(--accent);
+  font-size: 1.1rem;
   font-weight: 700;
   cursor: pointer;
   text-align: left;
-  font-family: inherit;
+  font-family: 'Rajdhani', sans-serif;
   appearance: none;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
 }
-#playbook-reference .section-head:hover { background: var(--bg3); }
+#playbook-reference .section-head:hover {
+  background: var(--bg3);
+  border-color: var(--accent);
+  box-shadow: 0 0 20px rgba(0,212,255,0.15);
+}
 #playbook-reference .section-head .chev {
   flex-shrink: 0;
   transition: transform .2s;
-  color: var(--muted);
+  color: var(--accent);
   font-size: .75rem;
+  opacity: 0.7;
 }
 #playbook-reference section.collapsed .section-body { display: none; }
 #playbook-reference section.collapsed .chev { transform: rotate(-90deg); }
 #playbook-reference .section-body {
-  padding: .85rem 0 0;
-  border-left: 2px solid var(--border);
-  margin-left: .5rem;
-  padding-left: .85rem;
+  padding: 1rem 0 0;
+  border-left: 2px solid rgba(0,212,255,0.2);
+  margin-left: .75rem;
+  padding-left: 1rem;
 }
-#playbook-reference h3 { font-size: .95rem; margin: 1rem 0 .5rem; color: var(--accent); }
-#playbook-reference h4 { font-size: .88rem; margin: .75rem 0 .4rem; color: var(--text); font-family: inherit; }
+#playbook-reference h3 { font-size: 1rem; margin: 1rem 0 .5rem; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+#playbook-reference h4 { font-size: .95rem; margin: .75rem 0 .4rem; color: var(--text); font-family: 'Rajdhani', sans-serif; font-weight: 700; }
 #playbook-reference p, #playbook-reference ul { margin-bottom: .65rem; color: var(--text); }
-#playbook-reference ul { padding-left: 1.2rem; }
-#playbook-reference li { margin-bottom: .25rem; }
+#playbook-reference ul { padding-left: 1.4rem; }
+#playbook-reference li { margin-bottom: .3rem; }
 #playbook-reference .tag {
   display: inline-block;
   font-size: .65rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: .04em;
-  padding: .12rem .4rem;
+  letter-spacing: .06em;
+  padding: .15rem .45rem;
   border-radius: 4px;
+  border: 1px solid transparent;
   margin-right: .25rem;
   vertical-align: middle;
 }
-#playbook-reference .tag-pound { background: rgba(56,139,253,.25); color: #79c0ff; }
-#playbook-reference .tag-stuff { background: rgba(163,113,247,.25); color: #d2a8ff; }
-#playbook-reference .tag-lock { background: rgba(248,81,73,.25); color: #ffa198; }
-#playbook-reference .tag-danger { background: rgba(240,136,62,.25); color: #ffc896; }
-#playbook-reference .tag-pressure { background: rgba(210,153,34,.25); color: #f0c14d; }
-#playbook-reference .tag-rz { background: rgba(218,54,51,.25); color: #ff7b72; }
-#playbook-reference .tag-pack { background: rgba(63,185,80,.25); color: #56d364; }
+#playbook-reference .tag-pound    { background: rgba(0,212,255,.15); color: #00d4ff; border-color: rgba(0,212,255,.35); }
+#playbook-reference .tag-stuff    { background: rgba(177,15,255,.15); color: #d090ff; border-color: rgba(177,15,255,.35); }
+#playbook-reference .tag-lock     { background: rgba(0,255,136,.15); color: #00ff88; border-color: rgba(0,255,136,.35); }
+#playbook-reference .tag-danger   { background: rgba(255,136,0,.15); color: #ff9933; border-color: rgba(255,136,0,.35); }
+#playbook-reference .tag-pressure { background: rgba(255,0,85,.15); color: #ff3377; border-color: rgba(255,0,85,.35); }
+#playbook-reference .tag-rz       { background: rgba(255,51,85,.15); color: #ff5577; border-color: rgba(255,51,85,.35); }
+#playbook-reference .tag-pack     { background: rgba(255,204,0,.15); color: #ffcc00; border-color: rgba(255,204,0,.35); }
 #playbook-reference .badge {
   font-size: .62rem;
   font-weight: 700;
-  padding: .1rem .35rem;
+  padding: .12rem .4rem;
   border-radius: 4px;
   border: 1px solid var(--border);
   color: var(--muted);
+  font-family: 'Space Mono', monospace;
 }
-#playbook-reference .badge-cfb { border-color: #388bfd; color: #79c0ff; }
-#playbook-reference .badge-madden { border-color: #a371f7; color: #d2a8ff; }
-#playbook-reference .card-grid { display: grid; gap: .75rem; grid-template-columns: 1fr; }
+#playbook-reference .badge-cfb    { border-color: rgba(0,212,255,.5); color: #00d4ff; }
+#playbook-reference .badge-madden { border-color: rgba(177,15,255,.5); color: #d090ff; }
+#playbook-reference .card-grid { display: grid; gap: 1rem; grid-template-columns: 1fr; }
 @media (min-width: 600px) { #playbook-reference .card-grid.cols-2 { grid-template-columns: 1fr 1fr; } }
 #playbook-reference .eco-card {
   background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: .85rem;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 1.2rem;
+  backdrop-filter: blur(10px);
   border-top: 3px solid var(--border);
+  transition: all 0.3s ease;
 }
-#playbook-reference .eco-card.pound { border-top-color: var(--pound); }
-#playbook-reference .eco-card.stuff { border-top-color: var(--stuff); }
-#playbook-reference .eco-card.lock { border-top-color: var(--lock); }
-#playbook-reference .eco-card.danger { border-top-color: var(--danger); }
-#playbook-reference .eco-card.pack { border-top-color: var(--pack); }
+#playbook-reference .eco-card:hover { transform: translateY(-2px); }
+#playbook-reference .eco-card.pound   { border-top-color: var(--pound);    box-shadow: 0 0 20px rgba(0,212,255,.1); }
+#playbook-reference .eco-card.stuff   { border-top-color: var(--stuff);    box-shadow: 0 0 20px rgba(177,15,255,.1); }
+#playbook-reference .eco-card.lock    { border-top-color: var(--lock);     box-shadow: 0 0 20px rgba(0,255,136,.1); }
+#playbook-reference .eco-card.danger  { border-top-color: var(--danger);   box-shadow: 0 0 20px rgba(255,136,0,.1); }
+#playbook-reference .eco-card.pack    { border-top-color: var(--pack);     box-shadow: 0 0 20px rgba(255,204,0,.1); }
 #playbook-reference .eco-card h4 { margin-top: 0; }
-#playbook-reference .eco-card .calls { font-size: .82rem; color: var(--muted); }
+#playbook-reference .eco-card .calls { font-size: .83rem; color: var(--muted); }
 #playbook-reference .warn {
-  background: rgba(218,54,51,.12);
-  border: 1px solid rgba(218,54,51,.4);
+  background: rgba(255,0,85,0.1);
+  border: 2px solid rgba(255,0,85,0.3);
+  border-left: 4px solid #ff0055;
   border-radius: 8px;
-  padding: .65rem .85rem;
-  font-size: .85rem;
+  padding: .85rem 1rem;
+  font-size: .88rem;
   margin: .75rem 0;
 }
-#playbook-reference .warn strong { color: #ff7b72; }
+#playbook-reference .warn strong { color: #ff3377; }
 #playbook-reference .form-block {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: .75rem;
-  margin-bottom: .75rem;
+  background: rgba(42,47,74,0.35);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: .85rem;
+  backdrop-filter: blur(5px);
+  transition: border-color 0.3s;
 }
+#playbook-reference .form-block:hover { border-color: rgba(139,147,176,0.35); }
 #playbook-reference .form-block h4 { margin-top: 0; display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; }
 #playbook-reference .play-list {
   display: flex;
   flex-wrap: wrap;
-  gap: .35rem;
+  gap: .4rem;
   list-style: none;
   padding: 0;
-  margin: .5rem 0 0;
+  margin: .6rem 0 0;
 }
 #playbook-reference .play-list li {
   font-size: .78rem;
-  padding: .28rem .5rem;
-  background: var(--bg3);
+  font-weight: 600;
+  padding: .3rem .65rem;
+  background: rgba(42,47,74,0.5);
   border-radius: 6px;
   border: 1px solid var(--border);
   margin: 0;
   cursor: pointer;
   color: var(--text);
+  transition: all 0.2s ease;
 }
-#playbook-reference .play-list li:hover { border-color: var(--accent); }
+#playbook-reference .play-list li:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 8px rgba(0,212,255,0.25);
+}
 #playbook-reference .play-list li.hidden { display: none; }
-#playbook-reference .copy-row { display: flex; gap: .5rem; margin-top: .5rem; flex-wrap: wrap; }
+#playbook-reference .copy-row { display: flex; gap: .5rem; margin-top: .75rem; flex-wrap: wrap; }
 #playbook-reference .btn {
   font-size: .75rem;
-  font-weight: 600;
-  padding: .35rem .65rem;
+  font-weight: 700;
+  padding: .4rem .85rem;
   border-radius: 6px;
-  border: 1px solid var(--border);
-  background: var(--bg3);
+  border: 2px solid var(--border);
+  background: var(--bg2);
   color: var(--text);
   cursor: pointer;
-  font-family: inherit;
+  font-family: 'Rajdhani', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  transition: all 0.3s ease;
 }
-#playbook-reference .btn:hover { border-color: var(--accent); }
-#playbook-reference .btn-primary { background: var(--accent); color: #0d1117; border-color: var(--accent); }
+#playbook-reference .btn:hover { border-color: var(--accent); box-shadow: 0 0 10px rgba(0,212,255,.2); }
+#playbook-reference .btn-primary {
+  background: linear-gradient(135deg, rgba(0,212,255,.2), rgba(177,15,255,.2));
+  border-color: var(--accent);
+  color: var(--accent);
+}
+#playbook-reference .btn-primary:hover { background: linear-gradient(135deg, rgba(0,212,255,.3), rgba(177,15,255,.3)); }
 #playbook-reference .snap-row {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: .35rem .75rem;
   align-items: center;
-  margin-bottom: .4rem;
-  font-size: .82rem;
+  margin-bottom: .5rem;
+  font-size: .85rem;
+  font-weight: 600;
 }
 #playbook-reference .snap-bar {
-  height: 8px;
-  background: var(--bg3);
+  height: 6px;
+  background: rgba(42,47,74,0.6);
   border-radius: 4px;
   overflow: hidden;
   grid-column: 1 / -1;
 }
-#playbook-reference .snap-fill { height: 100%; background: var(--accent); border-radius: 4px; }
+#playbook-reference .snap-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00d4ff, #b10fff);
+  border-radius: 4px;
+}
 #playbook-reference .tree {
   background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: .85rem;
-  font-size: .84rem;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  font-size: .88rem;
+  backdrop-filter: blur(10px);
 }
-#playbook-reference .tree dl { display: grid; gap: .35rem; }
-#playbook-reference .tree dt { font-weight: 700; color: var(--accent); }
-#playbook-reference .tree dd { margin: 0 0 .5rem 0; padding-left: .5rem; border-left: 2px solid var(--border); color: var(--text); }
-#playbook-reference .sheet-group { margin-bottom: 1rem; }
-#playbook-reference .sheet-group h4 { margin-bottom: .35rem; }
+#playbook-reference .tree dl { display: grid; gap: .4rem; }
+#playbook-reference .tree dt { font-weight: 700; color: var(--accent); text-transform: uppercase; font-size: .82rem; letter-spacing: .5px; }
+#playbook-reference .tree dd { margin: 0 0 .6rem 0; padding-left: .75rem; border-left: 2px solid rgba(0,212,255,0.25); color: var(--text); }
+#playbook-reference .sheet-group { margin-bottom: 1.25rem; }
+#playbook-reference .sheet-group h4 { margin-bottom: .4rem; }
 #playbook-reference .hide-filter { display: none !important; }
-#playbook-reference .no-results { text-align: center; padding: 2rem; color: var(--muted); display: none; }
+#playbook-reference .no-results { text-align: center; padding: 2rem; color: var(--muted); display: none; font-style: italic; }
 #playbook-reference .no-results.show { display: block; }
 #playbook-reference footer {
   text-align: center;
-  padding: 1.5rem 0;
+  padding: 2rem 0;
   color: var(--muted);
-  font-size: .75rem;
+  font-size: .72rem;
   border-top: 1px solid var(--border);
   margin-top: 2rem;
+  font-family: 'Space Mono', monospace;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
+/* Personnel cards */
+#playbook-reference .pers-grid {
+  display: grid;
+  gap: .85rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+#playbook-reference .pers-card {
+  background: var(--bg2);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  backdrop-filter: blur(5px);
+  transition: border-color 0.3s;
+}
+#playbook-reference .pers-card:hover { border-color: rgba(0,212,255,0.3); }
+#playbook-reference .pers-label {
+  font-size: .62rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--muted);
+  margin-bottom: .25rem;
+}
+#playbook-reference .pers-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: .4rem;
+}
+#playbook-reference .pers-formation {
+  font-size: .8rem;
+  color: var(--accent);
+  background: rgba(0,212,255,0.1);
+  border: 1px solid rgba(0,212,255,0.25);
+  border-radius: 6px;
+  padding: .25rem .55rem;
+  display: inline-block;
+  margin-bottom: .5rem;
+  font-weight: 700;
+}
+#playbook-reference .pers-card p { font-size: .82rem; color: var(--muted); margin-bottom: 0; line-height: 1.4; }
+/* Global search modal */
+.global-search-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(10,14,39,0.92);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 4rem 1rem 1rem;
+  animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.global-search-inner {
+  width: 100%;
+  max-width: 700px;
+  background: linear-gradient(135deg, rgba(42,47,74,0.8), rgba(26,31,58,0.9));
+  border: 2px solid rgba(0,212,255,0.4);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 0 60px rgba(0,212,255,0.2);
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+.global-search-header {
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.global-search-header input {
+  flex: 1;
+  padding: .75rem 1rem;
+  border: 2px solid rgba(0,212,255,0.4);
+  border-radius: 8px;
+  background: rgba(42,47,74,0.6);
+  color: #e8edf5;
+  font-size: 1rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+}
+.global-search-header input:focus { outline: none; border-color: #00d4ff; box-shadow: 0 0 15px rgba(0,212,255,0.3); }
+.global-search-header input::placeholder { color: #8b93b0; }
+.global-search-close {
+  padding: .6rem .9rem;
+  background: rgba(255,0,85,0.15);
+  border: 2px solid rgba(255,0,85,0.4);
+  border-radius: 8px;
+  color: #ff3377;
+  font-size: 1rem;
+  cursor: pointer;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+.global-search-close:hover { background: rgba(255,0,85,0.25); }
+.global-search-meta {
+  font-size: .75rem;
+  color: #8b93b0;
+  font-family: 'Space Mono', monospace;
+  margin-bottom: .75rem;
+}
+.global-search-results { overflow-y: auto; flex: 1; }
+.gs-situation-group { margin-bottom: 1.25rem; }
+.gs-situation-label {
+  font-size: .65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: #8b93b0;
+  margin-bottom: .4rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid rgba(139,147,176,0.2);
+}
+.gs-result-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: .25rem .75rem;
+  padding: .6rem .75rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: .3rem;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+.gs-result-item:hover { background: rgba(0,212,255,0.08); border-color: rgba(0,212,255,0.25); }
+.gs-result-name { font-size: .95rem; font-weight: 700; color: #e8edf5; }
+.gs-result-coverage { font-size: .78rem; color: #8b93b0; grid-column: 1; }
+.gs-result-freq { font-size: .9rem; font-weight: 700; color: #00ff88; align-self: center; text-align: right; }
+.gs-no-results { text-align: center; padding: 3rem; color: #8b93b0; font-style: italic; }
 </style>
 
 <div id="playbook-reference">
@@ -3967,6 +4249,7 @@ const personnelData = {
       <a href="#pb-pressure">Pressure</a>
       <a href="#pb-redzone">Red Zone</a>
       <a href="#pb-scout">Scout</a>
+      <a href="#pb-personnel">Personnel</a>
     </div>
   </nav>
 
@@ -4407,6 +4690,66 @@ const personnelData = {
         <p>Cover 3 Match, Buzz Mable, Cover 1 Robber, Cover 1 Hole. Formation: 2-4, 3-3 Dbl Mug.</p>
         <h4>Week C — Sim pressure / trap changeups</h4>
         <p>Cover 2 Invert, Tampa 2, Sim Pressure 3, Edge Blitz 3, Nickel Dog 3 Buzz. Max 1 sim per drive segment.</p>
+      </div>
+    </section>
+
+    <section id="pb-personnel" class="collapsed">
+      <button type="button" class="section-head" aria-expanded="false">
+        <span>Personnel Quick Reference</span>
+        <span class="chev">▼</span>
+      </button>
+      <div class="section-body">
+        <p>Defensive formation and coverage emphasis by offensive personnel grouping. Snap % is expected frequency you'll see that personnel.</p>
+        <div class="pers-grid">
+          <div class="pers-card">
+            <div class="pers-label">11 Personnel · ~60% of snaps</div>
+            <div class="pers-name">1 RB · 1 TE · 3 WR</div>
+            <span class="pers-formation">Nickel 2-4 (base)</span>
+            <p>Cover 3 Match 40% · Cover 4 Palms/Quarters 30% · Cover 6 20% · Cover 2 10%. Balanced run/pass threat — stay nickel, use your full menu.</p>
+          </div>
+          <div class="pers-card">
+            <div class="pers-label">12 Personnel · ~20% of snaps</div>
+            <div class="pers-name">1 RB · 2 TE · 2 WR</div>
+            <span class="pers-formation">Nickel 3-3 Mint (8 in box)</span>
+            <p>Cover 3 Sky 40% · Cover 3 Match 30% · Cover 2 Invert 20% · Cover 1 Hole 10%. Expect run 65%+. 8 in box mandatory.</p>
+          </div>
+          <div class="pers-card">
+            <div class="pers-label">10 Personnel · ~12% of snaps</div>
+            <div class="pers-name">1 RB · 0 TE · 4 WR</div>
+            <span class="pers-formation">Nickel 2-4</span>
+            <p>Cover 4 Palms/Quarters 50% · Cover 3 Match 25% · Tampa 2 15% · Cover 6 10%. Pass 75%+. Pattern-match emphasis.</p>
+          </div>
+          <div class="pers-card">
+            <div class="pers-label">Empty · ~5% of snaps</div>
+            <div class="pers-name">0 RB · 0 TE · 5 WR</div>
+            <span class="pers-formation">3-3-5 Over Flex</span>
+            <p>Cover 1 Spy 40% · Cover 2 Man 30% · Cover 4 Palms 30%. Man coverage + QB spy for mobile QBs. Speed personnel critical.</p>
+          </div>
+          <div class="pers-card">
+            <div class="pers-label">21 Personnel · ~5% of snaps</div>
+            <div class="pers-name">2 RB · 1 TE · 2 WR</div>
+            <span class="pers-formation">4-2-5 Over G</span>
+            <p>Cover 3 Sky 50% · Cover 3 Match 30% · Cover 2 Invert 20%. Power run expected 80%+. Gap control over coverage versatility.</p>
+          </div>
+          <div class="pers-card">
+            <div class="pers-label">20 Personnel · ~3% of snaps</div>
+            <div class="pers-name">2 RB · 0 TE · 3 WR</div>
+            <span class="pers-formation">Nickel 2-4</span>
+            <p>Cover 3 Sky 35% · Cover 3 Match 35% · Cover 4 Quarters 20% · Cover 2 Invert 10%. Hybrid — read tendency before committing.</p>
+          </div>
+          <div class="pers-card">
+            <div class="pers-label">Tempo / No-Huddle</div>
+            <div class="pers-name">Any personnel — can't sub</div>
+            <span class="pers-formation">3-3-5 Over Flex (stay)</span>
+            <p>Cover 4 Quarters 30% · Tampa 2 25% · Cover 3 Match 25% · Cover 2 Invert 20%. Can't substitute — stay in 3-3-5 regardless of personnel.</p>
+          </div>
+          <div class="pers-card">
+            <div class="pers-label">Wildcat / Direct Snap</div>
+            <div class="pers-name">RB as QB — run 90%+</div>
+            <span class="pers-formation">Nickel 3-3 Mint</span>
+            <p>Cover 1 Spy (MLB on RB) · 8 in box. Treat RB as mobile QB. Contain is the top priority — spy discipline over coverage variety.</p>
+          </div>
+        </div>
       </div>
     </section>
 
