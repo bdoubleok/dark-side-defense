@@ -3686,6 +3686,7 @@ const personnelData = {
   --danger: #f0883e;
   --pressure: #d29922;
   --rz: #da3633;
+  --pack: #3fb950;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   background: var(--bg);
   color: var(--text);
@@ -3770,6 +3771,7 @@ const personnelData = {
 #playbook-reference .chip[data-f="danger"].active { background: var(--danger); }
 #playbook-reference .chip[data-f="pressure"].active { background: var(--pressure); color: #0d1117; }
 #playbook-reference .chip[data-f="rz"].active { background: var(--rz); }
+#playbook-reference .chip[data-f="pack"].active { background: var(--pack); color: #0d1117; }
 #playbook-reference section { margin-bottom: 1rem; }
 #playbook-reference .section-head {
   display: flex;
@@ -3826,6 +3828,7 @@ const personnelData = {
 #playbook-reference .tag-danger { background: rgba(240,136,62,.25); color: #ffc896; }
 #playbook-reference .tag-pressure { background: rgba(210,153,34,.25); color: #f0c14d; }
 #playbook-reference .tag-rz { background: rgba(218,54,51,.25); color: #ff7b72; }
+#playbook-reference .tag-pack { background: rgba(63,185,80,.25); color: #56d364; }
 #playbook-reference .badge {
   font-size: .62rem;
   font-weight: 700;
@@ -3849,6 +3852,7 @@ const personnelData = {
 #playbook-reference .eco-card.stuff { border-top-color: var(--stuff); }
 #playbook-reference .eco-card.lock { border-top-color: var(--lock); }
 #playbook-reference .eco-card.danger { border-top-color: var(--danger); }
+#playbook-reference .eco-card.pack { border-top-color: var(--pack); }
 #playbook-reference .eco-card h4 { margin-top: 0; }
 #playbook-reference .eco-card .calls { font-size: .82rem; color: var(--muted); }
 #playbook-reference .warn {
@@ -3977,6 +3981,7 @@ const personnelData = {
         <span class="chip" data-f="danger">DANGER</span>
         <span class="chip" data-f="pressure">PRESSURE</span>
         <span class="chip" data-f="rz">RED ZONE</span>
+        <span class="chip" data-f="pack">PACK</span>
       </div>
     </div>
     <p class="no-results" id="pb-noResults">No matching plays. Clear search or change filter.</p>
@@ -4091,6 +4096,15 @@ const personnelData = {
             <p><strong>Formations:</strong> Nickel 2-4 Dbl Mug, Nickel 3-3 Dbl Mug, Nickel 2-4</p>
             <p><strong>When:</strong> 2nd &amp; long disguise, red zone, anti-scout weeks, QB hi-lo reads.</p>
             <p><strong>Avoid:</strong> Cover 0 spam; pairing complex pressure with complex robber every snap.</p>
+          </article>
+          <article class="eco-card pack" style="grid-column: 1 / -1;">
+            <h4><span class="tag tag-pack">PACK</span> Split Safety Zone — Quarters/Half Hybrid</h4>
+            <p><strong>Meaning:</strong> Split Safety Coverage that applies <strong>Quarters tools</strong> to the Nickel side and <strong>Half tools</strong> away from the Nickel. Nickel aligns to passing strength and runs C.O.S. motion. GP adjustment available for Speed Trips and Detroit formations.</p>
+            <p class="calls"><strong>Quarters Tools (Nickel side):</strong> Quads (Zone It) · Read (Buddy) · Stump · Box &nbsp;|&nbsp; <strong>Half Tools (away):</strong> Cloud · Read · Choke</p>
+            <p><strong>By formation:</strong> Strong → Quarter Tools · Weak → Half Tools · 3x1 → Quads / Read / Stubbie / Stump · Bunch → Box · Snug → Zone It / Read Buddy + Cloud or Read Buddy · Speed / Empty → Stubbie / Stump + Cloud / Read</p>
+            <p><strong>Position keys:</strong> WC — Cloud/Smack (#1 oversplit = Smack, #2 detached = Soft Squat) · SC — Quads = MOD #1 Bail; Stubbie = MEG #1; Stump = Clue 1/3 · Nickel — Quads = Quarter Flat; Read = Read Flat (Wall #2); Stubbie = Soft Squat · SS — Quads = Quarters 1×12 O/S #2; Read = 2 to 1 Read; Stubbie = 3 to 2 Read · FS — Cloud/Choke = Deep 1/2 Field; Read = 2 to 1 Read · MIKE — Quads = Quarter Hook; Read/Stump = #3 Vertical Hook; Stubbie = Read Hook (Wall #3) · DIME — Cloud/Smack = Vertical Hook #2; Read = Read Flat (Wall #2)</p>
+            <p><strong>When:</strong> Split-field answer vs trips, speed personnel, and formation-strength conflict — one side demands Quarters match, the other demands Cloud/Half protection.</p>
+            <p><strong>Avoid:</strong> Applying the same tool family to both halves; ignoring formation strength declaration pre-snap.</p>
           </article>
         </div>
       </div>
