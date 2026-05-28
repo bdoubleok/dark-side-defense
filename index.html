@@ -3666,5 +3666,853 @@ const personnelData = {
 
         init();
     </script>
+
+<!-- ============================================================
+     CFB '26 / MADDEN '26 SIDELINE REFERENCE
+     Content from dark-side-defense-playbook.html not in the above
+     ============================================================ -->
+<style>
+#playbook-reference {
+  --bg: #0d1117;
+  --bg2: #161b22;
+  --bg3: #21262d;
+  --border: #30363d;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --accent: #58a6ff;
+  --pound: #388bfd;
+  --stuff: #a371f7;
+  --lock: #f85149;
+  --danger: #f0883e;
+  --pressure: #d29922;
+  --rz: #da3633;
+  --pack: #3fb950;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  font-size: 15px;
+  margin-top: 3rem;
+}
+#playbook-reference a { color: var(--accent); text-decoration: none; }
+#playbook-reference a:hover { text-decoration: underline; }
+#playbook-reference .pb-divider {
+  text-align: center;
+  padding: 2rem 1.5rem 1rem;
+  border-top: 2px solid rgba(0, 212, 255, 0.3);
+  background: linear-gradient(135deg, rgba(0,212,255,.06), rgba(88,166,255,.06));
+}
+#playbook-reference .pb-divider h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 0.3rem;
+}
+#playbook-reference .pb-divider p { color: var(--muted); font-size: .82rem; margin-bottom: 0; }
+#playbook-reference .topnav {
+  background: rgba(13,17,23,.96);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+}
+#playbook-reference .topnav-inner {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .5rem .75rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+#playbook-reference .topnav a {
+  white-space: nowrap;
+  font-size: .72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  color: var(--muted);
+  padding: .35rem .55rem;
+  border-radius: 6px;
+  text-decoration: none;
+}
+#playbook-reference .topnav a:hover,
+#playbook-reference .topnav a:focus { color: var(--text); background: var(--bg3); }
+#playbook-reference .wrap { max-width: 920px; margin: 0 auto; padding: 1rem 1rem 3rem; }
+#playbook-reference .search-bar { padding: .6rem 0; background: var(--bg); }
+#playbook-reference .search-bar input {
+  width: 100%;
+  padding: .6rem .85rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg2);
+  color: var(--text);
+  font-size: .95rem;
+  font-family: inherit;
+}
+#playbook-reference .search-bar input::placeholder { color: var(--muted); }
+#playbook-reference .filter-chips { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .5rem; }
+#playbook-reference .chip {
+  font-size: .7rem;
+  font-weight: 700;
+  padding: .25rem .5rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+}
+#playbook-reference .chip.active { color: #fff; border-color: transparent; }
+#playbook-reference .chip[data-f="all"].active { background: var(--bg3); color: var(--text); }
+#playbook-reference .chip[data-f="pound"].active { background: var(--pound); }
+#playbook-reference .chip[data-f="stuff"].active { background: var(--stuff); }
+#playbook-reference .chip[data-f="lock"].active { background: var(--lock); }
+#playbook-reference .chip[data-f="danger"].active { background: var(--danger); }
+#playbook-reference .chip[data-f="pressure"].active { background: var(--pressure); color: #0d1117; }
+#playbook-reference .chip[data-f="rz"].active { background: var(--rz); }
+#playbook-reference .chip[data-f="pack"].active { background: var(--pack); color: #0d1117; }
+#playbook-reference section { margin-bottom: 1rem; }
+#playbook-reference .section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  width: 100%;
+  padding: .75rem 1rem;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  appearance: none;
+}
+#playbook-reference .section-head:hover { background: var(--bg3); }
+#playbook-reference .section-head .chev {
+  flex-shrink: 0;
+  transition: transform .2s;
+  color: var(--muted);
+  font-size: .75rem;
+}
+#playbook-reference section.collapsed .section-body { display: none; }
+#playbook-reference section.collapsed .chev { transform: rotate(-90deg); }
+#playbook-reference .section-body {
+  padding: .85rem 0 0;
+  border-left: 2px solid var(--border);
+  margin-left: .5rem;
+  padding-left: .85rem;
+}
+#playbook-reference h3 { font-size: .95rem; margin: 1rem 0 .5rem; color: var(--accent); }
+#playbook-reference h4 { font-size: .88rem; margin: .75rem 0 .4rem; color: var(--text); font-family: inherit; }
+#playbook-reference p, #playbook-reference ul { margin-bottom: .65rem; color: var(--text); }
+#playbook-reference ul { padding-left: 1.2rem; }
+#playbook-reference li { margin-bottom: .25rem; }
+#playbook-reference .tag {
+  display: inline-block;
+  font-size: .65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  padding: .12rem .4rem;
+  border-radius: 4px;
+  margin-right: .25rem;
+  vertical-align: middle;
+}
+#playbook-reference .tag-pound { background: rgba(56,139,253,.25); color: #79c0ff; }
+#playbook-reference .tag-stuff { background: rgba(163,113,247,.25); color: #d2a8ff; }
+#playbook-reference .tag-lock { background: rgba(248,81,73,.25); color: #ffa198; }
+#playbook-reference .tag-danger { background: rgba(240,136,62,.25); color: #ffc896; }
+#playbook-reference .tag-pressure { background: rgba(210,153,34,.25); color: #f0c14d; }
+#playbook-reference .tag-rz { background: rgba(218,54,51,.25); color: #ff7b72; }
+#playbook-reference .tag-pack { background: rgba(63,185,80,.25); color: #56d364; }
+#playbook-reference .badge {
+  font-size: .62rem;
+  font-weight: 700;
+  padding: .1rem .35rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+#playbook-reference .badge-cfb { border-color: #388bfd; color: #79c0ff; }
+#playbook-reference .badge-madden { border-color: #a371f7; color: #d2a8ff; }
+#playbook-reference .card-grid { display: grid; gap: .75rem; grid-template-columns: 1fr; }
+@media (min-width: 600px) { #playbook-reference .card-grid.cols-2 { grid-template-columns: 1fr 1fr; } }
+#playbook-reference .eco-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: .85rem;
+  border-top: 3px solid var(--border);
+}
+#playbook-reference .eco-card.pound { border-top-color: var(--pound); }
+#playbook-reference .eco-card.stuff { border-top-color: var(--stuff); }
+#playbook-reference .eco-card.lock { border-top-color: var(--lock); }
+#playbook-reference .eco-card.danger { border-top-color: var(--danger); }
+#playbook-reference .eco-card.pack { border-top-color: var(--pack); }
+#playbook-reference .eco-card h4 { margin-top: 0; }
+#playbook-reference .eco-card .calls { font-size: .82rem; color: var(--muted); }
+#playbook-reference .warn {
+  background: rgba(218,54,51,.12);
+  border: 1px solid rgba(218,54,51,.4);
+  border-radius: 8px;
+  padding: .65rem .85rem;
+  font-size: .85rem;
+  margin: .75rem 0;
+}
+#playbook-reference .warn strong { color: #ff7b72; }
+#playbook-reference .form-block {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: .75rem;
+  margin-bottom: .75rem;
+}
+#playbook-reference .form-block h4 { margin-top: 0; display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; }
+#playbook-reference .play-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  list-style: none;
+  padding: 0;
+  margin: .5rem 0 0;
+}
+#playbook-reference .play-list li {
+  font-size: .78rem;
+  padding: .28rem .5rem;
+  background: var(--bg3);
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  margin: 0;
+  cursor: pointer;
+  color: var(--text);
+}
+#playbook-reference .play-list li:hover { border-color: var(--accent); }
+#playbook-reference .play-list li.hidden { display: none; }
+#playbook-reference .copy-row { display: flex; gap: .5rem; margin-top: .5rem; flex-wrap: wrap; }
+#playbook-reference .btn {
+  font-size: .75rem;
+  font-weight: 600;
+  padding: .35rem .65rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text);
+  cursor: pointer;
+  font-family: inherit;
+}
+#playbook-reference .btn:hover { border-color: var(--accent); }
+#playbook-reference .btn-primary { background: var(--accent); color: #0d1117; border-color: var(--accent); }
+#playbook-reference .snap-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: .35rem .75rem;
+  align-items: center;
+  margin-bottom: .4rem;
+  font-size: .82rem;
+}
+#playbook-reference .snap-bar {
+  height: 8px;
+  background: var(--bg3);
+  border-radius: 4px;
+  overflow: hidden;
+  grid-column: 1 / -1;
+}
+#playbook-reference .snap-fill { height: 100%; background: var(--accent); border-radius: 4px; }
+#playbook-reference .tree {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: .85rem;
+  font-size: .84rem;
+}
+#playbook-reference .tree dl { display: grid; gap: .35rem; }
+#playbook-reference .tree dt { font-weight: 700; color: var(--accent); }
+#playbook-reference .tree dd { margin: 0 0 .5rem 0; padding-left: .5rem; border-left: 2px solid var(--border); color: var(--text); }
+#playbook-reference .sheet-group { margin-bottom: 1rem; }
+#playbook-reference .sheet-group h4 { margin-bottom: .35rem; }
+#playbook-reference .hide-filter { display: none !important; }
+#playbook-reference .no-results { text-align: center; padding: 2rem; color: var(--muted); display: none; }
+#playbook-reference .no-results.show { display: block; }
+#playbook-reference footer {
+  text-align: center;
+  padding: 1.5rem 0;
+  color: var(--muted);
+  font-size: .75rem;
+  border-top: 1px solid var(--border);
+  margin-top: 2rem;
+}
+</style>
+
+<div id="playbook-reference">
+  <div class="pb-divider">
+    <h2>CFB '26 / Madden '26 Sideline Reference</h2>
+    <p>Mike Macdonald · Seattle Seahawks · Formation Hierarchy, Ecosystems &amp; Curated Playbook</p>
+  </div>
+
+  <nav class="topnav" aria-label="Playbook sections">
+    <div class="topnav-inner">
+      <a href="#pb-summary">Summary</a>
+      <a href="#pb-cfb-form">CFB Form</a>
+      <a href="#pb-madden-form">Madden Form</a>
+      <a href="#pb-ecosystems">Coverage</a>
+      <a href="#pb-playbook">Plays</a>
+      <a href="#pb-snaps">Snaps</a>
+      <a href="#pb-tree">Tree</a>
+      <a href="#pb-callsheet">Call Sheet</a>
+      <a href="#pb-adjust">Adjust</a>
+      <a href="#pb-pressure">Pressure</a>
+      <a href="#pb-redzone">Red Zone</a>
+      <a href="#pb-scout">Scout</a>
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <div class="search-bar">
+      <input type="search" id="pb-search" placeholder="Filter plays, formations, coverage…" autocomplete="off" aria-label="Search playbook">
+      <div class="filter-chips" id="pb-chips">
+        <span class="chip active" data-f="all">All</span>
+        <span class="chip" data-f="pound">POUND</span>
+        <span class="chip" data-f="stuff">STUFF</span>
+        <span class="chip" data-f="lock">3 LOCK</span>
+        <span class="chip" data-f="danger">DANGER</span>
+        <span class="chip" data-f="pressure">PRESSURE</span>
+        <span class="chip" data-f="rz">RED ZONE</span>
+        <span class="chip" data-f="pack">PACK</span>
+      </div>
+    </div>
+    <p class="no-results" id="pb-noResults">No matching plays. Clear search or change filter.</p>
+
+    <section id="pb-summary">
+      <button type="button" class="section-head" aria-expanded="true">
+        <span>1. Executive Summary</span>
+        <span class="chev" aria-hidden="true">▼</span>
+      </button>
+      <div class="section-body">
+        <p>Updated 2025 Seahawks / Mike Macdonald validation: this defense is <strong>not pressure-first</strong>. It is a <strong>disguise-first, coverage-first, split-safety pattern-match ecosystem</strong> that uses simulated pressure selectively as a constraint—not as the base identity.</p>
+        <ul>
+          <li><strong>POUND</strong> — foundational Quarters ecosystem</li>
+          <li><strong>STUFF</strong> — Cover 6 / Half-Quarter-Quarter ecosystem</li>
+          <li><strong>3 LOCK</strong> — Match 3 / Buzz / weak rotation ecosystem</li>
+          <li><strong>DANGER</strong> — universal match-distribution rules engine</li>
+          <li><strong>SITE / ROB / LOU</strong> — weak-rotation match-3 changeups</li>
+        </ul>
+        <p>Core calls: Quarters, Cover 6, Match 3, weak rotation, simulated pressure. Sim pressures complement coverage—they do not define you.</p>
+        <div class="warn"><strong>Do Not Overuse:</strong> Cover 0, static spot-drop zones, repeated fire-zone blitzes, pressure every snap, or calling the same sim twice in a row.</div>
+      </div>
+    </section>
+
+    <section id="pb-cfb-form" class="collapsed">
+      <button type="button" class="section-head" aria-expanded="false">
+        <span>2. Formation Hierarchy — CFB '26</span>
+        <span class="chev">▼</span>
+      </button>
+      <div class="section-body">
+        <p><span class="badge badge-cfb">CFB '26</span> Formations available in-game only. <strong>Nickel 2-4 Odd is Madden-only</strong>—approximate with Nickel 2-4, Nickel 2-4 Dbl Mug, 3-3-5 Over Flex, or Nickel 3-3 Over.</p>
+        <ul>
+          <li><strong>Nickel 3-3 Over</strong> — core base (POUND / 3 LOCK hub)</li>
+          <li><strong>Nickel 2-4</strong> — stand-up edge / weak-rotation substitute for Madden Nickel 2-4 Odd</li>
+          <li><strong>Nickel 2-4 Dbl Mug</strong> — disguise / SITE / pressure constraint</li>
+          <li><strong>Nickel 3-3 Dbl Mug</strong> — A-gap disguise / Match 3 pressure</li>
+          <li><strong>3-3-5 Over Flex</strong> — Trips / Bunch / overhang control</li>
+          <li><strong>Nickel 3-3 Mint</strong> — anti-RPO / spread run</li>
+          <li><strong>3-3-5 Mint</strong> — safety-heavy run support</li>
+          <li><strong>3-3-5 3 High Odd</strong> — 3-safety disguise / Cover 6 / sim pressure</li>
+          <li><strong>Dime Rush</strong> — long yardage / weak rotation / sim pressure</li>
+          <li><strong>3-4 Bear</strong> — short yardage only</li>
+          <li><strong>Goal Line 5-3 / 6-2</strong> — goal line only</li>
+        </ul>
+        <div class="warn"><strong>Not in CFB '26:</strong> Nickel 2-4 Odd, Big Nickel Over G (Madden packages). Do not list 4-2-5 Over as equivalent to Big Nickel Over G.</div>
+      </div>
+    </section>
+
+    <section id="pb-madden-form" class="collapsed">
+      <button type="button" class="section-head" aria-expanded="false">
+        <span>3. Formation Hierarchy — Madden '26</span>
+        <span class="chev">▼</span>
+      </button>
+      <div class="section-body">
+        <p><span class="badge badge-madden">Madden '26</span> Supports more NFL-style odd/mug spacing. Map the same coverage ecosystems; CFB approximates odd looks via Nickel 2-4 and 3-3-5 spacing.</p>
+        <ul>
+          <li><strong>Nickel 2-4 Odd</strong> — primary weak-rotation / stand-up edge base <span class="badge badge-madden">Madden-only</span></li>
+          <li><strong>Nickel 2-4 Dbl Mug</strong> — SITE / sim constraint</li>
+          <li><strong>Nickel 3-3 Cub</strong> — Quarters / match hub (verify in-game label)</li>
+          <li><strong>Big Nickel Over G</strong> — separate package; not 4-2-5 Over</li>
+          <li><strong>Dollar 3-2 Mug</strong> — dime disguise / pressure</li>
+          <li><strong>Dollar 3-2</strong> — long-yardage quarters</li>
+          <li><strong>Dime Normal</strong> — Dime Rush equivalent</li>
+          <li><strong>3-4 Bear</strong> — short yardage only</li>
+        </ul>
+        <p>Translate CFB Nickel 2-4 + Over Flex calls to Madden Nickel 2-4 Odd + Big Nickel Over G when you need true NFL mug/odd spacing.</p>
+      </div>
+    </section>
+
+    <section id="pb-ecosystems" class="collapsed">
+      <button type="button" class="section-head" aria-expanded="false">
+        <span>4. Coverage Ecosystems</span>
+        <span class="chev">▼</span>
+      </button>
+      <div class="section-body">
+        <div class="card-grid cols-2">
+          <article class="eco-card pound">
+            <h4><span class="tag tag-pound">POUND</span> Quarters Foundation</h4>
+            <p><strong>Meaning:</strong> Split-safety Quarters match rules—#2 horizontal, #1 vertical, cloud/flat conflict solved post-snap.</p>
+            <p class="calls"><strong>Calls:</strong> Cover 4 Quarters · Cover 4 Palms · Match Quarters · Quarters Match</p>
+            <p><strong>Formations:</strong> Nickel 3-3 Over, 3-3-5 Over Flex, Dime Rush</p>
+            <p><strong>When:</strong> Spread 10/11, empty, 2nd &amp; medium, protect deep sidelines.</p>
+            <p><strong>Avoid:</strong> vs heavy run fits without Mint; static spot drops; Cover 0 pairing.</p>
+          </article>
+          <article class="eco-card stuff">
+            <h4><span class="tag tag-stuff">STUFF</span> Cover 6 / HQH</h4>
+            <p><strong>Meaning:</strong> Half-Quarter-Quarter—field Quarters, boundary Cover 2 / invert rules; trips/bunch answer.</p>
+            <p class="calls"><strong>Calls:</strong> Cover 6 · Cover 6 Willie · Cover 6 Match · Cover 2 Invert · Cover 4 Palms</p>
+            <p><strong>Formations:</strong> Nickel 2-4, 3-3-5 3 High Odd, Nickel 3-3 Over</p>
+            <p><strong>When:</strong> Trips, bunch, field-heavy formations, shot plays (shade over top).</p>
+            <p><strong>Avoid:</strong> Overcalling vs 12/21 without run fit; pure spot Cover 2.</p>
+          </article>
+          <article class="eco-card lock">
+            <h4><span class="tag tag-lock">3 LOCK</span> Match 3 / Buzz</h4>
+            <p><strong>Meaning:</strong> Weak rotation, buzzed hook/curl, match routes to flat and seam—Macdonald's change-up shell.</p>
+            <p class="calls"><strong>Calls:</strong> Cover 3 Match · Cover 3 Buzz Mable · Cover 3 Buzz · Match Buzz · Cover 3 Seam</p>
+            <p><strong>Formations:</strong> Nickel 3-3 Over, Nickel 2-4, Nickel 3-3 Dbl Mug, 3-3-5 Over Flex</p>
+            <p><strong>When:</strong> RPO teams, 2TE spread, QB run, intermediate flood.</p>
+            <p><strong>Avoid:</strong> Static Cover 3 Sky as every-down answer; no buzz vs levels.</p>
+          </article>
+          <article class="eco-card danger">
+            <h4><span class="tag tag-danger">DANGER</span> Match Distribution Engine</h4>
+            <p><strong>Meaning:</strong> Rules that assign #1/#2/#3 across zones—who takes crossers, seams, and flats after disguise.</p>
+            <p class="calls"><strong>Calls:</strong> Cover 3 Match · Cover 3 Seam · Match 3 · Cover 3 Sky (low priority only)</p>
+            <p><strong>Formations:</strong> All nickel; especially Dbl Mug and 2-4</p>
+            <p><strong>When:</strong> Conflict looks, empty, mesh, levels, scramble contain sets.</p>
+            <p><strong>Avoid:</strong> Sky as primary; man-free without robber plan.</p>
+          </article>
+          <article class="eco-card lock" style="grid-column: 1 / -1;">
+            <h4><span class="tag tag-lock">SITE</span> <span class="tag tag-lock">ROB</span> <span class="tag tag-lock">LOU</span> Weak-Rotation Changeups</h4>
+            <p><strong>Meaning:</strong> SITE = weak rotation to field/boundary; ROB = robber insert vs crossers; LOU = louis weak rotation tag (verify in-game terminology).</p>
+            <p class="calls"><strong>Calls:</strong> Cover 1 Robber · Cover 1 Hole · Nickel Dog 3 Buzz · Cover 3 Match (weak spin)</p>
+            <p><strong>Formations:</strong> Nickel 2-4 Dbl Mug, Nickel 3-3 Dbl Mug, Nickel 2-4</p>
+            <p><strong>When:</strong> 2nd &amp; long disguise, red zone, anti-scout weeks, QB hi-lo reads.</p>
+            <p><strong>Avoid:</strong> Cover 0 spam; pairing complex pressure with complex robber every snap.</p>
+          </article>
+          <article class="eco-card pack" style="grid-column: 1 / -1;">
+            <h4><span class="tag tag-pack">PACK</span> Split Safety Zone — Quarters/Half Hybrid</h4>
+            <p><strong>Meaning:</strong> Split Safety Coverage that applies <strong>Quarters tools</strong> to the Nickel side and <strong>Half tools</strong> away from the Nickel. Nickel aligns to passing strength and runs C.O.S. motion. GP adjustment available for Speed Trips and Detroit formations.</p>
+            <p class="calls"><strong>Quarters Tools (Nickel side):</strong> Quads (Zone It) · Read (Buddy) · Stump · Box &nbsp;|&nbsp; <strong>Half Tools (away):</strong> Cloud · Read · Choke</p>
+            <p><strong>By formation:</strong> Strong → Quarter Tools · Weak → Half Tools · 3x1 → Quads / Read / Stubbie / Stump · Bunch → Box · Snug → Zone It / Read Buddy + Cloud or Read Buddy · Speed / Empty → Stubbie / Stump + Cloud / Read</p>
+            <p><strong>Position keys:</strong> WC — Cloud/Smack (#1 oversplit = Smack, #2 detached = Soft Squat) · SC — Quads = MOD #1 Bail; Stubbie = MEG #1; Stump = Clue 1/3 · Nickel — Quads = Quarter Flat; Read = Read Flat (Wall #2); Stubbie = Soft Squat · SS — Quads = Quarters 1×12 O/S #2; Read = 2 to 1 Read; Stubbie = 3 to 2 Read · FS — Cloud/Choke = Deep 1/2 Field; Read = 2 to 1 Read · MIKE — Quads = Quarter Hook; Read/Stump = #3 Vertical Hook; Stubbie = Read Hook (Wall #3) · DIME — Cloud/Smack = Vertical Hook #2; Read = Read Flat (Wall #2)</p>
+            <p><strong>When:</strong> Split-field answer vs trips, speed personnel, and formation-strength conflict — one side demands Quarters match, the other demands Cloud/Half protection.</p>
+            <p><strong>Avoid:</strong> Applying the same tool family to both halves; ignoring formation strength declaration pre-snap.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="pb-playbook">
+      <button type="button" class="section-head" aria-expanded="true">
+        <span>5. Curated CFB '26 Playbook</span>
+        <span class="chev">▼</span>
+      </button>
+      <div class="section-body">
+        <p><span class="badge badge-cfb">CFB '26</span> <strong>69 plays</strong> — tap a play to copy. Verify any renamed play in your playbook editor.</p>
+        <div class="form-block" data-formation="nickel 3-3 over">
+          <h4>Nickel 3-3 Over <span class="tag tag-pound">POUND</span> <span class="tag tag-lock">3 LOCK</span></h4>
+          <ul class="play-list">
+            <li data-tags="lock danger" data-play="Cover 3 Match">Cover 3 Match</li>
+            <li data-tags="lock" data-play="Cover 3 Buzz Mable">Cover 3 Buzz Mable</li>
+            <li data-tags="pound" data-play="Cover 4 Quarters">Cover 4 Quarters</li>
+            <li data-tags="pound stuff" data-play="Cover 4 Palms">Cover 4 Palms</li>
+            <li data-tags="stuff" data-play="Cover 6">Cover 6</li>
+            <li data-tags="stuff" data-play="Cover 2 Invert">Cover 2 Invert</li>
+            <li data-tags="stuff" data-play="Tampa 2">Tampa 2</li>
+            <li data-tags="lock danger" data-play="Cover 1 Robber">Cover 1 Robber</li>
+            <li data-tags="pound" data-play="Cover 9 Show 2">Cover 9 Show 2</li>
+            <li data-tags="pressure" data-play="Sim Pressure 3">Sim Pressure 3</li>
+            <li data-tags="pressure" data-play="Edge Blitz 3">Edge Blitz 3</li>
+          </ul>
+          <div class="copy-row"><button type="button" class="btn btn-primary copy-btn">Copy formation list</button></div>
+        </div>
+        <div class="form-block" data-formation="nickel 2-4">
+          <h4>Nickel 2-4 <span class="badge badge-cfb">2-4 Odd sub</span> <span class="tag tag-lock">3 LOCK</span></h4>
+          <ul class="play-list">
+            <li data-tags="lock" data-play="Cover 3 Buzz Mable">Cover 3 Buzz Mable</li>
+            <li data-tags="pound stuff" data-play="Cover 4 Palms">Cover 4 Palms</li>
+            <li data-tags="lock danger" data-play="Cover 1 Robber">Cover 1 Robber</li>
+            <li data-tags="stuff" data-play="Cover 6">Cover 6</li>
+            <li data-tags="stuff" data-play="Cover 6 Willie">Cover 6 Willie</li>
+            <li data-tags="stuff" data-play="Cover 2 Invert">Cover 2 Invert</li>
+            <li data-tags="pressure" data-play="Sim Pressure 3">Sim Pressure 3</li>
+            <li data-tags="pressure" data-play="Edge Blitz 3">Edge Blitz 3</li>
+            <li data-tags="pressure" data-play="Field Sim 3">Field Sim 3</li>
+            <li data-tags="pressure" data-play="Nickel Sim 2">Nickel Sim 2</li>
+            <li data-tags="pressure" data-play="Buck Slant 3">Buck Slant 3</li>
+          </ul>
+          <div class="copy-row"><button type="button" class="btn btn-primary copy-btn">Copy formation list</button></div>
+        </div>
+        <div class="form-block" data-formation="nickel 2-4 dbl mug">
+          <h4>Nickel 2-4 Dbl Mug <span class="tag tag-lock">SITE</span> <span class="tag tag-pressure">PRESSURE</span></h4>
+          <ul class="play-list">
+            <li data-tags="lock danger" data-play="Cover 3 Match">Cover 3 Match</li>
+            <li data-tags="lock pressure" data-play="Nickel Dog 3 Buzz">Nickel Dog 3 Buzz</li>
+            <li data-tags="pressure" data-play="LB Blitz 3">LB Blitz 3</li>
+            <li data-tags="stuff" data-play="Tampa 2">Tampa 2</li>
+          </ul>
+          <div class="copy-row"><button type="button" class="btn btn-primary copy-btn">Copy formation list</button></div>
+        </div>
+        <div class="form-block" data-formation="nickel 3-3 dbl mug">
+          <h4>Nickel 3-3 Dbl Mug <span class="tag tag-danger">DANGER</span></h4>
+          <ul class="play-list">
+            <li data-tags="lock danger" data-play="Cover 3 Match">Cover 3 Match</li>
+            <li data-tags="lock danger" data-play="Cover 1 Hole">Cover 1 Hole</li>
+            <li data-tags="danger" data-play="Cover 3 Sky">Cover 3 Sky</li>
+            <li data-tags="lock pressure" data-play="Nickel Dog 3 Buzz">Nickel Dog 3 Buzz</li>
+            <li data-tags="pressure" data-play="LB Blitz 3">LB Blitz 3</li>
+            <li data-tags="pressure" data-play="SS Dog 3">SS Dog 3</li>
+          </ul>
+          <div class="copy-row"><button type="button" class="btn btn-primary copy-btn">Copy formation list</button></div>
+        </div>
+        <div class="form-block" data-formation="3-3-5 over flex">
+          <h4>3-3-5 Over Flex <span class="tag tag-pound">POUND</span></h4>
+          <ul class="play-list">
+            <li data-tags="lock danger" data-play="Cover 3 Match">Cover 3 Match</li>
+            <li data-tags="pound" data-play="Cover 4 Quarters">Cover 4 Quarters</li>
+            <li data-tags="pound stuff" data-play="Cover 4 Palms">Cover 4 Palms</li>
+            <li data-tags="pressure" data-play="CB Bench Blitz">CB Bench Blitz</li>
+            <li data-tags="pressure" data-play="Nickel Sim 3">Nickel Sim 3</li>
+          </ul>
+          <div class="copy-row"><button type="button" class="btn btn-primary copy-btn">Copy formation list</button></div>
+        </div>
+        <div class="form-block" data-formation="nickel 3-3 mint">
+          <h4>Nickel 3-3 Mint <span class="tag tag-lock">Anti-RPO</span></h4>
+          <ul class="play-list">
+            <li data-tags="lock" data-play="Cover 3 Buzz Mable">Cover 3 Buzz Mable</li>
+            <li data-tags="pound" data-play="Cover 4 Quarters">Cover 4 Quarters</li>
+            <li data-tags="pound stuff" data-play="Cover 4 Palms">Cover 4 Palms</li>
+            <li data-tags="stuff" data-play="Cover 6 Match">Cover 6 Match</li>
+            <li data-tags="stuff" data-play="Cover 6">Cover 6</li>
+            <li data-tags="pressure" data-play="Sim Pressure 3">Sim Pressure 3</li>
+          </ul>
+          <div class="copy-row"><button type="button" class="btn btn-primary copy-btn">Copy formation list</button></div>
+        </div>
+        <div class="form-block" data-formation="3-3-5 mint">
+          <h4>3-3-5 Mint</h4>
+          <ul class="play-list">
+            <li data-tags="lock danger" data-play="Cover 3 Match">Cover 3 Match</li>
+            <li data-tags="lock" data-play="Cover 3 Hard Flat">Cover 3 Hard Flat</li>
+            <li data-tags="pound" data-play="Cover 4 Quarters">Cover 4 Quarters</li>
+            <li data-tags="stuff" data-play="Cover 6 Willie">Cover 6 Willie</li>
+            <li data-tags="pressure" data-play="Edge Blitz 3">Edge Blitz 3</li>
+            <li data-tags="pressure" data-play="Sim Pressure 3">Sim Pressure 3</li>
+          </ul>
+          <div class="copy-row"><button type="button" class="btn btn-primary copy-btn">Copy formation list</button></div>
+        </div>
+        <div class="form-block" data-formation="dime rush">
+          <h4>Dime Rush <span class="tag tag-pound">POUND</span> <span class="tag tag-pressure">PRESSURE</span></h4>
+          <ul class="play-list">
+            <li data-tags="pound" data-play="Cover 4 Quarters">Cover 4 Quarters</li>
+            <li data-tags="stuff" data-play="Tampa 2">Tampa 2</li>
+            <li data-tags="pressure" data-play="Mug Sim Pressure">Mug Sim Pressure</li>
+            <li data-tags="pressure" data-play="Mug Blitz Tex 3">Mug Blitz Tex 3</li>
+          </ul>
+          <div class="copy-row"><button type="button" class="btn btn-primary copy-btn">Copy formation list</button></div>
+        </div>
+        <div class="form-block" data-formation="3-3-5 3 high odd">
+          <h4>3-3-5 3 High Odd <span class="tag tag-stuff">STUFF</span></h4>
+          <ul class="play-list">
+            <li data-tags="pound" data-play="Cover 4 Quarters">Cover 4 Quarters</li>
+            <li data-tags="stuff" data-play="Cover 6">Cover 6</li>
+            <li data-tags="pressure" data-play="Saw Blitz 3">Saw Blitz 3</li>
+          </ul>
+          <div class="copy-row"><button type="button" class="btn btn-primary copy-btn">Copy formation list</button></div>
+        </div>
+        <div class="form-block" data-formation="3-4 bear">
+          <h4>3-4 Bear <span class="tag tag-rz">SHORT</span></h4>
+          <ul class="play-list">
+            <li data-tags="lock danger rz" data-play="Cover 1 Hole">Cover 1 Hole</li>
+            <li data-tags="stuff rz" data-play="Cover 2 Invert">Cover 2 Invert</li>
+            <li data-tags="lock" data-play="Cover 3 Hard Flat">Cover 3 Hard Flat</li>
+            <li data-tags="danger" data-play="Trio Sky Zone">Trio Sky Zone</li>
+            <li data-tags="pressure" data-play="Sam Mike 1">Sam Mike 1</li>
+            <li data-tags="pressure" data-play="LB Blitz 0">LB Blitz 0</li>
+          </ul>
+          <div class="copy-row"><button type="button" class="btn btn-primary copy-btn">Copy formation list</button></div>
+        </div>
+        <div class="form-block" data-formation="goal line 5-3">
+          <h4>Goal Line 5-3 <span class="tag tag-rz">GL</span></h4>
+          <ul class="play-list">
+            <li data-tags="lock danger rz" data-play="Cover 1 Hole">Cover 1 Hole</li>
+            <li data-tags="stuff rz" data-play="Cover 2 Invert">Cover 2 Invert</li>
+            <li data-tags="pressure rz" data-play="Sam Mike 1">Sam Mike 1</li>
+            <li data-tags="pressure rz" data-play="LB Blitz 0">LB Blitz 0</li>
+          </ul>
+          <div class="copy-row"><button type="button" class="btn btn-primary copy-btn">Copy formation list</button></div>
+        </div>
+        <div class="form-block" data-formation="goal line 6-2">
+          <h4>Goal Line 6-2 <span class="tag tag-rz">GL</span></h4>
+          <ul class="play-list">
+            <li data-tags="lock danger rz" data-play="Cover 1 Hole">Cover 1 Hole</li>
+            <li data-tags="lock rz" data-play="Cover 3 Hard Flat">Cover 3 Hard Flat</li>
+            <li data-tags="danger rz" data-play="Trio Sky Zone">Trio Sky Zone</li>
+          </ul>
+          <div class="copy-row"><button type="button" class="btn btn-primary copy-btn">Copy formation list</button></div>
+        </div>
+        <p style="font-size:.8rem;color:var(--muted);margin-top:.75rem;">Total: 69 plays. <em>Mug Sim Pressure</em> — verify in-game if not listed under Dime Rush.</p>
+      </div>
+    </section>
+
+    <section id="pb-snaps" class="collapsed">
+      <button type="button" class="section-head" aria-expanded="false">
+        <span>6. Snap Distribution</span>
+        <span class="chev">▼</span>
+      </button>
+      <div class="section-body">
+        <div class="snap-row"><span>Nickel 3-3 Over</span><span>35–40%</span><div class="snap-bar"><div class="snap-fill" style="width:38%"></div></div></div>
+        <div class="snap-row"><span>Nickel 2-4</span><span>10–15%</span><div class="snap-bar"><div class="snap-fill" style="width:12%"></div></div></div>
+        <div class="snap-row"><span>Nickel 3-3 Dbl Mug</span><span>8–10%</span><div class="snap-bar"><div class="snap-fill" style="width:9%"></div></div></div>
+        <div class="snap-row"><span>Nickel 2-4 Dbl Mug</span><span>5–8%</span><div class="snap-bar"><div class="snap-fill" style="width:6%"></div></div></div>
+        <div class="snap-row"><span>3-3-5 Over Flex</span><span>8–10%</span><div class="snap-bar"><div class="snap-fill" style="width:9%"></div></div></div>
+        <div class="snap-row"><span>Dime Rush</span><span>8–10%</span><div class="snap-bar"><div class="snap-fill" style="width:9%"></div></div></div>
+        <div class="snap-row"><span>Nickel 3-3 Mint</span><span>8–10%</span><div class="snap-bar"><div class="snap-fill" style="width:9%"></div></div></div>
+        <div class="snap-row"><span>3-3-5 Mint</span><span>5–7%</span><div class="snap-bar"><div class="snap-fill" style="width:6%"></div></div></div>
+        <div class="snap-row"><span>3 High Odd</span><span>5–7%</span><div class="snap-bar"><div class="snap-fill" style="width:6%"></div></div></div>
+        <div class="snap-row"><span>3-4 Bear / Goal Line</span><span>Situational</span><div class="snap-bar"><div class="snap-fill" style="width:3%;background:var(--rz)"></div></div></div>
+      </div>
+    </section>
+
+    <section id="pb-tree" class="collapsed">
+      <button type="button" class="section-head" aria-expanded="false">
+        <span>7. One-Screen Formation Decision Tree</span>
+        <span class="chev">▼</span>
+      </button>
+      <div class="section-body">
+        <div class="tree">
+          <dl>
+            <dt>Spread / 10 / 11 personnel</dt><dd>→ Nickel 3-3 Over · POUND (Quarters / Palms)</dd>
+            <dt>Spread + QB run</dt><dd>→ Nickel 2-4 · 3 LOCK (Buzz Mable / Match)</dd>
+            <dt>2nd &amp; long / 3rd &amp; medium</dt><dd>→ Nickel 2-4 Dbl Mug or Nickel 3-3 Dbl Mug · SITE / sim constraint</dd>
+            <dt>Trips / Bunch</dt><dd>→ 3-3-5 Over Flex or Nickel 3-3 Over · STUFF (Cover 6 / Palms)</dd>
+            <dt>3rd &amp; long</dt><dd>→ Dime Rush · Quarters + Mug Sim / Tex</dd>
+            <dt>2TE / RPO / run-heavy spread</dt><dd>→ Nickel 3-3 Mint or 3-3-5 Mint</dd>
+            <dt>3-safety disguise</dt><dd>→ 3-3-5 3 High Odd · Cover 6 / Quarters show</dd>
+            <dt>Short yardage</dt><dd>→ 3-4 Bear</dd>
+            <dt>Goal line</dt><dd>→ Goal Line 5-3 / 6-2 only</dd>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section id="pb-callsheet" class="collapsed">
+      <button type="button" class="section-head" aria-expanded="false">
+        <span>8. Coverage Call Sheet</span>
+        <span class="chev">▼</span>
+      </button>
+      <div class="section-body">
+        <p>Organize by ecosystem—not by front. Copy blocks below for custom playbooks.</p>
+        <div class="sheet-group">
+          <h4><span class="tag tag-pound">POUND</span></h4>
+          <ul class="play-list"><li data-tags="pound">Cover 4 Quarters</li><li data-tags="pound">Cover 4 Palms</li><li data-tags="pound">Match Quarters</li><li data-tags="pound">Quarters Match</li><li data-tags="pound">Cover 9 Show 2</li></ul>
+        </div>
+        <div class="sheet-group">
+          <h4><span class="tag tag-stuff">STUFF</span></h4>
+          <ul class="play-list"><li data-tags="stuff">Cover 6</li><li data-tags="stuff">Cover 6 Willie</li><li data-tags="stuff">Cover 6 Match</li><li data-tags="stuff">Cover 2 Invert</li><li data-tags="stuff">Tampa 2</li></ul>
+        </div>
+        <div class="sheet-group">
+          <h4><span class="tag tag-lock">3 LOCK</span></h4>
+          <ul class="play-list"><li data-tags="lock">Cover 3 Match</li><li data-tags="lock">Cover 3 Buzz Mable</li><li data-tags="lock">Cover 3 Buzz</li><li data-tags="lock">Match Buzz</li><li data-tags="lock">Cover 3 Seam</li><li data-tags="lock">Cover 3 Hard Flat</li></ul>
+        </div>
+        <div class="sheet-group">
+          <h4><span class="tag tag-danger">DANGER</span></h4>
+          <ul class="play-list"><li data-tags="danger">Cover 3 Match</li><li data-tags="danger">Cover 3 Seam</li><li data-tags="danger">Match 3</li><li data-tags="danger">Cover 3 Sky</li><li data-tags="lock danger">Cover 1 Robber</li><li data-tags="lock danger">Cover 1 Hole</li></ul>
+        </div>
+        <div class="sheet-group">
+          <h4><span class="tag tag-pressure">PRESSURE</span> Constraints</h4>
+          <ul class="play-list"><li data-tags="pressure">Sim Pressure 3</li><li data-tags="pressure">Edge Blitz 3</li><li data-tags="pressure">Field Sim 3</li><li data-tags="pressure">Nickel Sim 2</li><li data-tags="pressure">Nickel Sim 3</li><li data-tags="pressure">Buck Slant 3</li><li data-tags="pressure">Nickel Dog 3 Buzz</li><li data-tags="pressure">LB Blitz 3</li><li data-tags="pressure">SS Dog 3</li><li data-tags="pressure">Mug Sim Pressure</li><li data-tags="pressure">Mug Blitz Tex 3</li><li data-tags="pressure">Saw Blitz 3</li><li data-tags="pressure">CB Bench Blitz</li></ul>
+        </div>
+        <div class="sheet-group">
+          <h4><span class="tag tag-rz">RED ZONE</span></h4>
+          <ul class="play-list"><li data-tags="rz pound stuff">Cover 4 Palms</li><li data-tags="rz lock danger">Cover 1 Robber</li><li data-tags="rz lock danger">Cover 1 Hole</li><li data-tags="rz stuff">Cover 2 Invert</li><li data-tags="rz pressure">Edge Blitz 3</li></ul>
+        </div>
+        <div class="sheet-group">
+          <h4>Anti-Scout Calls</h4>
+          <ul class="play-list"><li data-tags="stuff">Cover 2 Invert</li><li data-tags="stuff">Tampa 2</li><li data-tags="pound">Cover 9 Show 2</li><li data-tags="pressure">Nickel Dog 3 Buzz</li><li data-tags="danger">Trio Sky Zone</li></ul>
+        </div>
+        <div class="copy-row"><button type="button" class="btn btn-primary" id="pb-copyAllCalls">Copy full call sheet</button></div>
+      </div>
+    </section>
+
+    <section id="pb-adjust" class="collapsed">
+      <button type="button" class="section-head" aria-expanded="false">
+        <span>9. Adjustment Logic</span>
+        <span class="chev">▼</span>
+      </button>
+      <div class="section-body">
+        <ul>
+          <li><strong>Trips</strong> → Cover 6 / Cover 3 Buzz Mable / Cover 3 Match</li>
+          <li><strong>Bunch</strong> → Cover 4 Palms / Sky / box logic (STUFF)</li>
+          <li><strong>Empty</strong> → Cover 4 Quarters / Nickel 2-4 / Dime Rush</li>
+          <li><strong>RPO</strong> → Shade Down + Palms / Quarters (Mint front)</li>
+          <li><strong>Shot teams</strong> → Shade Over Top + Cover 6</li>
+          <li><strong>Scramble QB</strong> → Contain ON + Nickel 2-4</li>
+          <li><strong>Red zone</strong> → Cover 4 Palms / Cover 1 Robber / man-free robber concepts</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="pb-pressure" class="collapsed">
+      <button type="button" class="section-head" aria-expanded="false">
+        <span>10. Stunt / Pressure Rules</span>
+        <span class="chev">▼</span>
+      </button>
+      <div class="section-body">
+        <ul>
+          <li>Pressure is a <strong>constraint</strong>, not the identity.</li>
+          <li>Sim pressure at most every <strong>4–5 calls</strong>.</li>
+          <li><strong>Never</strong> call the same pressure twice in a row.</li>
+          <li>Complex coverage → simple pressure (Edge Blitz 3, Sim Pressure 3).</li>
+          <li>Complex pressure (Tex, Dog, Mug) → simple coverage (Quarters, Tampa 2).</li>
+          <li>TEX / ET / contain rules: use selectively vs scramble QBs; default contain ON outside blitzes.</li>
+        </ul>
+        <div class="warn"><strong>Do Not Overuse:</strong> LB Blitz 0, Cover 0, fire zones every series, Mug every 3rd down.</div>
+      </div>
+    </section>
+
+    <section id="pb-redzone" class="collapsed">
+      <button type="button" class="section-head" aria-expanded="false">
+        <span>11. Red Zone Package</span>
+        <span class="chev">▼</span>
+      </button>
+      <div class="section-body">
+        <ul class="play-list" style="margin-bottom:.75rem">
+          <li data-tags="rz pound stuff">Cover 4 Palms</li>
+          <li data-tags="rz lock danger">Cover 1 Robber</li>
+          <li data-tags="rz lock danger">Cover 1 Hole</li>
+          <li data-tags="rz stuff">Cover 2 Invert</li>
+          <li data-tags="rz pressure">Edge Blitz 3</li>
+        </ul>
+        <p>Bear / Goal Line only when yardage &amp; personnel demand it—not your default red-zone front.</p>
+      </div>
+    </section>
+
+    <section id="pb-scout" class="collapsed">
+      <button type="button" class="section-head" aria-expanded="false">
+        <span>12. Anti-Scout Rotation</span>
+        <span class="chev">▼</span>
+      </button>
+      <div class="section-body">
+        <h4>Week A — POUND / STUFF heavy</h4>
+        <p>Quarters, Palms, Cover 6, Cover 6 Willie. Formation: Nickel 3-3 Over, 2-4, Over Flex.</p>
+        <h4>Week B — 3 LOCK / DANGER heavy</h4>
+        <p>Cover 3 Match, Buzz Mable, Cover 1 Robber, Cover 1 Hole. Formation: 2-4, 3-3 Dbl Mug.</p>
+        <h4>Week C — Sim pressure / trap changeups</h4>
+        <p>Cover 2 Invert, Tampa 2, Sim Pressure 3, Edge Blitz 3, Nickel Dog 3 Buzz. Max 1 sim per drive segment.</p>
+      </div>
+    </section>
+
+    <section id="pb-madden-map" class="collapsed">
+      <button type="button" class="section-head" aria-expanded="false">
+        <span>Madden '26 Quick Map</span>
+        <span class="chev">▼</span>
+      </button>
+      <div class="section-body">
+        <table style="width:100%;font-size:.82rem;border-collapse:collapse">
+          <tr style="border-bottom:1px solid var(--border)"><th style="text-align:left;padding:.4rem;color:var(--text)">CFB '26</th><th style="text-align:left;padding:.4rem;color:var(--text)">Madden '26</th></tr>
+          <tr><td style="padding:.35rem;color:var(--text)">Nickel 2-4</td><td style="padding:.35rem;color:var(--text)">Nickel 2-4 Odd</td></tr>
+          <tr><td style="padding:.35rem;color:var(--text)">Dime Rush</td><td style="padding:.35rem;color:var(--text)">Dime Normal</td></tr>
+          <tr><td style="padding:.35rem;color:var(--text)">Nickel 3-3 Over</td><td style="padding:.35rem;color:var(--text)">Nickel 3-3 Cub</td></tr>
+          <tr><td style="padding:.35rem;color:var(--text)">Nickel 3-3 Dbl Mug</td><td style="padding:.35rem;color:var(--text)">Dollar 3-2 Mug</td></tr>
+          <tr><td style="padding:.35rem;color:var(--text)">—</td><td style="padding:.35rem;color:var(--text)">Big Nickel Over G (unique)</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <footer>Dark Side Defense · CFB '26 / Madden '26 Sideline Reference · Verify renamed plays in-game</footer>
+  </div>
+</div>
+
+<script>
+(function () {
+  var pb = document.getElementById('playbook-reference');
+  if (!pb) return;
+  pb.querySelectorAll('section').forEach(function (sec) {
+    var head = sec.querySelector('.section-head');
+    if (!head) return;
+    head.addEventListener('click', function () {
+      sec.classList.toggle('collapsed');
+      head.setAttribute('aria-expanded', String(!sec.classList.contains('collapsed')));
+    });
+  });
+  var search = document.getElementById('pb-search');
+  var chipsEl = document.getElementById('pb-chips');
+  var noResults = document.getElementById('pb-noResults');
+  var activeFilter = 'all';
+  function getPlayItems() {
+    return pb.querySelectorAll('#pb-playbook .play-list li, #pb-callsheet .play-list li, #pb-redzone .play-list li');
+  }
+  function applyFilters() {
+    var q = (search.value || '').trim().toLowerCase();
+    var visible = 0;
+    getPlayItems().forEach(function (li) {
+      var tags = (li.getAttribute('data-tags') || '') + ' ' + (li.getAttribute('data-play') || li.textContent);
+      var block = li.closest('.form-block, .sheet-group');
+      var formation = block && block.getAttribute('data-formation') ? block.getAttribute('data-formation') : '';
+      var text = (tags + ' ' + formation + ' ' + li.textContent).toLowerCase();
+      var show = (!q || text.indexOf(q) !== -1) && (activeFilter === 'all' || tags.indexOf(activeFilter) !== -1);
+      li.classList.toggle('hidden', !show);
+      if (show) visible++;
+    });
+    pb.querySelectorAll('.form-block').forEach(function (fb) {
+      var any = Array.from(fb.querySelectorAll('.play-list li')).some(function (p) { return !p.classList.contains('hidden'); });
+      var h4text = fb.querySelector('h4') ? fb.querySelector('h4').textContent.toLowerCase() : '';
+      var qMatch = !q || (fb.getAttribute('data-formation') || '').indexOf(q) !== -1 || h4text.indexOf(q) !== -1;
+      fb.classList.toggle('hide-filter', !any && !qMatch);
+    });
+    noResults.classList.toggle('show', visible === 0 && (q || activeFilter !== 'all'));
+  }
+  search.addEventListener('input', applyFilters);
+  chipsEl.addEventListener('click', function (e) {
+    var chip = e.target.closest('.chip');
+    if (!chip) return;
+    chipsEl.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('active'); });
+    chip.classList.add('active');
+    activeFilter = chip.getAttribute('data-f');
+    applyFilters();
+  });
+  pb.querySelectorAll('.copy-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var block = btn.closest('.form-block');
+      var plays = Array.from(block.querySelectorAll('.play-list li')).map(function (li) { return li.getAttribute('data-play') || li.textContent.trim(); });
+      var name = block.querySelector('h4').childNodes[0].textContent.trim();
+      navigator.clipboard.writeText(name + '\n' + plays.join('\n')).then(function () {
+        btn.textContent = 'Copied!';
+        setTimeout(function () { btn.textContent = 'Copy formation list'; }, 1500);
+      });
+    });
+  });
+  var copyAllBtn = document.getElementById('pb-copyAllCalls');
+  if (copyAllBtn) {
+    copyAllBtn.addEventListener('click', function () {
+      var lines = [];
+      pb.querySelectorAll('#pb-callsheet .sheet-group').forEach(function (g) {
+        var h = g.querySelector('h4');
+        if (h) { lines.push('\n' + h.textContent.trim()); g.querySelectorAll('.play-list li').forEach(function (li) { lines.push('  ' + li.textContent.trim()); }); }
+      });
+      navigator.clipboard.writeText(lines.join('\n').trim());
+      copyAllBtn.textContent = 'Copied!';
+      setTimeout(function () { copyAllBtn.textContent = 'Copy full call sheet'; }, 1500);
+    });
+  }
+  pb.querySelectorAll('.play-list li[data-play]').forEach(function (li) {
+    li.addEventListener('click', function () {
+      navigator.clipboard.writeText(li.getAttribute('data-play') || li.textContent.trim());
+      li.style.borderColor = 'var(--accent)';
+      setTimeout(function () { li.style.borderColor = ''; }, 400);
+    });
+    li.title = 'Tap to copy play name';
+  });
+  applyFilters();
+})();
+</script>
 </body>
 </html>
