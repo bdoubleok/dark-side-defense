@@ -1,8 +1,0 @@
-{
-  "name": "Inmate Profile Wireframe Generator",
-  "id": "inmate-profile-wireframe-generator",
-  "api": "1.0.0",
-  "main": "code.js",
-  "editorType": ["figma"],
-  "documentAccess": "dynamic-page"
-}
