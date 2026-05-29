@@ -2,6 +2,8 @@
 
 Low-to-mid fidelity grayscale wireframe for a 1440px desktop **Inmate Profile** admin experience, per the product spec.
 
+**Location:** `Unified Command/inmate-profile-wireframe/` (copy to your machine with [`scripts/copy-to-local.sh`](scripts/copy-to-local.sh)).
+
 ## Figma MCP note
 
 The Cursor **Figma MCP server** was unavailable in the cloud build environment (no `use_figma` / `create_new_file` tools). This folder provides two equivalent paths:
