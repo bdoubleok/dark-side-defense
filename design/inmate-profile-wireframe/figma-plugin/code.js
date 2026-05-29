@@ -1,7 +1,14 @@
 /**
  * Inmate Profile Wireframe Generator
  * Creates grayscale low-fi wireframe per spec (1440 desktop, 8pt grid, Auto Layout).
+ *
+ * Target file: Unified Command — Activities
+ * https://www.figma.com/design/DzbyDszCqh5R0FzdL1etra/Unified-Command---Activities?node-id=831-1067
+ * Placement: under node 831:1067 when present; otherwise creates pages 00–03.
  */
+
+const TARGET_NODE_ID = "831:1067";
+const TARGET_FILE_NAME = "Unified Command — Activities";
 
 const C = {
   bg: { r: 0.96, g: 0.96, b: 0.96 },
@@ -236,8 +243,10 @@ function createTwoColumnForm() {
   return comp;
 }
 
-function buildComponentsPage(page) {
-  figma.currentPage = page;
+function buildComponentsPage(pageOrParent) {
+  const isPage = pageOrParent.type === "PAGE";
+  if (isPage) figma.currentPage = pageOrParent;
+
   components.badgeActive = createBadge("Active", "active");
   components.badgeReleased = createBadge("Released", "released");
   components.input = createInput("Label", "Value");
@@ -255,12 +264,166 @@ function buildComponentsPage(page) {
   const row = frame("Component row", 1200, 400, "HORIZONTAL", SP.md, SP.md);
   row.fills = [{ type: "SOLID", color: C.bg }];
   Object.values(components).forEach((c) => row.appendChild(c));
-  page.appendChild(row);
 
-  const label = textNode("00 — Components", 24, "Bold", C.text);
-  label.x = 40;
-  label.y = 40;
-  page.appendChild(label);
+  if (isPage) {
+    pageOrParent.appendChild(row);
+    const label = textNode("00 — Components", 24, "Bold", C.text);
+    label.x = 40;
+    label.y = 40;
+    pageOrParent.appendChild(label);
+  } else {
+    pageOrParent.appendChild(row);
+    pageOrParent.appendChild(textNode("00 — Components (library)", 14, "Semi Bold", C.muted));
+  }
+  return row;
+}
+
+function getPageAncestor(node) {
+  let current = node;
+  while (current && current.type !== "PAGE") {
+    current = current.parent;
+  }
+  return current;
+}
+
+function canHoldChildren(node) {
+  return (
+    node &&
+    (node.type === "FRAME" ||
+      node.type === "SECTION" ||
+      node.type === "GROUP" ||
+      node.type === "COMPONENT")
+  );
+}
+
+async function resolvePlacement() {
+  try {
+    const target = await figma.getNodeByIdAsync(TARGET_NODE_ID);
+    if (!target) return { mode: "pages" };
+
+    const page = getPageAncestor(target);
+    if (!page) return { mode: "pages" };
+
+    figma.currentPage = page;
+    return { mode: "anchored", target, page };
+  } catch (e) {
+    return { mode: "pages" };
+  }
+}
+
+function getPlacementOrigin(target, page) {
+  if ("absoluteTransform" in target && target.absoluteTransform) {
+    const t = target.absoluteTransform;
+    const pageTransform =
+      "absoluteTransform" in page ? page.absoluteTransform : [[1, 0, 0], [0, 1, 0]];
+    const x = t[0][2] - pageTransform[0][2];
+    const y = t[1][2] - pageTransform[1][2];
+    const h = "height" in target ? target.height : 0;
+    return { x, y: y + h + SP.lg };
+  }
+  return { x: 80, y: 120 };
+}
+
+function buildAnchoredWireframe(placement) {
+  const { target, page } = placement;
+  const origin = getPlacementOrigin(target, page);
+
+  const root = frame("Inmate Profile — Wireframe", 4600, 400, "VERTICAL", SP.lg, 0);
+  root.fills = [{ type: "SOLID", color: C.bg }];
+  root.x = origin.x;
+  root.y = origin.y;
+
+  const header = textNode(
+    `Inmate Profile wireframe → anchored under ${target.name} (${TARGET_NODE_ID})`,
+    14,
+    "Medium",
+    C.muted
+  );
+  root.appendChild(header);
+
+  const componentsWrap = frame("00 — Components", 1280, 440, "VERTICAL", SP.sm, SP.md);
+  componentsWrap.fills = [{ type: "SOLID", color: C.surface }];
+  applyStroke(componentsWrap);
+  componentsWrap.cornerRadius = 8;
+  buildComponentsPage(componentsWrap);
+
+  const sectionsWrap = frame("02 — Sections", 4500, 3600, "VERTICAL", SP.md, SP.md);
+  sectionsWrap.fills = [];
+  sectionsWrap.appendChild(textNode("Section frames", 18, "Semi Bold", C.text));
+
+  const grid = frame("Section grid", 4400, 3400, "VERTICAL", SP.lg, 0);
+  grid.fills = [];
+
+  const builders = [
+    ["01 Overview", "Overview", sectionOverview],
+    ["02 Personal Details", "Personal Details", sectionPersonalDetails],
+    ["03 Identifiers", "Identifiers & Credentials", sectionIdentifiers],
+    ["04 Location", "Location", sectionLocation],
+    ["05 Access", "Access & Permissions", sectionAccess],
+    ["06 Call Settings", "Call Settings", sectionCallSettings],
+    ["07 Call Restrictions", "Call Restrictions", sectionCallRestrictions],
+    ["08 Visitation (master OFF)", "Visitation Settings", sectionVisitation(false)],
+    ["08b Visitation (master ON)", "Visitation Settings", sectionVisitation(true)],
+    ["09 Visit Restrictions", "Visit Restrictions", sectionVisitRestrictions],
+    ["10 Monitoring (collapsed)", "Monitoring", (m) => sectionMonitoring(m, false)],
+    ["10b Monitoring (expanded)", "Monitoring", (m) => sectionMonitoring(m, true)],
+    ["11 Notes", "Notes", sectionNotes],
+  ];
+
+  let rowFrame = frame("Row 1", 4400, 1200, "HORIZONTAL", SP.lg, 0);
+  rowFrame.fills = [];
+  builders.forEach(([frameName, nav, builder], idx) => {
+    const f = shellFrame(frameName, nav, builder, 1100);
+    rowFrame.appendChild(f);
+    if ((idx + 1) % 3 === 0) {
+      grid.appendChild(rowFrame);
+      rowFrame = frame(`Row ${idx / 3 + 2}`, 4400, 1200, "HORIZONTAL", SP.lg, 0);
+      rowFrame.fills = [];
+    }
+  });
+  if (rowFrame.children.length > 0) grid.appendChild(rowFrame);
+  sectionsWrap.appendChild(grid);
+
+  const shell = shellFrame("01 Shell / Inmate Profile", "Overview", sectionOverview, 1024);
+  root.appendChild(shell);
+  root.appendChild(componentsWrap);
+  root.appendChild(sectionsWrap);
+
+  const annotations = frame("03 — Annotations", 480, 620, "VERTICAL", SP.sm, SP.md);
+  annotations.fills = [{ type: "SOLID", color: C.bg }];
+  applyStroke(annotations);
+  annotations.cornerRadius = 8;
+  [
+    ["Identifiers vs credentials", "Separation reduces accidental PIN exposure when scanning."],
+    ["Visitor list master", "When ON, child visit-type toggles are disabled — enforcement is centralized."],
+    ["Location hierarchy", "Facility drives block/room — dropdown cascade for engineering."],
+    ["Monitoring", "Collapsed by default to reduce cognitive load for daily ops."],
+    ["Terminology", "Tablet PIN vs Call PIN labels normalized in copy."],
+  ].forEach(([title, body]) => {
+    const n = frame(title, 440, 96, "VERTICAL", SP.xs, SP.sm);
+    n.fills = [{ type: "SOLID", color: { r: 1, g: 0.98, b: 0.8 } }];
+    applyStroke(n);
+    n.cornerRadius = 4;
+    n.appendChild(textNode(title, 13, "Semi Bold", C.text));
+    n.appendChild(textNode(body, 12, "Regular", C.muted));
+    annotations.appendChild(n);
+  });
+  root.appendChild(annotations);
+
+  if (canHoldChildren(target) && "layoutMode" in target && target.height > 600) {
+    target.appendChild(root);
+    root.x = SP.md;
+    root.y = SP.md;
+  } else if (canHoldChildren(target)) {
+    target.appendChild(root);
+    root.x = SP.md;
+    root.y = ("height" in target ? target.height : 0) + SP.md;
+  } else {
+    page.appendChild(root);
+  }
+
+  figma.viewport.scrollAndZoomIntoView([root]);
+  return root;
 }
 
 function buildLeftNav(activeIndex, secondaryIndex) {
@@ -755,6 +918,21 @@ function buildAnnotationsPage(page) {
 
 async function run() {
   await loadFonts();
+
+  const placement = await resolvePlacement();
+
+  if (placement.mode === "anchored") {
+    buildAnchoredWireframe(placement);
+    figma.closePlugin(
+      `Inmate Profile wireframe added under node ${TARGET_NODE_ID} in "${TARGET_FILE_NAME}".`
+    );
+    return;
+  }
+
+  figma.notify(
+    `Node ${TARGET_NODE_ID} not found. Open "${TARGET_FILE_NAME}" and run again, or using standalone pages.`,
+    { timeout: 5000 }
+  );
 
   const pages = {
     components: figma.createPage(),

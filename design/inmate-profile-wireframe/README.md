@@ -11,11 +11,13 @@ The Cursor **Figma MCP server** was unavailable in the cloud build environment (
 
 ## 1. Generate in Figma (plugin)
 
-1. Open **Figma Desktop**.
+**Target file:** [Unified Command — Activities](https://www.figma.com/design/DzbyDszCqh5R0FzdL1etra/Unified-Command---Activities?node-id=831-1067&m=dev) — wireframe is placed under node **`831:1067`**. See [TARGET.md](TARGET.md).
+
+1. Open that file in **Figma Desktop**.
 2. **Plugins → Development → Import plugin from manifest…**
 3. Select [`figma-plugin/manifest.json`](figma-plugin/manifest.json).
 4. Run **Inmate Profile Wireframe Generator**.
-5. Wait for completion (fonts load, frames are created on four pages).
+5. Wait for completion — anchored layout under node `831:1067`, or four standalone pages if the node is not found.
 
 ### File structure created
 
