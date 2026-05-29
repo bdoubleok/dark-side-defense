@@ -978,6 +978,7 @@ footer {
     btn.addEventListener('click', function () {
       const block = btn.closest('.form-block');
       const plays = Array.from(block.querySelectorAll('.play-list li'))
+        .filter(function (li) { return !li.classList.contains('hidden'); })
         .map(function (li) { return li.getAttribute('data-play') || li.textContent.trim(); });
       const name = block.querySelector('h4').childNodes[0].textContent.trim();
       const text = name + '\n' + plays.join('\n');
@@ -992,9 +993,11 @@ footer {
     const lines = [];
     document.querySelectorAll('#callsheet .sheet-group').forEach(function (g) {
       const h = g.querySelector('h4');
-      if (!h) return;
+      const plays = Array.from(g.querySelectorAll('.play-list li'))
+        .filter(function (li) { return !li.classList.contains('hidden'); });
+      if (!h || !plays.length) return;
       lines.push('\n' + h.textContent.trim());
-      g.querySelectorAll('.play-list li').forEach(function (li) {
+      plays.forEach(function (li) {
         lines.push('  ' + li.textContent.trim());
       });
     });
