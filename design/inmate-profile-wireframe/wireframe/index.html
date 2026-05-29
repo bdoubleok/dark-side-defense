@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1440" />
+  <title>Inmate Profile — Wireframe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <nav class="nav" aria-label="Section navigation">
+      <div class="nav-title">Inmate Profile</div>
+      <button type="button" class="nav-item active" data-section="overview">Overview</button>
+      <button type="button" class="nav-item" data-section="personal">Personal Details</button>
+      <button type="button" class="nav-item" data-section="identifiers">Identifiers & Credentials</button>
+      <button type="button" class="nav-item" data-section="location">Location</button>
+      <button type="button" class="nav-item" data-section="access">Access & Permissions</button>
+      <button type="button" class="nav-item" data-section="call-settings">Call Settings</button>
+      <button type="button" class="nav-item" data-section="call-restrictions">Call Restrictions</button>
+      <button type="button" class="nav-item" data-section="visitation">Visitation Settings</button>
+      <button type="button" class="nav-item" data-section="visit-restrictions">Visit Restrictions</button>
+      <div class="nav-advanced">ADVANCED</div>
+      <button type="button" class="nav-item secondary" data-section="monitoring">Monitoring</button>
+      <button type="button" class="nav-item" data-section="notes">Notes</button>
+    </nav>
+
+    <main class="main">
+      <!-- 1. Overview -->
+      <section id="overview" class="section active">
+        <p class="page-header">02 — Sections / Overview</p>
+        <h2>Overview</h2>
+        <div class="card hero">
+          <div class="photo" aria-hidden="true"></div>
+          <div class="hero-meta">
+            <div class="hero-row">
+              <h1>Jordan A. Martinez</h1>
+              <span class="badge">Active</span>
+            </div>
+            <p class="meta-line">DOB: 03/14/1989 (37) · Facility: North Annex · Room: B-204</p>
+            <p>Tablet balance: $12.40 · Phone balance: $8.00</p>
+            <details class="collapsible">
+              <summary>View details</summary>
+              <p class="meta-line">Inmate ID: 8849201</p>
+              <p class="meta-line">Booking #: 2024-11829</p>
+              <p class="meta-line">Booking key: NA-B204-JM</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Personal Details -->
+      <section id="personal" class="section">
+        <h2>Personal Details</h2>
+        <div class="card">
+          <div class="grid-3">
+            <div class="field"><label>First name</label><input type="text" value="Jordan" /></div>
+            <div class="field"><label>Middle name</label><input type="text" value="A." /></div>
+            <div class="field"><label>Last name</label><input type="text" value="Martinez" /></div>
+          </div>
+          <div class="grid-2">
+            <div class="field"><label>Date of birth</label><input type="text" value="03/14/1989" /></div>
+            <div class="field readonly"><label>Age</label><input type="text" value="37" readonly /></div>
+          </div>
+          <div class="grid-2">
+            <div class="field"><label>Gender</label><select><option>Male</option></select></div>
+            <div class="field"><label>Race</label><select><option>Decline to answer</option></select></div>
+          </div>
+          <div class="grid-2">
+            <div class="field"><label>Classification code</label><input type="text" value="MED" /></div>
+            <div class="field"><label>Country of birth</label><input type="text" value="United States" /></div>
+          </div>
+          <div class="field"><label>Member type</label><input type="text" value="General population" /></div>
+        </div>
+      </section>
+
+      <!-- 3. Identifiers -->
+      <section id="identifiers" class="section">
+        <h2>Identifiers & Credentials</h2>
+        <div class="card">
+          <h3>System identifiers</h3>
+          <div class="grid-3">
+            <div class="field readonly"><label>Inmate ID</label><input readonly value="8849201" /></div>
+            <div class="field readonly"><label>Booking #</label><input readonly value="2024-11829" /></div>
+            <div class="field readonly"><label>Booking key</label><input readonly value="NA-B204-JM" /></div>
+            <div class="field readonly"><label>Alias</label><input readonly value="—" /></div>
+            <div class="field readonly"><label>Misc ID</label><input readonly value="—" /></div>
+            <div class="field readonly"><label>Card ID</label><input readonly value="CARD-99201" /></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Access credentials</h3>
+          <div class="grid-2">
+            <div class="field"><label>Tablet PIN <span class="tooltip" title="Login PIN for facility tablet">?</span></label><input type="password" value="••••••" /></div>
+            <div class="field"><label>Backup PIN <span class="tooltip" title="Secondary tablet PIN">?</span></label><input type="password" value="••••••" /></div>
+            <div class="field"><label>Call PIN (debit & collect) <span class="tooltip" title="Telephony PIN">?</span></label><input type="password" value="••••••" /></div>
+            <div class="field"><label>Password</label><input type="password" value="••••••" /></div>
+          </div>
+        </div>
+        <div class="card pin-actions">
+          <div class="toggle-row">
+            <button type="button" class="toggle on" aria-pressed="true"></button>
+            <div class="toggle-copy"><strong>Sync PINs</strong><span>Keep tablet and call PINs aligned</span></div>
+          </div>
+          <button type="button" class="btn primary">Reset PIN</button>
+        </div>
+      </section>
+
+      <!-- 4. Location -->
+      <section id="location" class="section">
+        <h2>Location</h2>
+        <div class="card">
+          <div class="field"><label>Facility</label><select><option>North Annex</option></select></div>
+          <div class="hierarchy">
+            <div class="field"><label>Block</label><select><option>B</option></select></div>
+            <div class="field"><label>Room (housing)</label><select><option>B-204</option></select></div>
+            <div class="field"><label>Group(s)</label><input type="text" value="General population" /></div>
+          </div>
+          <details class="collapsible">
+            <summary>Advanced</summary>
+            <div class="field"><label>Raw location string</label><input type="text" value="NA/B/B-204/GP" readonly /></div>
+          </details>
+        </div>
+      </section>
+
+      <!-- 5. Access -->
+      <section id="access" class="section">
+        <h2>Access & Permissions</h2>
+        <div class="card">
+          <div class="toggle-row">
+            <button type="button" class="toggle on" aria-pressed="true"></button>
+            <div class="toggle-copy"><strong>Phone station access</strong><span>Controls access to facility phone stations</span></div>
+          </div>
+          <div class="toggle-row">
+            <button type="button" class="toggle on" aria-pressed="true"></button>
+            <div class="toggle-copy"><strong>Tablet access</strong><span>Controls access to tablet login</span></div>
+          </div>
+          <div class="toggle-row">
+            <button type="button" class="toggle" aria-pressed="false"></button>
+            <div class="toggle-copy"><strong>Video visitation access</strong><span>Allows scheduling and joining video visits</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Limits</h3>
+          <div class="grid-2">
+            <div class="field"><label>Limit on grievances</label><input type="number" value="3" /></div>
+            <div class="field"><label>Limit on requests</label><input type="number" value="5" /></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Call Settings -->
+      <section id="call-settings" class="section">
+        <h2>Call Settings</h2>
+        <div class="card">
+          <h3>Contact controls</h3>
+          <div class="toggle-row">
+            <button type="button" class="toggle on"></button>
+            <div class="toggle-copy"><strong>Auto PAN</strong><span>Automatically assign PAN</span></div>
+          </div>
+          <div class="field"><label>Auto PAN number</label><input type="text" value="4025550182" /></div>
+          <div class="field"><label>Max PAN</label><input type="text" value="4025550199" /></div>
+        </div>
+        <div class="card">
+          <h3>Usage limits</h3>
+          <div class="field"><label>Minutes between calls</label><input type="number" value="15" /></div>
+        </div>
+        <div class="card">
+          <h3>Security</h3>
+          <div class="field"><label>Threat group</label><select><option>Standard</option></select></div>
+          <p class="status-dot">Voice IQ — Verified</p>
+        </div>
+        <div class="card">
+          <h3>Features</h3>
+          <div class="toggle-row">
+            <button type="button" class="toggle on"></button>
+            <div class="toggle-copy"><strong>Voicemail</strong><span>Enable voicemail box</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. Call Restrictions -->
+      <section id="call-restrictions" class="section">
+        <h2>Call Restrictions</h2>
+        <div class="card">
+          <span class="badge">Active</span>
+          <div class="timeline">
+            <div class="field"><label>Lockout start date/time</label><input type="text" value="05/01/2026 08:00" /></div>
+            <div class="field"><label>Lockout end date/time</label><input type="text" value="05/15/2026 08:00" /></div>
+          </div>
+          <div class="toggle-row">
+            <button type="button" class="toggle"></button>
+            <div class="toggle-copy"><strong>Allow free calls</strong><span>Override free call lockout</span></div>
+          </div>
+          <div class="toggle-row">
+            <button type="button" class="toggle"></button>
+            <div class="toggle-copy"><strong>Allow private calls</strong><span>Override private call lockout</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. Visitation -->
+      <section id="visitation" class="section">
+        <h2>Visitation Settings</h2>
+        <p class="annotation-banner">Toggle “Use approved visitor list” to see parent → child dependency</p>
+        <div class="card">
+          <div class="toggle-row">
+            <button type="button" class="toggle on"></button>
+            <div class="toggle-copy"><strong>Allow inmate to schedule visits</strong><span>Inmate can propose visit times</span></div>
+          </div>
+          <div class="toggle-row">
+            <button type="button" class="toggle"></button>
+            <div class="toggle-copy"><strong>Auto-record video visits</strong><span>Sessions stored per policy</span></div>
+          </div>
+          <div class="toggle-row" id="visitor-master-row">
+            <button type="button" class="toggle" id="visitor-master"></button>
+            <div class="toggle-copy"><strong>Use approved visitor list</strong><span>When on, visit-type toggles are enforced centrally</span></div>
+          </div>
+          <div id="visitor-children" style="padding-left: 32px;">
+            <div class="toggle-row child-toggle">
+              <button type="button" class="toggle on"></button>
+              <div class="toggle-copy"><strong>Video visits</strong><span>Controlled by approved list</span></div>
+            </div>
+            <div class="toggle-row child-toggle">
+              <button type="button" class="toggle on"></button>
+              <div class="toggle-copy"><strong>Face-to-face visits</strong><span>Controlled by approved list</span></div>
+            </div>
+            <div class="toggle-row child-toggle">
+              <button type="button" class="toggle"></button>
+              <div class="toggle-copy"><strong>Internet video visits</strong><span>Controlled by approved list</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. Visit Restrictions -->
+      <section id="visit-restrictions" class="section">
+        <h2>Visit Restrictions</h2>
+        <div class="card">
+          <div class="field"><label>Restriction type</label><select><option>Temporary suspension</option></select></div>
+          <div class="field"><label>Restriction reason</label><textarea rows="3">Documented incident on 04/12/2026 — pending review.</textarea></div>
+          <div class="field"><label>Authorized by</label><input type="text" value="Officer L. Chen" /></div>
+          <div class="grid-2">
+            <div class="field"><label>Start date</label><input type="text" value="05/01/2026" /></div>
+            <div class="field"><label>End date</label><input type="text" value="05/31/2026" /></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10. Monitoring -->
+      <section id="monitoring" class="section">
+        <h2>Monitoring (Advanced)</h2>
+        <details class="card warning-border collapsible">
+          <summary>Monitoring controls</summary>
+          <h3>Status flags</h3>
+          <div class="toggle-row"><button type="button" class="toggle on"></button><div class="toggle-copy"><strong>Active status</strong><span>Monitoring enabled</span></div></div>
+          <div class="field"><label>Hot PIN (call monitoring)</label><input type="password" value="••••" /></div>
+          <div class="toggle-row"><button type="button" class="toggle"></button><div class="toggle-copy"><strong>Currently in use</strong><span>Live session</span></div></div>
+          <h3>Voice & playback</h3>
+          <div class="toggle-row"><button type="button" class="toggle"></button><div class="toggle-copy"><strong>Restricted playback</strong><span>Limit recording playback</span></div></div>
+          <div class="toggle-row"><button type="button" class="toggle on"></button><div class="toggle-copy"><strong>Voice verification — enrolled</strong></div></div>
+          <div class="toggle-row"><button type="button" class="toggle"></button><div class="toggle-copy"><strong>Voice verification — exempt</strong></div></div>
+          <button type="button" class="btn primary">Reset recorded name</button>
+        </details>
+      </section>
+
+      <!-- 11. Notes -->
+      <section id="notes" class="section">
+        <h2>Notes</h2>
+        <div class="card">
+          <h3>Editable notes</h3>
+          <div class="field"><label>Notes</label><textarea rows="4">Case manager notes — follow up on visitation appeal.</textarea></div>
+          <div class="actions">
+            <button type="button" class="btn primary">Save</button>
+            <button type="button" class="btn">Clear</button>
+          </div>
+        </div>
+        <div class="card notes-external">
+          <h3>External notes (read-only)</h3>
+          <div class="log-list">
+            <div class="log-item"><time>2026-05-28 14:02</time>Visit request auto-denied (restriction active)</div>
+            <div class="log-item"><time>2026-05-27 09:15</time>PIN sync completed</div>
+            <div class="log-item"><time>2026-05-20 11:00</time>Transferred to North Annex B-204</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Annotations (inline reference) -->
+      <section id="annotations-ref" class="section" style="display:none;">
+        <h2>Annotations</h2>
+        <ul>
+          <li><strong>Identifiers vs credentials:</strong> Separation reduces accidental PIN exposure.</li>
+          <li><strong>Visitor list master:</strong> When ON, child toggles disabled.</li>
+          <li><strong>Location hierarchy:</strong> Facility drives block/room cascade.</li>
+          <li><strong>Monitoring:</strong> Collapsed by default for daily ops.</li>
+        </ul>
+      </section>
+    </main>
+
+    <aside class="utility" title="Utility panel (collapsed)">›</aside>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
