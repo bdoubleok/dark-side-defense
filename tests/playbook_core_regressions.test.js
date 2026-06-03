@@ -1,10 +1,10 @@
-import assert from 'node:assert/strict';
-import { spawn } from 'node:child_process';
-import { mkdtemp, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import path from 'node:path';
-import { pathToFileURL } from 'node:url';
-import test from 'node:test';
+const assert = require('node:assert/strict');
+const { spawn } = require('node:child_process');
+const { mkdtemp, rm } = require('node:fs/promises');
+const { tmpdir } = require('node:os');
+const path = require('node:path');
+const { pathToFileURL } = require('node:url');
+const test = require('node:test');
 
 const INDEX_URL = pathToFileURL(path.resolve('index.html')).href;
 
@@ -227,7 +227,7 @@ test('decision tree buttons work without relying on global event', async () => {
   try {
     const result = await page.evaluate(`(() => {
       Array.from(document.querySelectorAll('#situationSelector .situation-btn'))
-        .find(btn => btn.textContent.includes('Passing Downs - Medium'))
+        .find(btn => btn.textContent.includes('Passing Downs (Medium)'))
         .click();
       document.getElementById('pressuresToggle').click();
 
