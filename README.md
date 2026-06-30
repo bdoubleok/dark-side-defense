@@ -124,6 +124,7 @@ open index.html
 ## 📖 Documentation
 
 Full documentation available in `/docs`:
+- [Dark Side v4 Spec](docs/dark_side_v4.md) — concept-centric playbook, formations, reads, recipes, recruiting
 - DL Alignment Guide
 - Pressure System Guide
 - Hash Filter Guide
