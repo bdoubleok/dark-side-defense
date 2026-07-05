@@ -288,9 +288,9 @@ const v4Recruiting = [
 
 const v4ConceptMap = {
   "Cover 3 Match": "DANGER", "Cover 3 Sky": "DANGER", "Cover 3 Buzz": "3 LOCK",
-  "Cover 3 Buzz Mable": "3 LOCK", "Cover 3 Seam": "DANGER", "Match 3": "DANGER",
+  "Cover 3 Buzz Mable": "DANGER", "Cover 3 Seam": "DANGER", "Match 3": "DANGER",
   "Cover 3 Hard Flat": "DANGER", "Trio Sky Zone": "DANGER",
-  "Cover 4 Quarters": "POUND", "Cover 4 Palms": "POUND", "Match Quarters": "POUND",
+  "Cover 4 Quarters": "POUND", "Cover 4 Palms": "STUFF", "Match Quarters": "POUND",
   "Quarters Match": "POUND", "Cover 9 Show 2": "POUND",
   "Cover 6": "STUFF", "Cover 6 Willie": "STUFF", "Cover 6 Match": "STUFF",
   "Cover 4 Solo": "STUFF", "Quarter-Quarter-Half": "STUFF",
@@ -438,6 +438,15 @@ function v4ConceptToFilterTag(concept) {
   return map[concept] || "";
 }
 
+function v4GetFilterTagsForPlay(playData) {
+  const tags = [];
+  const conceptTag = v4ConceptToFilterTag(playData.concept);
+  if (conceptTag) tags.push(conceptTag);
+  // SQUAT is the bunch/red-zone adjustment for Palms, not a separate play name.
+  if (playData.name === "Cover 4 Palms") tags.push("squat");
+  return tags.filter(function (tag, index) { return tag && tags.indexOf(tag) === index; });
+}
+
 function v4EnhanceFormationBlocks(pb) {
   const root = pb || document;
   if (!root) return;
@@ -497,13 +506,13 @@ function v4EnhanceFormationBlocks(pb) {
         badge.textContent = playData.tag;
         li.insertBefore(badge, li.firstChild);
       }
-      if (playData.concept) {
+      const filterTags = v4GetFilterTagsForPlay(playData);
+      if (filterTags.length) {
         const tags = (li.getAttribute("data-tags") || "").split(/\s+/).filter(Boolean);
-        const ft = v4ConceptToFilterTag(playData.concept);
-        if (ft && tags.indexOf(ft) === -1) {
-          tags.push(ft);
-          li.setAttribute("data-tags", tags.join(" "));
-        }
+        filterTags.forEach(function (tag) {
+          if (tags.indexOf(tag) === -1) tags.push(tag);
+        });
+        li.setAttribute("data-tags", tags.join(" "));
       }
     });
   });
