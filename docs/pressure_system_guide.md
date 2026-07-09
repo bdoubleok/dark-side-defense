@@ -81,7 +81,7 @@ Scroll down to see available pressures/stunts:
 At the bottom when viewing pressures:
 
 ```
-📊 PRESSURE LOG                [+ Log Pressure]
+📊 PRESSURE LOG                [+ Log Pressure] [+ Non-Pressure Play]
 
 Q1, 3:45 - Tex Stunt
 Q2, 8:12 - Sim Pressure 3
@@ -92,11 +92,12 @@ Target: 20-25%
 ```
 
 **How to Log:**
-1. Click "[+ Log Pressure]"
-2. Enter pressure name (e.g., "Tex Stunt")
-3. Enter quarter (1-4)
-4. Enter time (e.g., "3:45")
-5. Tracker updates automatically
+1. Tap "[+ Non-Pressure Play]" after each defensive snap without a pressure call.
+2. Click "[+ Log Pressure]" when you call a pressure.
+3. Enter pressure name (e.g., "Tex Stunt")
+4. Enter quarter (1-4)
+5. Enter time (e.g., "3:45")
+6. Tracker updates automatically
 
 **Why Track?**
 - Ensures you stay within Macdonald's 20-25% blitz rate
@@ -191,7 +192,7 @@ Target: 20-25%
 2. Click "🔥 Pressures" toggle
 3. Check decision tree (if available)
 4. Select pressure based on recommendation
-5. Log the call
+5. Log each snap as either a non-pressure play or a pressure call
 6. Monitor pressure rate
 
 ### **Post-Game:**
