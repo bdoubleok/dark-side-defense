@@ -2206,6 +2206,16 @@ const personnelData = {
             lastPlays: null,
             rushWorking: null
         };
+
+        function resetDecisionState() {
+            decisionState = {
+                downDistance: null,
+                qbQuality: null,
+                lastPlays: null,
+                rushWorking: null
+            };
+        }
+
         let hashState = {
             position: 'middle',
             formationType: 'none',
@@ -2227,7 +2237,9 @@ const personnelData = {
         function setFormationFilter(formation) {
             selectedFormation = formation;
             renderFormationSelector();
-            renderPlays();
+            if (currentView === 'coverages') {
+                renderPlays();
+            }
         }
 
         function renderFormationSelector() {
@@ -2697,7 +2709,9 @@ const personnelData = {
             document.getElementById('hashMiddle').checked = (pos === 'middle');
             document.getElementById('hashRight').checked = (pos === 'right');
             updateHashFilter();
-            renderPlays();
+            if (currentView === 'coverages') {
+                renderPlays();
+            }
         }
 
         function setFormationType(type) {
@@ -2727,7 +2741,9 @@ const personnelData = {
             }
             
             updateHashFilter();
-            renderPlays();
+            if (currentView === 'coverages') {
+                renderPlays();
+            }
         }
 
         function setStrength(str) {
@@ -2738,7 +2754,9 @@ const personnelData = {
             document.getElementById('strengthBoundary').checked = (str === 'boundary');
             document.getElementById('strengthNone').checked = (str === 'none');
             updateHashFilter();
-            renderPlays();
+            if (currentView === 'coverages') {
+                renderPlays();
+            }
         }
 
         function updateHashFilter() {
@@ -3143,6 +3161,8 @@ const personnelData = {
             
             // Render appropriate content
             if (view === 'pressures') {
+                document.getElementById('hashFilter').style.display = 'none';
+                document.getElementById('formationSelector').style.display = 'none';
                 renderPressures();
                 renderDecisionTree();
             } else {
@@ -3154,6 +3174,8 @@ const personnelData = {
             const situation = currentSituation;
             const checksDiv = document.getElementById('decisionChecks');
             const resultDiv = document.getElementById('decisionResult');
+            checksDiv.innerHTML = '';
+            resultDiv.innerHTML = '';
             
             // Situation-specific checks
             let checks = [];
@@ -3214,7 +3236,14 @@ const personnelData = {
                 `;
                 checksDiv.innerHTML = '';
             } else {
-                updateDecisionResult();
+                resultDiv.innerHTML = `
+                    <div class="decision-result" style="background: rgba(139, 147, 176, 0.1); border-color: var(--text-secondary); color: var(--text-secondary);">
+                        SITUATIONAL PRESSURE ONLY
+                        <div class="decision-result-detail">
+                            Use the listed pressure calls at their recommended frequencies for this situation.
+                        </div>
+                    </div>
+                `;
             }
         }
 
@@ -3448,6 +3477,7 @@ const personnelData = {
                     currentSituation = key;
                     currentView = 'coverages'; // Reset to coverages when changing situations
                     selectedFormation = 'all'; // Reset formation filter
+                    resetDecisionState();
                     
                     // Reset toggle buttons
                     document.getElementById('coveragesToggle').classList.add('active');
