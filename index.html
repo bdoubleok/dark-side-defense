@@ -2212,8 +2212,50 @@ const personnelData = {
             strength: 'none'
         };
         let selectedFormation = 'all'; // New: tracks formation filter
-        let pressureLog = JSON.parse(localStorage.getItem('pressureLog') || '[]');
-        let totalPlays = parseInt(localStorage.getItem('totalPlays') || '0');
+
+        function safeReadStorage(key) {
+            try {
+                return localStorage.getItem(key);
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function safeWriteStorage(key, value) {
+            try {
+                localStorage.setItem(key, value);
+            } catch (error) {
+                // Storage can be unavailable in restricted browser modes; keep the in-memory tracker usable.
+            }
+        }
+
+        function loadPressureLog() {
+            const storedLog = safeReadStorage('pressureLog');
+            if (!storedLog) return [];
+
+            try {
+                const parsedLog = JSON.parse(storedLog);
+                if (Array.isArray(parsedLog)) return parsedLog;
+                safeWriteStorage('pressureLog', '[]');
+                return [];
+            } catch (error) {
+                safeWriteStorage('pressureLog', '[]');
+                return [];
+            }
+        }
+
+        function loadTotalPlays() {
+            const storedTotal = parseInt(safeReadStorage('totalPlays') || '0', 10);
+            return Number.isFinite(storedTotal) && storedTotal >= 0 ? storedTotal : 0;
+        }
+
+        function savePressureState() {
+            safeWriteStorage('pressureLog', JSON.stringify(pressureLog));
+            safeWriteStorage('totalPlays', totalPlays.toString());
+        }
+
+        let pressureLog = loadPressureLog();
+        let totalPlays = Math.max(loadTotalPlays(), pressureLog.length);
 
         // Get unique formations from current situation
         function getAvailableFormations() {
@@ -2889,8 +2931,7 @@ const personnelData = {
             
             pressureLog = [];
             totalPlays = 0;
-            localStorage.setItem('pressureLog', JSON.stringify(pressureLog));
-            localStorage.setItem('totalPlays', '0');
+            savePressureState();
             updatePressureTracker();
         }
 
@@ -3373,15 +3414,14 @@ const personnelData = {
             
             totalPlays++;
             
-            localStorage.setItem('pressureLog', JSON.stringify(pressureLog));
-            localStorage.setItem('totalPlays', totalPlays.toString());
+            savePressureState();
             
             updatePressureTracker();
         }
 
         function updatePressureSuccess(index, successType) {
             pressureLog[index].success = successType;
-            localStorage.setItem('pressureLog', JSON.stringify(pressureLog));
+            savePressureState();
             updatePressureTracker();
         }
 
