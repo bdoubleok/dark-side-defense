@@ -5,7 +5,8 @@
   "main": "index.html",
   "scripts": {
     "dev": "python3 -m http.server 3000",
-    "deploy": "vercel --prod"
+    "deploy": "vercel --prod",
+    "test": "node test/dl-alignment-formation.test.js"
   },
   "keywords": [
     "football",
