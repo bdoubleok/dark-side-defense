@@ -2317,6 +2317,56 @@ const personnelData = {
         }
 
         // Get DL alignment based on formation and hash
+        // Map coverage-table fronts onto the play card's defensive formation.
+        // The alignment tables are authored for Nickel 2-4; without this adapter,
+        // 4-3 / 3-3 / Dime cards incorrectly display Nickel 2-4 fronts & techniques.
+        function classifyDefensiveFront(formation) {
+            if (!formation) return 'unknown';
+            const f = String(formation).toLowerCase();
+            if (f.includes('dime')) return 'dime';
+            if (f.includes('3-3') || f.includes('mint')) return 'threeDown';
+            if (f.includes('nickel 2-4') || f.includes('4-3') || f.includes('4-2-5')) return 'fourDown';
+            return 'unknown';
+        }
+
+        function adaptDlAlignmentForFormation(formation, front, dl) {
+            if (!formation) return { front, dl };
+            const kind = classifyDefensiveFront(formation);
+
+            if (kind === 'threeDown') {
+                return {
+                    front: formation,
+                    dl: [
+                        '4i-tech both sides (inside shade of tackles)',
+                        '0-tech nose (head-up on center)',
+                        'Edge Rushers wide (OLB/DE, 9-tech or contain)'
+                    ]
+                };
+            }
+
+            if (kind === 'dime') {
+                return {
+                    front: formation,
+                    dl: [
+                        'Single DL: 0-tech or 1-tech shade (occupy interior)',
+                        'No traditional DE pair — edges are LB/DB hybrids',
+                        'Emphasis: coverage first; contain rush only'
+                    ]
+                };
+            }
+
+            if (kind === 'fourDown') {
+                const variant = (String(front).match(/\b(Over|Under|Balanced)\b/) || [])[0];
+                let resolved = formation;
+                if (variant && !/\b(Over|Under|Balanced)\b/i.test(formation)) {
+                    resolved = formation + ' ' + variant;
+                }
+                return { front: resolved, dl };
+            }
+
+            return { front: formation, dl };
+        }
+
         function getDLAlignment(playName, formation, formType, strength, hashPos) {
             const alignments = {
                 'Cover 3 Match': {
@@ -2685,10 +2735,7 @@ const personnelData = {
                 dlArray = dlArray(hashPos);
             }
 
-            return {
-                front: alignmentData.front,
-                dl: dlArray
-            };
+            return adaptDlAlignmentForFormation(formation, alignmentData.front, dlArray);
         }
 
         function setHashPosition(pos) {
