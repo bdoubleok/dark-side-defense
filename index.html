@@ -2665,14 +2665,14 @@ const personnelData = {
             const coverageAlignments = alignments[playName];
             if (!coverageAlignments) return null;
 
-            // Build lookup key
+            // Build lookup key. Empty/spread have no field/boundary strength —
+            // never form empty-field / spread-field (those keys do not exist and
+            // would incorrectly fall back to base instead of the empty/spread row).
             let key = 'base';
-            if (formType !== 'none') {
-                if (strength !== 'none') {
-                    key = `${formType}-${strength}`;
-                } else if (formType === 'spread' || formType === 'empty') {
-                    key = formType;
-                }
+            if (formType === 'spread' || formType === 'empty') {
+                key = formType;
+            } else if (formType !== 'none' && strength !== 'none') {
+                key = `${formType}-${strength}`;
             }
 
             // Get alignment data
@@ -2708,9 +2708,10 @@ const personnelData = {
             document.getElementById('formEmpty').checked = (type === 'empty');
             document.getElementById('formNone').checked = (type === 'none');
             
-            // Enable/disable strength based on formation type
+            // Enable/disable strength based on formation type.
+            // Empty and spread are balanced (no field/boundary strength).
             const strengthOptions = document.querySelectorAll('input[name="strength"]');
-            if (type === 'none' || type === 'spread') {
+            if (type === 'none' || type === 'spread' || type === 'empty') {
                 hashState.strength = 'none';
                 document.getElementById('strengthNone').checked = true;
                 strengthOptions.forEach(opt => {
@@ -2731,7 +2732,7 @@ const personnelData = {
         }
 
         function setStrength(str) {
-            if (hashState.formationType === 'none' || hashState.formationType === 'spread') return;
+            if (hashState.formationType === 'none' || hashState.formationType === 'spread' || hashState.formationType === 'empty') return;
             
             hashState.strength = str;
             document.getElementById('strengthField').checked = (str === 'field');
