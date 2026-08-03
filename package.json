@@ -5,6 +5,7 @@
   "main": "index.html",
   "scripts": {
     "dev": "python3 -m http.server 3000",
+    "test": "node test/sim-pressure-decision-tree.test.js && node test/cover1-spy-alignment-alias.test.js",
     "deploy": "vercel --prod"
   },
   "keywords": [
