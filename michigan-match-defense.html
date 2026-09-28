@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Michigan Multiple Match Defense - CFB In-Game Call Sheet</title>
+  <style>
+    :root {
+      --bg-main: #060b14;
+      --bg-card: #0d1726;
+      --bg-card-alt: #132035;
+      --border-color: #1f3352;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+      --maize: #ffcb05;
+      --blue-accent: #00274c;
+      --navy-deep: #001830;
+      --navy-badge: #1e3a8a;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --rose: #fb7185;
+      --amber: #fbbf24;
+      --ink: #000;
+      --paper: #fff;
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      line-height: 1.5;
+      padding: 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--navy-deep) 0%, var(--blue-accent) 60%, var(--bg-card) 100%);
+      border: 1px solid var(--maize);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    @media (min-width: 768px) {
+      header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+
+    .header-title h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--maize);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .header-title p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    /* Badge: one component, color set per variant via --c */
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .badge-maize { background: var(--maize); color: var(--ink); }
+    .badge-blue { background: var(--navy-badge); color: var(--paper); border: 1px solid var(--cyan); }
+
+    .badge-cyan { --c: var(--cyan); }
+    .badge-rose { --c: var(--rose); }
+    .badge-cyan, .badge-rose {
+      background: color-mix(in srgb, var(--c) 15%, transparent);
+      color: var(--c);
+      border: 1px solid var(--c);
+    }
+
+    .btn-print {
+      background: var(--maize);
+      color: var(--ink);
+      border: none;
+      padding: 0.5rem 1rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: opacity 0.2s;
+    }
+
+    .btn-print:hover { opacity: 0.9; }
+
+    .btn-print:focus-visible,
+    .tab-btn:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 2px;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+      overflow-x: auto;
+      padding-bottom: 0.25rem;
+    }
+
+    .tab-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 0.5rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.825rem;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    /* Hover and selected are separate states */
+    .tab-btn:hover {
+      color: var(--text-main);
+      border-color: var(--maize);
+    }
+
+    .tab-btn[aria-pressed="true"] {
+      background: var(--blue-accent);
+      color: var(--maize);
+      border-color: var(--maize);
+    }
+
+    section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-header {
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem 1rem;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .section-header h2 {
+      font-size: 1.15rem;
+      color: var(--maize);
+      text-transform: uppercase;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .section-header span {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.825rem;
+      text-align: left;
+    }
+
+    thead th {
+      background: var(--bg-card-alt);
+      color: var(--maize);
+      font-weight: 700;
+      padding: 0.65rem 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    tbody th,
+    td {
+      padding: 0.65rem 0.75rem;
+      border-bottom: 1px solid color-mix(in srgb, var(--border-color) 60%, transparent);
+      vertical-align: top;
+    }
+
+    /* Row labels: semantic headers that keep the body-cell look */
+    tbody th {
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    tbody tr:nth-child(even) { background: color-mix(in srgb, var(--bg-card-alt) 40%, transparent); }
+    tbody tr:hover { background: color-mix(in srgb, var(--cyan) 8%, transparent); }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      background: var(--bg-card-alt);
+      border: 1px solid var(--border-color);
+      border-radius: 3px;
+      padding: 0.05rem 0.3rem;
+    }
+
+    .tag {
+      font-weight: 700;
+      color: var(--cyan);
+    }
+
+    .sub-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-top: 0.75rem;
+    }
+
+    .card {
+      background: var(--bg-card-alt);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1rem;
+    }
+
+    .card h3 {
+      font-size: 0.95rem;
+      color: var(--cyan);
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.35rem;
+    }
+
+    .card ul {
+      list-style-type: none;
+      font-size: 0.8rem;
+    }
+
+    /* Two-column label/value rhythm instead of edge-to-edge spread */
+    .card li {
+      margin-bottom: 0.4rem;
+      display: grid;
+      grid-template-columns: 105px 1fr;
+      gap: 0.5rem;
+    }
+
+    .btn-label {
+      font-weight: 700;
+      color: var(--maize);
+    }
+
+    .instruction-block {
+      background: color-mix(in srgb, var(--blue-accent) 30%, transparent);
+      border-left: 3px solid var(--maize);
+      padding: 0.6rem 0.75rem;
+      margin: 0.5rem 0;
+      font-size: 0.8rem;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .instruction-block strong { color: var(--maize); }
+
+    @media print {
+      body {
+        background-color: var(--paper) !important;
+        color: var(--ink) !important;
+        padding: 0;
+      }
+      header, section, .card, th, td, tr, code, .badge, .instruction-block {
+        border-color: #ccc !important;
+        background: none !important;
+        color: var(--ink) !important;
+      }
+      .badge { border: 1px solid var(--ink) !important; }
+      .tag, h1, h2, h3, .btn-label, strong {
+        color: var(--ink) !important;
+      }
+      .btn-print, .nav-tabs { display: none !important; }
+      /* Always print every section, even if a tab filter is active */
+      section[hidden] { display: block !important; }
+      section { margin-bottom: 1rem; padding: 0.5rem; }
+      tr, .card, .instruction-block { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="header-title">
+      <h1>2022 Michigan Match Defense</h1>
+      <p>CFB '26 / CFB '27 Situational Call Sheet &amp; Console</p>
+    </div>
+    <div class="header-meta">
+      <span class="badge badge-maize">Balanced 2-High Disguise</span>
+      <span class="badge badge-blue">MOFC / MOFO Hybrid</span>
+      <button type="button" class="btn-print" onclick="window.print()">Print / Save PDF</button>
+    </div>
+  </header>
+
+  <nav class="nav-tabs" aria-label="Call sheet sections">
+    <button type="button" class="tab-btn" data-target="all" aria-pressed="true">View All</button>
+    <button type="button" class="tab-btn" data-target="sec-sit" aria-pressed="false">Situational Grid</button>
+    <button type="button" class="tab-btn" data-target="sec-aud" aria-pressed="false">Audible Wheels</button>
+    <button type="button" class="tab-btn" data-target="sec-mac" aria-pressed="false">CFB '27 Macros</button>
+    <button type="button" class="tab-btn" data-target="sec-chk" aria-pressed="false">Formation Checks</button>
+    <button type="button" class="tab-btn" data-target="sec-usr" aria-pressed="false">User Stick Rules</button>
+  </nav>
+
+  <!-- 1. SITUATIONAL CALL GRID -->
+  <section id="sec-sit">
+    <div class="section-header">
+      <h2>Section 1: Situational Call Grid</h2>
+      <span>Live Game Situations</span>
+    </div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Down &amp; Distance</th>
+            <th scope="col">Play Call</th>
+            <th scope="col">In-Game Formation</th>
+            <th scope="col">In-Game Base Play</th>
+            <th scope="col">Post-Snap Shell</th>
+            <th scope="col">User Responsibility &amp; Objectives</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1st &amp; 10 (Base)</th>
+            <td><span class="tag">Plus 3 Lock</span></td>
+            <td>Nickel 3-3 Over</td>
+            <td>Cover 3 Match</td>
+            <td>MOFC (Down Weak)</td>
+            <td>3-Man run fits. User <strong>3Rec/Mike</strong> to squeeze and deliver shallow drags to flat defender.</td>
+          </tr>
+          <tr>
+            <th scope="row">1st &amp; 10 (Heavy 12/21)</th>
+            <td><span class="tag">Under Solid</span></td>
+            <td>3-4 Under / 4-3 Under</td>
+            <td>Cover 3 Sky</td>
+            <td>MOFC (Rob/Lou away Sam)</td>
+            <td>Set heavy edge with Sam (9T) &amp; End (Heavy 5). User <strong>Mike/Will</strong> gap scrape.</td>
+          </tr>
+          <tr>
+            <th scope="row">2nd &amp; Long (7+)</th>
+            <td><span class="tag">Float Pound</span></td>
+            <td>Nickel 3-3 Tite</td>
+            <td>Cover 4 Palms / Quarters</td>
+            <td>MOFO (Split-Safety)</td>
+            <td>Quarters match. User <strong>Weak Safety</strong>; flat-foot read, bracket #3 field crosser.</td>
+          </tr>
+          <tr>
+            <th scope="row">2nd &amp; Medium (4–6)</th>
+            <td><span class="tag">Bench Favre</span></td>
+            <td>Nickel 3-3 Over</td>
+            <td>Overload 3 Seam / NB Blitz 3</td>
+            <td>MOFC (Field Sim 4-Man)</td>
+            <td>Field Nickel blitzes; weak DE drops to 3RH. User <strong>3Rec Hook</strong> to wall crossers.</td>
+          </tr>
+          <tr>
+            <th scope="row">2nd &amp; Short (1–3)</th>
+            <td><span class="tag">Plus Mike Dog 1</span></td>
+            <td>Nickel 2-4 Double Mug</td>
+            <td>Cover 1 Dog / Mid Blitz</td>
+            <td>MOFC (Cover 1 Free)</td>
+            <td>Mike shoots A/B gap; Dime hugs RB. User <strong>Dime/Rat</strong> on low-hole crosser.</td>
+          </tr>
+          <tr>
+            <th scope="row">3rd &amp; Short (1–3)</th>
+            <td><span class="tag">Plus Manning</span></td>
+            <td>Nickel 2-4 Double Mug</td>
+            <td>Mid Blitz 0 (Check 3-Seam)</td>
+            <td>MOFC (Cover 3 Match)</td>
+            <td>Mike interior A-gap creep; DE drops to low hole. User <strong>Will</strong> to cut slants and RPO lanes.</td>
+          </tr>
+          <tr>
+            <th scope="row">3rd &amp; Medium (4–7)</th>
+            <td><span class="tag">Plus 3 Lock (MUSH)</span></td>
+            <td>Nickel 3-3 Over</td>
+            <td>Cover 3 Match</td>
+            <td>MOFC (Safety down to #3)</td>
+            <td>Apex DBs ride vertical stems. User <strong>3Rec Hook</strong> to carry drags across the middle.</td>
+          </tr>
+          <tr>
+            <th scope="row">3rd &amp; Long (8+)</th>
+            <td><span class="tag">Plus Brady</span></td>
+            <td>Nickel 3-3 Over</td>
+            <td>DB Fire 3 / CB Blitz 3</td>
+            <td>MOFC (Boundary Sim)</td>
+            <td>Dime blitzes weak edge; safety poaches. User <strong>Weak Safety (Diesel)</strong> top-down.</td>
+          </tr>
+          <tr>
+            <th scope="row">3rd &amp; Extra Long (12+)</th>
+            <td><span class="tag">Wide Needle Bandit</span></td>
+            <td>Dollar 3-2 / Nickel 2-4</td>
+            <td>DB Fire 2 / Tampa 2</td>
+            <td>MOFO (Cover 0 w/ 2 Bandits)</td>
+            <td>Double edge rush; Mike &amp; Tackle drop as Bandits. User <strong>Bandit Dropper</strong>.</td>
+          </tr>
+          <tr>
+            <th scope="row">Red Zone (20–10 Yd)</th>
+            <td><span class="tag">Bench Sand Deuce</span></td>
+            <td>Nickel 3-3 Odd</td>
+            <td>Cover 2 Sink / Tampa 2</td>
+            <td>MOFO (Deuce / Soft Squat)</td>
+            <td>Dime creeps A-C gap; End drops to Deuce Hook. User <strong>Mike</strong> in middle hole.</td>
+          </tr>
+          <tr>
+            <th scope="row">Low Red Zone (10–4 Yd)</th>
+            <td><span class="tag">Flex Back Prison</span></td>
+            <td>Nickel 3-3 Odd / 2-4 Mug</td>
+            <td>Cover 1 Hole Press</td>
+            <td>MOFC (Cover 1 Dual-Rat)</td>
+            <td>Safeties drop as Dual Rats. Corners press-man. User <strong>Mike</strong> on RB and low-hole cut.</td>
+          </tr>
+          <tr>
+            <th scope="row">Goal Line (Inside 4 Yd)</th>
+            <td><span class="tag">GL Cardinal</span></td>
+            <td>5-2 Goal Line</td>
+            <td>Goal Line Man Free</td>
+            <td>Cover 0 with a Rat</td>
+            <td>0-Lag Nose, Jet-B Tackles, 6i Ends. User <strong>MLB</strong> 1.5 yds off ball to cut sneaks and iso.</td>
+          </tr>
+          <tr>
+            <th scope="row">Goal Line (Edge Crash)</th>
+            <td><span class="tag">GL Bluejay</span></td>
+            <td>5-2 Goal Line</td>
+            <td>Goal Line Edge Blitz</td>
+            <td>Cover 0 (Crash &amp; Climb)</td>
+            <td>Rush checks "Take It" to blitz edge; End covers TE. User <strong>MLB</strong> in lead A-gap.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 2. AUDIBLE WHEEL MAPPINGS -->
+  <section id="sec-aud">
+    <div class="section-header">
+      <h2>Section 2: Gameday Audible Wheels</h2>
+      <span>Sub-Package Muscle Memory</span>
+    </div>
+    <div class="sub-grid">
+      <div class="card">
+        <h3>Nickel 3-3 Over <span class="badge badge-cyan">Speed Match</span></h3>
+        <ul>
+          <li><span class="btn-label">DEFAULT:</span> <span>Cover 3 Match (Plus 3 Lock)</span></li>
+          <li><span class="btn-label">SQUARE / X:</span> <span>Overload 3 Seam (Bench Favre)</span></li>
+          <li><span class="btn-label">TRIANGLE / Y:</span> <span>Cover 4 Palms (Float Pound)</span></li>
+          <li><span class="btn-label">L1 / LB:</span> <span>DB Fire 3 (Plus Brady)</span></li>
+          <li><span class="btn-label">R1 / RB:</span> <span>Cover 1 Robber (Plus 1 Rat)</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Nickel 2-4 Double Mug <span class="badge badge-rose">Interior Heat</span></h3>
+        <ul>
+          <li><span class="btn-label">DEFAULT:</span> <span>Cover 3 Sky (Base Mug Look)</span></li>
+          <li><span class="btn-label">SQUARE / X:</span> <span>Mug Fire Zone 3 (Plus Manning)</span></li>
+          <li><span class="btn-label">TRIANGLE / Y:</span> <span>Cover 2 Invert (Tampa Bulls)</span></li>
+          <li><span class="btn-label">L1 / LB:</span> <span>Mid Blitz 0 (Dog 1 Max Heat)</span></li>
+          <li><span class="btn-label">R1 / RB:</span> <span>Cover 4 Quarters (Drop-8 Trap)</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>3-4 Under / 4-3 Under <span class="badge badge-maize">Base Heavy</span></h3>
+        <ul>
+          <li><span class="btn-label">DEFAULT:</span> <span>Under Cover 3 Sky (Under Solid)</span></li>
+          <li><span class="btn-label">SQUARE / X:</span> <span>Under Cover 1 Hole (Under Sam 1)</span></li>
+          <li><span class="btn-label">TRIANGLE / Y:</span> <span>Cover 4 Quarters (Rock Pound)</span></li>
+          <li><span class="btn-label">L1 / LB:</span> <span>Fire Zone 3 (Rock/Laser Flame)</span></li>
+          <li><span class="btn-label">R1 / RB:</span> <span>Edge Blitz 1 (Under Saw Blitz)</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>5-2 Goal Line <span class="badge badge-rose">Short Yardage</span></h3>
+        <ul>
+          <li><span class="btn-label">DEFAULT:</span> <span>GL Man Free (GL Cardinal)</span></li>
+          <li><span class="btn-label">SQUARE / X:</span> <span>GL Edge Blitz (GL Bluejay)</span></li>
+          <li><span class="btn-label">TRIANGLE / Y:</span> <span>GL Pinch 0 (A-Gap Sneak Stop)</span></li>
+          <li><span class="btn-label">L1 / LB:</span> <span>GL 4-3 Alert (Jumbo Heavy Front)</span></li>
+          <li><span class="btn-label">R1 / RB:</span> <span>GL 1-Back Adjuster (21 on Backs)</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. CFB '27 MACROS -->
+  <section id="sec-mac">
+    <div class="section-header">
+      <h2>Section 3: CFB '27 Quick-Macro Presets</h2>
+      <span>LB/L1 Custom Adjustments</span>
+    </div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Slot</th>
+            <th scope="col">Macro Name</th>
+            <th scope="col">Programmed Parameters</th>
+            <th scope="col">Situational Trigger</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Macro 1</th>
+            <td><span class="tag">3x1 Trips Diesel</span></td>
+            <td>Backside: <code>Skinny Meg</code> | Field: <code>Stubbie</code> | Safety Midpoint: <code>Weak</code> | Zone: <code>Look for Work</code></td>
+            <td>Any 3x1 Spread, Trips Y-Off, or Trey formation.</td>
+          </tr>
+          <tr>
+            <th scope="row">Macro 2</th>
+            <td><span class="tag">Bunch Point Triangle</span></td>
+            <td>Bunch Side: <code>Point Triangle</code> | Backside: <code>Skinny Meg</code> | Safety: <code>Balanced</code> | Leverage: <code>Inside-Out</code></td>
+            <td>Gun Bunch, Bunch Quads, or Stack alignments.</td>
+          </tr>
+          <tr>
+            <th scope="row">Macro 3</th>
+            <td><span class="tag">3rd Down Manning Sim</span></td>
+            <td>LB: <code>A-Gap Creep</code> | DL: <code>Drop Opposite DE to 3RH</code> | Coverage: <code>3 Lock Match</code> | Safety: <code>Down Weak</code></td>
+            <td>3rd &amp; Short or 3rd &amp; Medium money downs.</td>
+          </tr>
+          <tr>
+            <th scope="row">Macro 4</th>
+            <td><span class="tag">Flex Back Prison</span></td>
+            <td>Front: <code>Flex Back (3T to RB)</code> | Coverage: <code>Press Man (Travel)</code> | Safeties: <code>Dual Low-Hole Rats</code></td>
+            <td>Low Red Zone (inside the 12-yard line).</td>
+          </tr>
+          <tr>
+            <th scope="row">Macro 5</th>
+            <td><span class="tag">GL Cardinal Sneak Stop</span></td>
+            <td>DL: <code>Pinch Line &amp; Slant In</code> | Secondary: <code>Cover 0 Press Underneath</code> | Option: <code>QB Conserv / Pitch Aggr</code></td>
+            <td>1-yard line / QB Sneak / Heavy goal-line sets.</td>
+          </tr>
+          <tr>
+            <th scope="row">Macro 6</th>
+            <td><span class="tag">GL Bluejay Edge Spike</span></td>
+            <td>Edge: <code>Crash &amp; Climb Blitz</code> | Play-side DE: <code>Man Coverage on In-Line TE</code> | Safety: <code>Run-Fit at 3 Yds</code></td>
+            <td>Goal-line perimeter stretch / Heavy 2-TE sets.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 4. CHECKS & COMMUNICATION -->
+  <section id="sec-chk">
+    <div class="section-header">
+      <h2>Section 4: Formation Checks &amp; Secondary Calls</h2>
+      <span>Automated In-Game Rules</span>
+    </div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Offensive Look</th>
+            <th scope="col">Defensive Check</th>
+            <th scope="col">Automated Rule &amp; DB Mechanics</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">3x1 Trips / Trey</th>
+            <td><span class="tag">Solo + Diesel</span></td>
+            <td>Boundary CB plays <strong>Solo MEG</strong>. Weak Safety rotates down-and-in to poach #3 vertical crosser.</td>
+          </tr>
+          <tr>
+            <th scope="row">Gun Bunch</th>
+            <td><span class="tag">Point Triangle</span></td>
+            <td>4-over-3 distribution. DBs bracket point man; apex defenders pass off in/out stems without getting rubbed.</td>
+          </tr>
+          <tr>
+            <th scope="row">Shallow Drag / Mesh</th>
+            <td><span class="tag">M.U.S.H.</span></td>
+            <td>Man Unless Shallow. Squeeze receiver hip for 2 yards, communicate "IN IN IN", deliver to 3RH hook.</td>
+          </tr>
+          <tr>
+            <th scope="row">Single Nasty WR Weak</th>
+            <td><span class="tag">TUBE ALERT</span></td>
+            <td>Boundary CB escorts shallow crosser on 1-to-3 delivery; snaps eyes back for late benders/digs.</td>
+          </tr>
+          <tr>
+            <th scope="row">2x2 Open (Twin)</th>
+            <td><span class="tag">Sort / Quarters</span></td>
+            <td>Apex defenders play 1/4s match. Safeties stay balanced at 10–12 yards depth.</td>
+          </tr>
+          <tr>
+            <th scope="row">Jet Motion (Speed)</th>
+            <td><span class="tag">Shove</span></td>
+            <td>Nickel runs with motion or alerts "Shove" to pass off flat coverage to down safety.</td>
+          </tr>
+          <tr>
+            <th scope="row">Empty (3x2 / 4x1)</th>
+            <td><span class="tag">Dime Find RB</span></td>
+            <td>Dime matches backfield player. Safeties rotate away from pass strength into middle-read hole.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 5. USER STICK RULES -->
+  <section id="sec-usr">
+    <div class="section-header">
+      <h2>Section 5: User Stick Execution &amp; Hit-Stick Triggers</h2>
+      <span>Stick Mechanics</span>
+    </div>
+    <div class="sub-grid">
+      <div class="card">
+        <h3>3Rec Hook (Linebacker)</h3>
+        <div class="instruction-block">
+          <strong>Pre-Snap:</strong> Mug the A/B gap to threaten interior pass protection.
+        </div>
+        <div class="instruction-block">
+          <strong>Post-Snap:</strong> Take 2 read steps in strafe (<code>LT/L2</code>). Squeeze the 1st shallow crosser entering your window.
+        </div>
+        <div class="instruction-block">
+          <strong>The Handoff:</strong> Deliver shallow route to flat defender, snap eyes inside to rob the 2nd crosser (dig/bender).
+        </div>
+        <div class="instruction-block">
+          <strong>Hit-Stick:</strong> Flick <strong>Right Stick DOWN</strong> (Cut-Tackle) to eliminate forward YAC lean.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Weak Safety (Diesel Poach)</h3>
+        <div class="instruction-block">
+          <strong>Pre-Snap:</strong> Hold balanced alignment on hash at 10–12 yds. Never cheat early.
+        </div>
+        <div class="instruction-block">
+          <strong>Post-Snap:</strong> Key #3 receiver release. If vertical/cross, run an angled top-down diagonal track.
+        </div>
+        <div class="instruction-block">
+          <strong>The Interception:</strong> Maintain a 2-yd cushion above the route; drive downhill when QB front shoulder unlocks.
+        </div>
+        <div class="instruction-block">
+          <strong>Hit-Stick:</strong> Flick <strong>Right Stick UP</strong> (Truck-Stopper) to dislodge ball at catch point.
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab-btn');
+  const sections = document.querySelectorAll('section');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.target;
+
+      tabs.forEach(t => t.setAttribute('aria-pressed', String(t === tab)));
+      sections.forEach(sec => {
+        sec.hidden = target !== 'all' && sec.id !== target;
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
