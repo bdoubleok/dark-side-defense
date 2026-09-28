@@ -2661,8 +2661,18 @@ const personnelData = {
                 }
             };
 
+            // Resolve play-name aliases to table keys (game-plan labels can drift)
+            const alignmentAliases = {
+                'Cover 1 w/ MLB Spy': 'Cover 1 w/ Spy'
+            };
+            const alignmentKey = alignments[playName]
+                ? playName
+                : (alignmentAliases[playName] || (
+                    playName.includes('Cover 1 w/ Spy') ? 'Cover 1 w/ Spy' : playName
+                ));
+
             // Get base alignment for this coverage
-            const coverageAlignments = alignments[playName];
+            const coverageAlignments = alignments[alignmentKey];
             if (!coverageAlignments) return null;
 
             // Build lookup key
@@ -2954,6 +2964,16 @@ const personnelData = {
                     },
                     {
                         formation: "Nickel 2-4",
+                        name: "Sim Pressure 3",
+                        type: "Sim Pressure",
+                        frequency: "10%",
+                        description: "Signature sim pressure: drop one, send one. Creates a 5-man look without a pure blitz identity. Primary constraint call when the decision tree says PRESSURE NOW.",
+                        tags: ["when:3rd & 7-10", "when:Constraint", "avoid:Spam"],
+                        coverage: "Pairs with Cover 3 Match or Cover 4 behind",
+                        isPrimary: false
+                    },
+                    {
+                        formation: "Nickel 2-4",
                         name: "Exit Stunt",
                         type: "4-Man Stunt",
                         frequency: "8%",
@@ -2994,6 +3014,16 @@ const personnelData = {
                         description: "All 4 DL loop/cross. Maximum chaos vs max protect on obvious pass. Don't spam - save for critical moments.",
                         tags: ["when:3rd & 15+", "when:Max Protect", "avoid:Repeatedly"],
                         coverage: "Cover 3 or Cover 4 behind",
+                        isPrimary: false
+                    },
+                    {
+                        formation: "Nickel 2-4",
+                        name: "Sim Pressure 3",
+                        type: "Sim Pressure",
+                        frequency: "10%",
+                        description: "Signature sim pressure: drop one, send one. Creates a 5-man look without a pure blitz identity. Matches the decision-tree APPROVE recommendation on obvious pass.",
+                        tags: ["when:3rd & 11+", "when:Constraint", "avoid:Spam"],
+                        coverage: "Pairs with Cover 3 Match or Cover 4 behind",
                         isPrimary: false
                     },
                     {
