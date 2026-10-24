@@ -1129,12 +1129,12 @@
                 <div class="filter-section">
                     <div class="filter-label">Formation Strength</div>
                     <div class="filter-options">
-                        <div class="filter-radio" onclick="setStrength('field')">
-                            <input type="radio" name="strength" id="strengthField">
+                        <div class="filter-radio" onclick="setStrength('field')" style="opacity: 0.5;">
+                            <input type="radio" name="strength" id="strengthField" disabled>
                             <label for="strengthField">To Field</label>
                         </div>
-                        <div class="filter-radio" onclick="setStrength('boundary')">
-                            <input type="radio" name="strength" id="strengthBoundary">
+                        <div class="filter-radio" onclick="setStrength('boundary')" style="opacity: 0.5;">
+                            <input type="radio" name="strength" id="strengthBoundary" disabled>
                             <label for="strengthBoundary">To Boundary</label>
                         </div>
                         <div class="filter-radio" onclick="setStrength('none')">
@@ -2710,6 +2710,18 @@ const personnelData = {
             renderPlays();
         }
 
+        function syncStrengthControls() {
+            const locked = hashState.formationType === 'none' || hashState.formationType === 'spread';
+            document.getElementById('strengthField').checked = hashState.strength === 'field';
+            document.getElementById('strengthBoundary').checked = hashState.strength === 'boundary';
+            document.getElementById('strengthNone').checked = hashState.strength === 'none';
+            document.querySelectorAll('input[name="strength"]').forEach(opt => {
+                if (opt.id === 'strengthNone') return;
+                opt.disabled = locked;
+                opt.parentElement.style.opacity = locked ? '0.5' : '1';
+            });
+        }
+
         function setFormationType(type) {
             hashState.formationType = type;
             document.getElementById('formTrips').checked = (type === 'trips');
@@ -2717,36 +2729,26 @@ const personnelData = {
             document.getElementById('formTE').checked = (type === 'teattached');
             document.getElementById('formEmpty').checked = (type === 'empty');
             document.getElementById('formNone').checked = (type === 'none');
-            
-            // Enable/disable strength based on formation type
-            const strengthOptions = document.querySelectorAll('input[name="strength"]');
+
+            // Spread and "none" have no strength. Clear it and lock the radios
+            // so a click cannot leave Field/Boundary checked while state stays none.
             if (type === 'none' || type === 'spread') {
                 hashState.strength = 'none';
-                document.getElementById('strengthNone').checked = true;
-                strengthOptions.forEach(opt => {
-                    if (opt.id !== 'strengthNone') {
-                        opt.disabled = true;
-                        opt.parentElement.style.opacity = '0.5';
-                    }
-                });
-            } else {
-                strengthOptions.forEach(opt => {
-                    opt.disabled = false;
-                    opt.parentElement.style.opacity = '1';
-                });
             }
-            
+            syncStrengthControls();
+
             updateHashFilter();
             renderPlays();
         }
 
         function setStrength(str) {
-            if (hashState.formationType === 'none' || hashState.formationType === 'spread') return;
-            
+            if (hashState.formationType === 'none' || hashState.formationType === 'spread') {
+                syncStrengthControls();
+                return;
+            }
+
             hashState.strength = str;
-            document.getElementById('strengthField').checked = (str === 'field');
-            document.getElementById('strengthBoundary').checked = (str === 'boundary');
-            document.getElementById('strengthNone').checked = (str === 'none');
+            syncStrengthControls();
             updateHashFilter();
             renderPlays();
         }
@@ -3155,6 +3157,7 @@ const personnelData = {
             renderPlays();
             renderStats();
             updatePressureTracker();
+            syncStrengthControls();
         }
 
         function switchView(view) {
