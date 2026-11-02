@@ -515,7 +515,7 @@ Use this as your in-game quick reference. Find the down and distance, call the f
 |**2-minute**            |Nickel Over → Dime Normal         |DANGER + POUND only                          |Simplify                                         |
 |**vs Trips**            |Nickel Over, Mint, Load or Load Mug (not the Mugs)|STUFF (`Cover 6` / `Cover 6 Willie`)         |—                                                |
 |**vs Bunch**            |Nickel Over, Mint or Load         |SQUAT (`Cover 4 Palms` w/ adjustments)       |—                                                |
-|**vs Empty**            |Nickel Over or Dime Normal        |POUND (`Cover 4 Quarters`)                   |`Edge Blitz 3`, `Nickel 2 Trap` (both Nickel Over)|
+|**vs Empty**            |Nickel Over or Dime Normal        |POUND (`Cover 4 Quarters`)                   |Nickel Over `Edge Blitz 3` / `Nickel 2 Trap`       |
 
 > **Never rush three on 3rd & medium.** Seattle's only 3-man rush vs KC gave up +2.60 EPA. `Hot Blitz Bail` (Mint) stays in the book for 2nd & long only.
 
@@ -538,7 +538,7 @@ Plan your play-calling tendencies for a game. Adjust based on opponent.
 |3rd & Long  |5%    |5%    |55%  |35%  |
 |Red Zone    |30%   |25%   |10%  |35%  |
 
-*v3.2: 3rd & medium/long are Dime downs. POUND = `Cover 4 Palms`/`Quarters`; STUFF = `Cover 6` and `Tampa 2`. Seattle played two-high on 66% of snaps and Cover 6 on 26% in Week 7.*
+*v3.2: 3rd & medium/long are Dime downs. POUND = `Cover 4 Palms`/`Cover 4 Quarters`; STUFF = `Cover 6` and `Tampa 2`. Seattle played two-high on 66% of snaps and Cover 6 on 26% in Week 7.*
 
 **vs Spread-Heavy Offense.** Shift toward POUND and STUFF. Reduce DANGER. (1st & 10: 25/25/30/20.)
 
