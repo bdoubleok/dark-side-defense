@@ -1,6 +1,6 @@
 # DARK SIDE DEFENSE v3 — Canonical Build
 
-**Mike Macdonald / 2022 Michigan (Minter) Scheme · CFB ’26**
+**Mike Macdonald / 2022 Michigan (Minter) Scheme · CFB ’26 · v3.2 (validated Nov. 1, 2026)**
 
 > Canonical merge of Dark Side v1 (7-formation streamlined), v2 (10-formation full), and the corrected build. Architecturally pivoted: 4-down nickel base via the **4-2-5 playbook**. Every formation and play verified against [cfb.fan](https://cfb.fan/26/playbooks/) as of May 2026.
 
@@ -39,6 +39,7 @@ v3 corrects the architecture and merges the v1 streamlined build, v2 full build,
 - Stunts and sims over true blitz.
 - Pressure spike on 3rd & 7+. Short yardage and red zone are the other windows.
 - Real-Macdonald math: ~19-22% blitz rate, ~36% pressure rate.
+- **v3.2 (Week 7 2026 check):** when you send five, keep two deep (Sonic: `Nickel 2 Trap`). Seattle did on 6 of 8 blitzes vs KC. Third down 4+ is a Dime down. Never rush three on 3rd & medium.
 
 **Playbook allocation: 65% base coverage / 25% sims & stunts / 10% true blitz.**
 
@@ -59,21 +60,23 @@ v3 corrects the architecture and merges the v1 streamlined build, v2 full build,
 
 |# |Formation            |Personnel                            |Role                                             |Source      |Status          |
 |--|---------------------|-------------------------------------|-------------------------------------------------|------------|----------------|
-|1 |**Nickel Over**      |4 DL / 2 LB / 5 DB                   |Primary 4-down nickel. Full Macdonald menu.      |4-2-5 base  |✅ verified      |
+|1 |**Nickel Over**      |4 DL / 2 LB / 5 DB                   |Primary 4-down nickel. Full Macdonald menu.      |4-2-5 base  |✅ verified (36) |
 |2 |**Nickel Double Mug**|3 DL / 3 LB (2 mugged) / 5 DB        |A-gap pressure illusion.                         |4-2-5 base  |✅ verified      |
 |3 |**4-2-5 Over G**     |4 DL / 2 LB / 5 DB                   |Pound shell. 1st/2nd & medium 2-high look.       |4-2-5 base  |✅ verified      |
 |4 |**Nickel 3-3 Mint**  |3 DL / 3 LB / 5 DB                   |Anti-RPO / spread / tite alignment.              |4-2-5 base  |✅ verified      |
 |5 |**Nickel Load**      |4 DL / 2 LB stacked / 5 DB           |Cross-games specialist. Native Cover 1 Robber.   |4-2-5 base  |✅ verified      |
 |6 |**3-3-5 Penny**      |3 DL / 3 LB / 5 DB stacked           |Saw Blitz family — Ravens cross-blitz DNA.       |4-2-5 base  |✅ verified      |
-|7 |**3-3-5 Over Flex**  |3 DL / 3 LB / 5 DB                   |Run-down 2-high change-up. CB Bench Blitz native.|4-2-5 base  |✅ verified      |
-|8 |**Nickel Single Mug**|4 DL / 2 LB (1 mugged) / 5 DB        |Lighter mug.                                     |4-2-5 base  |⚠ verify in-game|
-|9 |**4-2-5 Under**      |4 DL / 2 LB / 5 DB                   |Run-down change-up. True-blitz heavy.            |4-2-5 base  |✅ verified      |
-|10|**Dime Normal**      |4 DL / 1 LB / 6 DB                   |3rd & long passing set.                          |4-2-5 base  |⚠ verify in-game|
-|11|**Nickel Load Mug**  |4 DL / 2 LB (mugged from Load) / 5 DB|Load front + mug.                                |4-2-5 base  |⚠ verify in-game|
-|12|**3-4 Odd**          |3 DL / 4 LB / 4 DB                   |Heavy / short-yardage box.                       |Add from 3-4|⚠ verify in-game|
+|7 |**3-3-5 Over Flex**  |3 DL / 3 LB / 5 DB                   |Run-down 2-high change-up. CB Bench Blitz native.|4-2-5 base  |✅ verified (18) |
+|8 |**Nickel Single Mug**|4 DL / 2 LB (1 mugged) / 5 DB        |Lighter mug. Sonic + Tex stunt home.             |4-2-5 base  |✅ verified (12) |
+|9 |**4-2-5 Under**      |4 DL / 2 LB / 5 DB                   |Run-down change-up. True-blitz heavy.            |4-2-5 base  |✅ verified (16) |
+|10|**Dime Normal**      |4 DL / 1 LB / 6 DB                   |3rd & 4+ passing set (v3.2).                     |4-2-5 base  |✅ verified (18) |
+|11|**Nickel Load Mug**  |4 DL / 2 LB (mugged from Load) / 5 DB|Load front + mug.                                |4-2-5 base  |✅ verified (15) |
+|12|**3-4 Odd**          |3 DL / 4 LB / 4 DB                   |Heavy / short-yardage box.                       |Add from 3-4|✅ verified (10) |
 |GL|**Goal Line 5-3**    |5 DL / 3 LB / 3 DB                   |Goal line.                                       |4-2-5 base  |⚠ verify in-game|
 
 **Snap percentages removed from this table** — they were estimates without source data. Use the situational chart below to drive formation selection; observe what your in-game tendencies become over time.
+
+Counts in parentheses = plays listed on cfb.fan, re-checked Nov. 1, 2026. cfb.fan confirms play membership only, not drops; coverage shells below are read from play names.
 
 ⚠ = formation exists, full play list not fetched from cfb.fan. Token slots and audibles for these formations should be confirmed in-game before favoriting.
 
@@ -120,7 +123,7 @@ v3 corrects the architecture and merges the v1 streamlined build, v2 full build,
 
 ### 1. Nickel Over — Primary
 
-*The workhorse. 38 plays in the full catalog; favorite these.*
+*The workhorse. 36 plays in the full catalog; favorite these.*
 
 **Token slots**
 
@@ -155,8 +158,8 @@ v3 corrects the architecture and merges the v1 streamlined build, v2 full build,
 
 **Token slots**
 
-- DANGER → `Cover 3 Sky` *(no Cover 3 Match native — Sky is the closest 1-high match feel)*
-- 3 LOCK → `Cover 3 Sky` *(doubles as 3 Lock with press shading)*
+- DANGER → `Cover 3 Match` *(v3.2 fix: Cover 3 Match is native — confirmed on cfb.fan)*
+- 3 LOCK → `Cover 3 Sky` *(press shading)*
 - POUND → `Cover 2 Invert` *(no native Cover 4 — Cover 2 Invert fills the 2-high role)*
 - STUFF → `Tampa 2` *(no Cover 6 native — Tampa 2 fills the 2-deep role)*
 
@@ -167,6 +170,8 @@ v3 corrects the architecture and merges the v1 streamlined build, v2 full build,
 - `Nickel Overload 3` *overload pressure with C3 behind*
 - `LB Blitz 3` *interior LB heat*
 - `Cover 1 Hole` *red zone Robber token*
+- `Nickel 2 Trap` *v3.2 — Sonic: 5 rush, 2 deep. Seattle's main blitz in Week 7*
+- `SS Blitz 3` *v3.2 — 3-deep fire zone change-up*
 
 **Audibles**
 
@@ -188,7 +193,7 @@ v3 corrects the architecture and merges the v1 streamlined build, v2 full build,
 - DANGER → `Cover 3 Match`
 - 3 LOCK → `Cover 3 Sky`
 - POUND → `Cover 4 Palms`
-- STUFF → `Cover 6 Trap` *(or `Cover 6 Invert` vs 3x1)*
+- STUFF → `Cover 6 Trap` *(or `Cover 6 Invert` vs 3x1; plain `Cover 6` is listed as "COVER6" on cfb.fan)*
 
 **Specialty slots**
 
@@ -198,6 +203,7 @@ v3 corrects the architecture and merges the v1 streamlined build, v2 full build,
 - `WS Blitz 3` *designed weak safety blitz with C3 behind*
 - `Mike SS 3` *Mike + SS blitz with C3 behind*
 - `Corner Blitz 3` *corner pressure*
+- `WS Blitz 2` / `SS Blitz 2` *v3.2 — 2-deep five-man pressure (Sonic family by name)*
 
 **Audibles**
 
@@ -217,7 +223,7 @@ v3 corrects the architecture and merges the v1 streamlined build, v2 full build,
 - DANGER → `Cover 3 Match`
 - 3 LOCK → `Cover 3 Buzz Mable`
 - POUND → `Cover 4 Palms`
-- STUFF → `Cover 4 Palms` with Cloud shading *(no Cover 6 native — Palms-Cloud is the closest)*
+- STUFF → `Cover 6` *(v3.2 fix: `Cover 6` and `Cover 6 Willie` are both native — confirmed on cfb.fan)*
 
 **Specialty slots**
 
@@ -226,6 +232,7 @@ v3 corrects the architecture and merges the v1 streamlined build, v2 full build,
 - `Tampa Sim Pressure` *sim with Tampa 2 shell behind*
 - `Cover 1 Robber Press` *Robber token — press-man with reading safety*
 - `Tampa 2` *change-up shell*
+- `Nickel 2 Trap` *v3.2 — Sonic from Mint*
 
 **Audibles**
 
@@ -238,7 +245,7 @@ v3 corrects the architecture and merges the v1 streamlined build, v2 full build,
 
 ### 5. Nickel Load — Cross-Games Specialist ⭐ NEW in v3.1
 
-*4-down look with both LBs stacked behind the line (“loaded” alignment). 17 plays, all new in CFB ’26. The coverage menu rivals Nickel Over; the **cross-games** are unique to this formation.*
+*4-down look with both LBs stacked behind the line (“loaded” alignment). 18 plays, all new in CFB ’26. The coverage menu rivals Nickel Over; the **cross-games** are unique to this formation.*
 
 **Token slots**
 
@@ -300,9 +307,9 @@ v3 corrects the architecture and merges the v1 streamlined build, v2 full build,
 
 -----
 
-### 7. 3-3-5 Over Flex — Run-Down 2-High Change-Up ⚠ verified
+### 7. 3-3-5 Over Flex — Run-Down 2-High Change-Up ✅ verified
 
-*3-down look with the apex defender flexed wider. 17 plays, all NEW in CFB ’26. Carries the standard Macdonald coverage menu plus a unique edge-pressure variant.*
+*3-down look with the apex defender flexed wider. 18 plays, all NEW in CFB ’26. Carries the standard Macdonald coverage menu plus a unique edge-pressure variant.*
 
 **Token slots**
 
@@ -332,35 +339,51 @@ v3 corrects the architecture and merges the v1 streamlined build, v2 full build,
 
 -----
 
-### 8. Nickel Single Mug — Lighter Mug ⚠ skeleton
+### 8. Nickel Single Mug — Lighter Mug ✅ verified v3.2
 
-*Single ILB walked into the A-gap. Less pressure illusion than Double Mug; more coverage flexibility.*
+*Single ILB walked into the A-gap. 12 plays ([cfb.fan](https://cfb.fan/26/playbooks/4-2-5-def/nickel-single-mug/)). Less pressure illusion than Double Mug; this is where the Tex stunt and Sonic live together.*
 
-> **Play list not yet verified.** Fetch from [cfb.fan/26/playbooks/4-2-5-def/nickel-single-mug/](https://cfb.fan/26/playbooks/4-2-5-def/nickel-single-mug/) before favoriting plays. Once verified, fill the four token slots (DANGER / 3 LOCK / POUND / STUFF) with the closest native coverages and identify specialty plays unique to this formation.
+**Token slots** *(no Cover 3 Match or Cover 6 native)*
 
-**Token slots** — *to be filled after in-game audit*
-**Specialty slots** — *to be filled after in-game audit*
-**Audibles** — *to be filled after in-game audit*
+- DANGER → `Cov 3 Buzz Match`
+- 3 LOCK → `Cov 3 Buzz Match` *(doubles up — formation limit)*
+- POUND → `Cover 4 Quarters`
+- STUFF → `Cover 9` *(2-high disguise; no Cover 6)*
+
+**Specialty slots**
+
+- `Nickel 2 Trap` ⭐ *Sonic: 5 rush, 2 deep*
+- `Blitz Tex 3 Sim 3` ⭐ *4-man Tex stunt sim — 3rd-down stunt call*
+- `DT Mike Loop 3` *looping interior / Mike pressure*
+- `DB Blitz Tex 3` · `Nickel Blitz 3` · `1LB Dog`
+- `Cover 1 Hole` *Robber token* · `Cover 2 Invert` *Cloud token* · `Tampa 2`
+
+**Audibles**
+
+1. `Cov 3 Buzz Match`
+1. `Blitz Tex 3 Sim 3`
+1. `Cover 4 Quarters`
+1. `Nickel 2 Trap`
 
 -----
 
 ### 9. 4-2-5 Under — Run-Down Change-Up
 
-*Under-front 4-down look. 18 plays. True-blitz heavy; lighter coverage menu.*
+*Under-front 4-down look. 16 plays. True-blitz heavy; lighter coverage menu.*
 
 **Token slots**
 
 - DANGER → `Cover 3 Match`
 - 3 LOCK → `Cover 3 Sky Wk`
 - POUND → `Cover 4 Quarters`
-- STUFF → `Cover 2 Invert` *(no Cover 6 native — Cover 2 Invert is the closest Stuff feel)*
+- STUFF → `Cover 2 Invert` *(no Cover 6 native — confirmed v3.2)*
 
 **Specialty slots**
 
 - `Tampa 2` *change-up shell*
 - `Cover 1 Hole` *red zone Robber token*
 - `Mike Sam Crash Press` *5-man crash with press technique*
-- `Hammer 0 Blast` *zero blitz*
+- `Sam Blitz 2` *v3.2 — replaces `Hammer 0 Blast`, which is not in the CFB 26 menu. Sonic: 5 rush, 2 deep. 4th & short call*
 - `Will Go Fire 3` *fire zone — Will LB fire, drop edge*
 - `1FS Fire` *free safety fire*
 
@@ -369,53 +392,102 @@ v3 corrects the architecture and merges the v1 streamlined build, v2 full build,
 1. `Cover 4 Quarters`
 1. `Cover 3 Match`
 1. `Mike Sam Crash Press`
-1. `Hammer 0 Blast`
+1. `Sam Blitz 2`
 
 -----
 
-### 10. Dime Normal — Passing Down ⚠ skeleton
+### 10. Dime Normal — 3rd & 4+ Set ✅ verified v3.2
 
-*4 DL / 1 LB / 6 DB. Use on 3rd & long, 2-minute, obvious pass.*
+*4 DL / 1 LB / 6 DB. 18 plays ([cfb.fan](https://cfb.fan/26/playbooks/4-2-5-def/dime-normal/)). Week 7 2026: Seattle played Dime on every 3rd & 4+ vs KC. No true `Cover 1 Robber` here — use `Cover 1 Robber Press`.*
 
-> **Play list not yet verified.** Fetch from [cfb.fan/26/playbooks/4-2-5-def/dime-normal/](https://cfb.fan/26/playbooks/4-2-5-def/dime-normal/) before favoriting plays. Confirm whether Cover 1 Robber is native (it lives in some Dime variants but not all).
+**Token slots**
 
-**Token slots** — *to be filled after in-game audit*
-**Specialty slots** — *to be filled after in-game audit*
-**Audibles** — *to be filled after in-game audit*
+- DANGER → `Cover 3 Buzz Match`
+- 3 LOCK → `Cover 3 Buzz Press`
+- POUND → `Cover 4 Palms` ⭐ *3rd & 4–7 base*
+- STUFF → `Cover 6`
+
+**Specialty slots**
+
+- `Tampa 2` ⭐ *3rd & 8–11 base*
+- `Cover 4 Quarters` *3rd & 12+*
+- `Cover 1 Robber Press` *Robber token* · `Cover 1 Contain Spy` *vs running QB*
+- `Overload 3 Show 2` *Show 2 token*
+- `Dime Blitz 3` · `SS Blitz 3` · `3 Double Buzz` *3-deep pressure*
+- `DB Blitz 0` · `Dbl Safety Blitz` *all-out; use sparingly*
+- Also listed: `Cover 2 Hard Flat`, `Cover 2 Man`, `Cover 3 Cloud`, `LB Blitz 1`
+
+**Audibles**
+
+1. `Cover 4 Palms`
+1. `Tampa 2`
+1. `Cover 6`
+1. `Dime Blitz 3`
 
 -----
 
-### 11. Nickel Load Mug — Load + Mug ⚠ skeleton
+### 11. Nickel Load Mug — Load + Mug ✅ verified v3.2
 
-*Load front (LBs stacked behind the line) combined with mug presentation. Same family as Nickel Load, different alignment.*
+*Load front with mug presentation. 15 plays ([cfb.fan](https://cfb.fan/26/playbooks/4-2-5-def/nickel-load-mug/)). **v3.2 fix:** it does NOT carry `Cover 1 Robber`, `OLB Cross Games`, `1LB Cross Games` or `LB 3 Seam Games` — those stay in Nickel Load.*
 
-> **Play list not yet verified.** Fetch from [cfb.fan/26/playbooks/4-2-5-def/nickel-load-mug/](https://cfb.fan/26/playbooks/4-2-5-def/nickel-load-mug/) before favoriting plays. Likely inherits much of Nickel Load’s menu (cross-games family + coverage suite) plus mug-specific pressures — but **do not assume** until confirmed in-game.
+**Token slots**
 
-**Token slots** — *to be filled after in-game audit*
-**Specialty slots** — *to be filled after in-game audit*
-**Audibles** — *to be filled after in-game audit*
+- DANGER → `Cover 3 Match`
+- 3 LOCK → `Cover 3 Sky`
+- POUND → `Cover 6 Willie` *(no Cover 4 native)*
+- STUFF → `Cover 6`
+
+**Specialty slots**
+
+- `LB DE Twist 3` ⭐ *4-man twist, 3 deep — stunt call*
+- `Nickel Blitz 2` *Sonic family by name: 5 rush, 2 deep*
+- `Nickel Blitz 3` · `Hot Blitz 3` · `Nickel Blitz 1` · `Cover 1LB Blitz`
+- `Nickel Blitz 0` · `LB Blitz 0` *zero pressure*
+- `Cover 3 Cloud` · `Cover 2 Man` · `Tampa 2`
+
+**Audibles**
+
+1. `Cover 3 Match`
+1. `LB DE Twist 3`
+1. `Cover 6`
+1. `Nickel Blitz 2`
 
 > *The relationship between Load, Load Mug, Double Mug: same family, different presentations. **Load** = stacked LBs, normal alignment. **Load Mug** = stacked LBs + mug presentation. **Double Mug** = LBs walked from a different formation entirely. Run them on different downs against the same OL to keep them guessing.*
 
 -----
 
-### 12. 3-4 Odd — Heavy Box ⚠ skeleton
+### 12. 3-4 Odd — Heavy Box ✅ verified v3.2
 
-*3 DL / 4 LB / 4 DB. Short-yardage / loaded-box specialist. The only formation in this build that adds 4 LBs to the field. **Add from the 3-4 playbook.***
+*3 DL / 4 LB / 4 DB. 10 plays ([cfb.fan](https://cfb.fan/26/playbooks/3-4-def/3-4-odd/)). **Add from the 3-4 playbook.** Short-yardage and 12/21 personnel only.*
 
-> **Play list not yet verified.** Fetch from [cfb.fan/26/playbooks/3-4-def/3-4-odd/](https://cfb.fan/26/playbooks/3-4-def/3-4-odd/) before favoriting plays. Token slots and signature 3-4 fire-zone plays should be identified in-game.
+**Token slots**
 
-**Token slots** — *to be filled after in-game audit*
-**Specialty slots** — *to be filled after in-game audit*
-**Audibles** — *to be filled after in-game audit*
+- DANGER → `Cover 1 Hole` *(no Cover 3 Match native)*
+- 3 LOCK → `Will Buck 3 Press`
+- POUND → `Cover 4 Quarters`
+- STUFF → `Cover 6`
+
+**Specialty slots**
+
+- `Cross 3 Fire` ⭐ *3-deep fire zone*
+- `SS 2 Trap` *Sonic family by name: 5 rush, 2 deep*
+- `Saw Blitz 1` · `Storm Brave 1` · `Pinch Buck 0`
+- `Tampa 2`
+
+**Audibles**
+
+1. `Cover 4 Quarters`
+1. `Cross 3 Fire`
+1. `SS 2 Trap`
+1. `Cover 1 Hole`
 
 -----
 
-### GL. Goal Line 5-3 — Situational ⚠ skeleton
+### GL. Goal Line 5-3 — Situational ⚠ unverified
 
 *5 DL / 3 LB / 3 DB. Man / gap assignments. Call based on short-yardage tendency.*
 
-> **Play list not yet verified.** Fetch from [cfb.fan/26/playbooks/4-2-5-def/goal-line-5-3/](https://cfb.fan/26/playbooks/4-2-5-def/goal-line-5-3/) before favoriting plays.
+> **Still unverified (v3.2).** The [cfb.fan Goal Line 5-3 page](https://cfb.fan/26/playbooks/4-2-5-def/goal-line-5-3/) lists no plays as of Nov. 1, 2026. Check the menu in-game before favoriting.
 
 **Audibles** — *to be filled after in-game audit*
 
@@ -425,22 +497,27 @@ v3 corrects the architecture and merges the v1 streamlined build, v2 full build,
 
 Use this as your in-game quick reference. Find the down and distance, call the formation, and pick from the token / specialty options.
 
-|Situation               |Formation                       |Primary Call                                  |Mix-In                                     |
-|------------------------|--------------------------------|----------------------------------------------|-------------------------------------------|
-|**1st & 10 (balanced)** |Nickel Over                     |DANGER (`Cover 3 Match`)                      |POUND (`Cover 4 Palms`), 3 LOCK            |
-|**1st & 10 (run-heavy)**|Nickel Over or 3-4 Odd          |DANGER (`Cover 3 Sky`)                        |4-man rush                                 |
-|**2nd & short (≤3)**    |Nickel Over                     |ROBBER (`Cover 1 Hole`)                       |DANGER, `Show Blitz + Pinch DL`            |
-|**2nd & medium (4-6)**  |Nickel Over                     |POUND (`Cover 4 Palms`)                       |SAND DEUCE (`Edge Blitz 3`)                |
-|**2nd & long (7+)**     |Nickel Over                     |POUND (`Cover 4 Quarters`)                    |SHOW 2 (`Cover 9 Show 2`), `Sim Pressure 3`|
-|**3rd & short (1-3)**   |3-4 Odd or Nickel Double Mug    |ROBBER (`Cover 1 Hole`)                       |`Cross 3 Fire`, `Nickel Dog 3 Buzz`        |
-|**3rd & medium (4-6)**  |Nickel Over or Nickel Double Mug|`Sim Pressure 3` / `Nickel Dog 3 Buzz`        |`Field Sim 3`, `Hot Blitz Bail`            |
-|**3rd & long (7+)**     |Nickel 3-3 Mint or Dime Normal  |POUND (`Cover 4 Quarters`) or `Hot Blitz Bail`|`Edge Blitz 3`, `Zero Blitz`               |
-|**Red zone (inside 20)**|Nickel Over or Mint             |ROBBER (`Cover 1 Robber Press`)               |STUFF (`Cover 6`), POUND                   |
-|**Goal line (inside 5)**|Goal Line 5-3                   |Man / gap                                     |`Mid Blitz 0`                              |
-|**2-minute**            |Nickel Over                     |DANGER + POUND only                           |Simplify                                   |
-|**vs Trips**            |Any Nickel                      |STUFF (`Cover 6` / `Cover 6 Willie`)          |—                                          |
-|**vs Bunch**            |Any Nickel                      |SQUAT (`Cover 4 Palms` w/ adjustments)        |—                                          |
-|**vs Empty**            |Nickel Over                     |POUND (`Cover 4 Quarters`)                    |`Edge Blitz 3`                             |
+|Situation               |Formation                         |Primary Call                                 |Mix-In                                           |
+|------------------------|----------------------------------|---------------------------------------------|-------------------------------------------------|
+|**1st & 10 (balanced)** |Nickel Over                       |DANGER (`Cover 3 Match`)                     |POUND (`Cover 4 Palms`), STUFF (`Cover 6`)       |
+|**1st & 10 (run-heavy)**|Nickel Over or 4-2-5 Over G       |DANGER (`Cover 3 Sky`)                       |Over G `Cover 6` (split-field vs 12/21)          |
+|**Early-down pressure** |Nickel Over                       |`Nickel 2 Trap` (Sonic)                      |Week 7: 5 of Seattle's 8 blitzes came on 1st/2nd |
+|**2nd & short (≤3)**    |Nickel Over                       |DANGER (`Cover 3 Match`)                     |ROBBER (`Cover 1 Hole`), `Show Blitz + Pinch DL` |
+|**2nd & medium (4-6)**  |Nickel Over                       |POUND (`Cover 4 Palms`)                      |SAND DEUCE (`Edge Blitz 3`)                      |
+|**2nd & long (7+)**     |Nickel Over                       |POUND (`Cover 4 Quarters`)                   |SHOW 2 (`Cover 9 Show 2`), `Sim Pressure 3`      |
+|**3rd & short (1-3)**   |Nickel Over or Nickel Double Mug  |4-man sim, 3 deep: `Field Sim 3` / `Sim Pressure 3`|`Nickel Dog 3 Buzz`, ROBBER (`Cover 1 Hole`)|
+|**3rd & medium (4-7)**  |**Dime Normal**                   |POUND (`Cover 4 Palms`)                      |`Cover 6`; stunt: Single Mug `Blitz Tex 3 Sim 3` |
+|**3rd & long (8-11)**   |**Dime Normal**                   |`Tampa 2`                                    |Sonic: Single Mug `Nickel 2 Trap`                |
+|**3rd & very long (12+)**|**Dime Normal**                  |`Cover 4 Quarters`                           |`Cover 6`                                        |
+|**4th & short (1-2)**   |4-2-5 Under                       |`Sam Blitz 2` (Sonic)                        |Double Mug `Nickel 2 Trap`; avoid 4-man Cover 3  |
+|**Red zone (inside 20)**|Nickel Over or Mint               |ROBBER (`Cover 1 Robber Press` — Mint)       |STUFF (`Cover 6`), POUND                         |
+|**Goal line (inside 5)**|Goal Line 5-3 (unverified) or 3-4 Odd|Man / gap                                 |3-4 Odd `Pinch Buck 0`                           |
+|**2-minute**            |Nickel Over → Dime Normal         |DANGER + POUND only                          |Simplify                                         |
+|**vs Trips**            |Any Nickel                        |STUFF (`Cover 6` / `Cover 6 Willie`)         |—                                                |
+|**vs Bunch**            |Any Nickel                        |SQUAT (`Cover 4 Palms` w/ adjustments)       |—                                                |
+|**vs Empty**            |Nickel Over or Dime Normal        |POUND (`Cover 4 Quarters`)                   |`Edge Blitz 3` (Nickel Over), `Nickel 2 Trap`    |
+
+> **Never rush three on 3rd & medium.** Seattle's only 3-man rush vs KC gave up +2.60 EPA. `Hot Blitz Bail` (Mint) stays in the book for 2nd & long only.
 
 -----
 
@@ -457,9 +534,11 @@ Plan your play-calling tendencies for a game. Adjust based on opponent.
 |2nd & Medium|30%   |25%   |25%  |20%  |
 |2nd & Long  |20%   |25%   |35%  |20%  |
 |3rd & Short |50%   |25%   |10%  |15%  |
-|3rd & Medium|20%   |30%   |20%  |30%  |
-|3rd & Long  |10%   |15%   |50%  |25%  |
+|3rd & Medium|10%   |10%   |50%  |30%  |
+|3rd & Long  |5%    |5%    |55%  |35%  |
 |Red Zone    |30%   |25%   |10%  |35%  |
+
+*v3.2: 3rd & medium/long are Dime downs. POUND = `Cover 4 Palms`/`Quarters`; STUFF = `Cover 6` and `Tampa 2`. Seattle played two-high on 66% of snaps and Cover 6 on 26% in Week 7.*
 
 **vs Spread-Heavy Offense.** Shift toward POUND and STUFF. Reduce DANGER. (1st & 10: 25/25/30/20.)
 
@@ -578,6 +657,25 @@ Macdonald’s system is designed to cycle between coverages so the QB can never 
 
 -----
 
+## Week 7 2026 Evidence (v3.2)
+
+Checked against Seattle 20, Kansas City 3 (Oct. 25, 2026), 50 snaps, from the verified play-by-play pulled through SumerBrain.
+
+|Finding|Number|What changed in this doc|
+|---|---|---|
+|Zone coverage|94% of snaps|Kept the zone-token system|
+|Two-high shell|66% · Cover 6 26%|Raised STUFF/POUND on 3rd down|
+|4-man rush|27 of 36 dropbacks, 52% pressure|Sims stay the default|
+|5-man rush|8 snaps, 2 deep on 6 (Sonic)|Added `Nickel 2 Trap` / `Sam Blitz 2` slots|
+|Dime on 3rd down|9 of 11, every 3rd & 4+|3rd & 4+ = Dime Normal|
+|Stunts|6 total, 4 on 3rd down|Single Mug `Blitz Tex 3 Sim 3`, Load Mug `LB DE Twist 3`|
+|4th & 1|KC 2 for 2 vs 4-man Cover 3|New 4th & short row|
+|3-man rush|1 snap, +2.60 EPA|Never rush 3 on 3rd & medium|
+
+One game is a small sample. Treat these as call-sheet leanings, not fixed percentages.
+
+-----
+
 ## What Changed From v1 / v2 / v3.0
 
 |Issue                                               |v1 / v2                    |v3.0                                            |**v3.1 (current)**                                                                                            |
@@ -586,14 +684,16 @@ Macdonald’s system is designed to cycle between coverages so the QB can never 
 |Primary formation                                   |Nickel 3-3 Over            |Nickel Over                                     |Nickel Over                                                                                                   |
 |Dismissed 4-2-5 / 4-3 Multiple?                     |Yes (“incomplete coverage”)|No                                              |No                                                                                                            |
 |Hybrid coverage tokens                              |Mapping table only         |Enforced                                        |Enforced                                                                                                      |
-|Cover 1 Robber location                             |Nickel 2-4 only            |Nickel Load + Mint (Robber Press)               |**Native in Nickel Load, 3-3-5 Penny, and Nickel Load Mug**                                                   |
-|Cross-blitz family (OLB Cross, 1LB Cross, LB 3 Seam)|Not included               |Not included                                    |**Added via Nickel Load + Load Mug**                                                                          |
+|Cover 1 Robber location                             |Nickel 2-4 only            |Nickel Load + Mint (Robber Press)               |**Native in Nickel Load and 3-3-5 Penny** (v3.2: Load Mug claim removed)                                     |
+|Cross-blitz family (OLB Cross, 1LB Cross, LB 3 Seam)|Not included               |Not included                                    |**Added via Nickel Load** (v3.2: not in Load Mug)                                                             |
 |Saw Blitz family                                    |Not included               |Not included                                    |**Added via 3-3-5 Penny**                                                                                     |
 |Ravens 2.0 lineage explicit                         |No                         |Partial                                         |**Yes — Load + Penny + Mint as the Ravens cross-blitz triangle**                                              |
 |New CFB ’26 plays                                   |Not included               |Bracket Switch Willie, Field Sim 3, Nickel Sim 2|All v3.0 plays + **Saw Blitz 1/3, OLB Cross Games, 1LB Cross Games, LB 3 Seam Games, Cover 1 Robber (proper)**|
 |Formation count                                     |7 (v1) / 10+ (v2)          |9 + GL                                          |**12 + GL**                                                                                                   |
 |Formations from outside base                        |2                          |1                                               |**1 (3-4 Odd only — everything else native to 4-2-5)**                                                        |
 |3-3-5 Over Flex                                     |—                          |Kept                                            |**Kept alongside Penny — different roles**                                                                    |
+
+**v3.2 (Nov. 1, 2026) — validation pass.** Re-checked every formation list on cfb.fan. Fixed: `Hammer 0 Blast` (not in Under) → `Sam Blitz 2`; Double Mug does have `Cover 3 Match`; Mint does have `Cover 6`; Load Mug has no `Cover 1 Robber`; `Zero Blitz` (not a 4-2-5 play) removed. Filled Single Mug, Dime Normal, Load Mug and 3-4 Odd. Rebuilt the 3rd- and 4th-down rows from Week 7. Goal Line 5-3 is still unverified. Coverage shells are read from play names; cfb.fan doesn't show drops.
 
 **Why the v3.0 → v3.1 expansion?** The original v3.0 dismissed Nickel Load and 3-3-5 Penny as duplicating Nickel Over’s menu. The audit showed those formations carry tools (`Cover 1 Robber` proper, OLB/1LB Cross Games, Saw Blitz 1/3, LB 3 Seam Games) that don’t exist elsewhere in the build. These are the **Ravens 2.0 cross-blitz DNA** — how the original Martindale defense generated pressure without true blitzes, and how Macdonald carries it forward.
 

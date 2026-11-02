@@ -6,13 +6,14 @@ const v4ConceptGlossary = [
   { name: "STUFF", cfb: "Cover 4 Palms + adjustments, Cover 6", structure: "2-high asymmetric", desc: "Trips, field-heavy formations, split-field Cover 6 / HQH." },
   { name: "CLOUD", cfb: "Cover 2 Invert, Tampa 2", structure: "2-high invert", desc: "Change-up two-high. Safe shell with cloud/force technique." },
   { name: "SQUAT", cfb: "Cover 4 Palms (vs Bunch) + adj", structure: "2-high tightened", desc: "Bunch = SQUAT. Always. Tighten landmarks — pattern-match dies vs bunch rub." },
-  { name: "SAND DEUCE", cfb: "Edge Blitz 3, Sim Pressure 3", structure: "5-man sim pressure", desc: "Constraint every 4–5 plays. Sim pressure complements coverage — does not define you." }
+  { name: "SAND DEUCE", cfb: "Edge Blitz 3, Sim Pressure 3", structure: "5-man sim pressure", desc: "Constraint every 4–5 plays. Sim pressure complements coverage — does not define you. v3.2: when you send 5, keep 2 deep (Sonic — Nickel 2 Trap). Seattle did on 6 of 8 blitzes in Week 7 2026." }
 ];
 
 const v4GoldenRules = [
   "Never show the same look twice in a row.",
   "Alternate 1-high (DANGER / 3 LOCK) and 2-high (POUND / STUFF / CLOUD).",
   "Mix in SAND DEUCE (Edge Blitz 3) every 4–5 plays.",
+  "Send 5? Keep 2 deep (Sonic / Nickel 2 Trap). 3rd & 4+ = Dime. Never rush 3 on 3rd & medium.",
   "Bunch = SQUAT. Always.",
   "Red zone = STUFF or SQUAT.",
   "Hurry-up = Simplify to DANGER + POUND only.",
@@ -245,9 +246,10 @@ const v4Situations = [
   { down: "2nd & short (≤3)", form: "3-3 Over", primary: "Cover 1 Hole", pressure: "Blitz selective" },
   { down: "2nd & medium (4-6)", form: "Over / 2-4", primary: "STUFF (Palms) / DANGER", pressure: "Sim every 4–5" },
   { down: "2nd & long (7+)", form: "3-3 Over", primary: "POUND (C4 Qtrs)", pressure: "SAND DEUCE" },
-  { down: "3rd & short (1-3)", form: "3-4 Bear / Mug", primary: "Cover 1 Hole", pressure: "Blitz" },
-  { down: "3rd & medium (4-6)", form: "Dbl Mug", primary: "DANGER (C3 Match)", pressure: "Sim / Dog" },
-  { down: "3rd & long (7+)", form: "Dime Rush / Mug", primary: "POUND (Qtrs) / CLOUD", pressure: "Mug Sim / Tex" },
+  { down: "3rd & short (1-3)", form: "Over / Dbl Mug", primary: "4-man sim, 3 deep (Field Sim 3)", pressure: "Sim / Dog" },
+  { down: "3rd & medium (4-7)", form: "Dime", primary: "POUND (Palms) / STUFF (C6)", pressure: "4-man / Tex stunt" },
+  { down: "3rd & long (8+)", form: "Dime", primary: "CLOUD (Tampa 2) / POUND (Qtrs)", pressure: "Sonic only (Nickel 2 Trap)" },
+  { down: "4th & short (1-2)", form: "Under / Dbl Mug", primary: "Sonic (Sam Blitz 2)", pressure: "5 rush, 2 deep — not 4-man C3" },
   { down: "Red Zone", form: "3-3 Over", primary: "STUFF (Palms) / SQUAT", pressure: "Conservative" },
   { down: "Goal Line", form: "GL 5-3 / 6-2", primary: "Man / Gap", pressure: "Blitz" },
   { down: "2-Minute", form: "3-3 Over", primary: "DANGER + POUND only", pressure: "Minimal" },
