@@ -3177,7 +3177,7 @@ const personnelData = {
                 checksDiv.innerHTML = `
                     <div class="check-item">
                         <div class="check-label">Down & Distance</div>
-                        <div class="check-status pass">✅ ${situation === 'passingDownsMedium' ? '3rd & 7-10' : '3rd & 11+'}</div>
+                        <div class="check-status pass">✅ ${situation === 'passingDownsMedium' ? '3rd & 4-10, 2nd & 10-12' : '3rd & 11+, 2nd & 13+'}</div>
                     </div>
                     <div class="check-item">
                         <div class="check-label">QB Quality</div>
@@ -3274,13 +3274,17 @@ const personnelData = {
                 if (qbQuality === 'elite') reason = 'Elite QB will diagnose pressure quickly';
                 else if (lastPlays === 'blitz') reason = 'Already blitzed recently - back to zones';
                 else if (rushWorking === 'yes') reason = '4-man rush is working - stick with it';
+
+                const coverageCall = currentSituation === 'passingDownsMedium'
+                    ? 'Cover 4 Palms (35%) or Tampa 2 (25%)'
+                    : 'Cover 4 Quarters (35%) or Tampa 2 (25%)';
                 
                 resultDiv.innerHTML = `
                     <div class="decision-result denied">
                         ❌ DO NOT PRESSURE
                         <div class="decision-result-detail">
                             ${reason}<br>
-                            Recommended: Cover 4 Palms (20%) or Cover 3 Match (25%)
+                            Recommended: ${coverageCall}
                         </div>
                     </div>
                 `;
