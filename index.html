@@ -1319,230 +1319,203 @@ const gamePlanData = {
     },
     passingDownsMedium: {
         label: "Passing Downs (Medium)",
-        subtitle: "3rd & 7-10, 2nd & 10-12",
-        coverageNote: "MEDIUM PASSING DOWNS: Still some run threat. RUSH: Straight 4-Man (55%), Tex Stunt (20%), Tempe (15%), Exit (8%), El Paso (2%). Cover 3 Match (35%), Cover 4 Palms (20%), Cover 6 (15%), Tampa 2 (10%), Cover 3 Buzz (8%), Cover 4 Quarters (7%), Cover 4 Solo (5%).",
+        subtitle: "3rd & 4-10, 2nd & 10-12",
+        coverageNote: "v3.2 (Week 7 2026 check): 3rd & 4+ is a DIME down. Seattle played Dime on every 3rd & 4+ vs KC, rushed 4 on 27 of 36 dropbacks and played two-high 66% of the time. Never rush 3 here (+2.60 EPA on the one 3-man rush). Play names verified on cfb.fan (4-2-5 playbook). Stats below are plan targets, not observed rates.",
         plays: [
             {
-                formation: "Nickel 2-4",
-                name: "Cover 3 Match",
-                coverage: "Three-Deep Zone Match",
-                frequency: "35%",
-                description: "Foundation coverage for 3rd & 7-10. Zones match vertical stems. Balanced vs run and pass. MLB reads QB eyes, stays in hook zone. Safe call.",
-                tags: ["general:Foundation", "general:Safe", "when:vs Balanced"],
-                isPrimary: true
-            },
-            {
-                formation: "Nickel 2-4",
+                formation: "Dime Normal",
                 name: "Cover 4 Palms",
-                coverage: "Quarters Pattern-Match",
-                frequency: "20%",
-                description: "Pattern-matching quarters. Excellent vs bunch/mesh routes. Defenders read route combinations. Good on 3rd & 7-9.",
-                tags: ["when:vs Bunch", "when:vs Mesh", "general:Pattern-Match"],
+                coverage: "Quarters Pattern-Match (2-high)",
+                frequency: "35%",
+                description: "Base call on 3rd & 4-7. Four-man rush, two deep, corners read #1/#2. Takes away the sticks throw and the slant/flat. User the Mike in the hole.",
+                tags: ["general:Foundation", "when:3rd & 4-7", "general:Two-High"],
                 isPrimary: true
             },
             {
-                formation: "Nickel 2-4",
-                name: "Cover 6",
-                coverage: "Split-Field Coverage",
-                frequency: "15%",
-                description: "Cover 4 to trips/strength, Cover 2 to boundary. MANDATORY vs unbalanced formations (3x1). Adapts to formation balance.",
-                tags: ["when:vs 3x1", "general:Split-Field", "general:Championship Coverage"],
-                isPrimary: false
-            },
-            {
-                formation: "3-3-5 Over Flex",
+                formation: "Dime Normal",
                 name: "Tampa 2",
-                coverage: "Two-Deep, MLB Drops Hole",
+                coverage: "Two-Deep, Mike Runs the Pole",
+                frequency: "25%",
+                description: "Base call on 3rd & 8-10. Mike carries the seam, 5 under / 2 deep. Seattle was two-high on all four 3rd & 8-11 snaps in Week 7.",
+                tags: ["when:3rd & 8-10", "when:vs 4 Verts", "general:Anti-Seam"],
+                isPrimary: true
+            },
+            {
+                formation: "Dime Normal",
+                name: "Cover 6",
+                coverage: "Split-Field (Quarters / Half)",
+                frequency: "15%",
+                description: "Quarters to trips, Cover 2 to the boundary. Mandatory vs 3x1. Seattle's most-used shell in Week 7 (26% of snaps).",
+                tags: ["when:vs 3x1", "general:Split-Field"],
+                isPrimary: false
+            },
+            {
+                formation: "Nickel Single Mug",
+                name: "Blitz Tex 3 Sim 3",
+                coverage: "4-Man Tex Stunt, 3 Deep",
                 frequency: "10%",
-                description: "MLB drops to deep middle seam. Protects vs 4 verts. Speed personnel for pass rush. Forces sideline throws.",
-                tags: ["when:vs 4 Verts", "general:Anti-Seam"],
+                description: "The 3rd-down stunt. 4 of Seattle's 6 stunts came on 3rd down. Mugged A-gap freezes the center, then the T/E twist hits the guard-tackle seam.",
+                tags: ["general:Stunt", "when:vs Slide Protection"],
                 isPrimary: false
             },
             {
-                formation: "Nickel 2-4",
-                name: "Cover 3 Buzz",
-                coverage: "Three-Deep, Safety Buzzes Flat",
-                frequency: "8%",
-                description: "Shows Cover 2 pre-snap, safety buzzes to flat post-snap. Disguise coverage that rotates to Cover 3. Confuses QB reads.",
-                tags: ["general:Disguise", "when:vs QB Reads", "general:Change-Up"],
+                formation: "Nickel Single Mug",
+                name: "Nickel 2 Trap",
+                coverage: "5-Man Sonic (2 Deep)",
+                frequency: "10%",
+                description: "When you send five, keep two deep. Seattle had Cover 2 behind 6 of its 8 five-man rushes. Change-up only; don't make it the base.",
+                tags: ["general:Sonic", "general:Pressure"],
                 isPrimary: false
             },
             {
-                formation: "3-3-5 Over Flex",
-                name: "Cover 4 Quarters",
-                coverage: "Four Quarters",
-                frequency: "7%",
-                description: "Speed personnel variant. Safeties and corners quarter the field. Good vs 4-wide sets. More pass rush juice from OLBs.",
-                tags: ["when:vs 4-Wide", "general:Two-High", "general:Speed Rush"],
-                isPrimary: false
-            },
-            {
-                formation: "Nickel 2-4 Over",
-                name: "Cover 4 Solo",
-                coverage: "Quarters Weak, Man Strong",
+                formation: "Dime Normal",
+                name: "Cover 3 Buzz Match",
+                coverage: "Three-Deep, Safety Buzzes Hook",
                 frequency: "5%",
-                description: "Weak side plays quarters, strong side plays man. Hybrid split-field vs unbalanced. Bracket star receiver with man coverage.",
-                tags: ["when:vs Star WR", "general:Hybrid", "general:Split-Field"],
+                description: "1-high change-up to steal a read after showing two-high. Use once or twice a half.",
+                tags: ["general:Disguise", "general:Change-Up"],
                 isPrimary: false
             }
         ],
         stats: {
-            totalPlays: 7,
-            blitzRate: "8%",
-            twoHighRate: "57%",
-            stuntRate: "45%"
+            totalPlays: 6,
+            blitzRate: "10%",
+            twoHighRate: "75%",
+            stuntRate: "10%"
         }
     },
     passingDownsObvious: {
         label: "Passing Downs (Obvious)",
         subtitle: "3rd & 11+, 2nd & 13+",
-        coverageNote: "OBVIOUS PASS: Max coverage, aggressive rush. RUSH: Tex Stunt (25%), Straight 4-Man (45%), Tempe (15%), Fire Zone 2 (10%), El Paso (5%). Cover 3 Match (30%), Cover 4 Palms (25%), Tampa 2 (20%), Cover 2 Man (10%), Quarter-Quarter-Half (8%), Cover 1 Robber (5%), Fire Zone 2 (2%).",
+        coverageNote: "v3.2: still DIME. Keep everything in front and rally. Four-man rush with two deep; five-man only as Sonic (2 deep). No zero pressure on 3rd & 11+. Play names verified on cfb.fan (4-2-5 playbook). Stats below are plan targets, not observed rates.",
         plays: [
             {
-                formation: "Nickel 2-4",
-                name: "Cover 3 Match",
-                coverage: "Three-Deep Zone Match",
-                frequency: "30%",
-                description: "Still your foundation even on obvious pass. Zones match vertical stems. Safe, forces checkdowns. MLB reads QB eyes.",
-                tags: ["general:Foundation", "general:Safe", "when:3rd & 11+"],
+                formation: "Dime Normal",
+                name: "Cover 4 Quarters",
+                coverage: "Four Quarters (2-high)",
+                frequency: "35%",
+                description: "Base on 3rd & 12+. Four deep, three under at the sticks. Rally and tackle short of the line.",
+                tags: ["general:Foundation", "when:3rd & 12+", "general:Two-High"],
                 isPrimary: true
             },
             {
-                formation: "Nickel 2-4",
+                formation: "Dime Normal",
+                name: "Tampa 2",
+                coverage: "Two-Deep, Mike Runs the Pole",
+                frequency: "25%",
+                description: "Base on 3rd & 11. Mike carries the seam; corners sink at the sticks.",
+                tags: ["when:3rd & 11", "general:Anti-Seam"],
+                isPrimary: true
+            },
+            {
+                formation: "Dime Normal",
+                name: "Cover 6",
+                coverage: "Split-Field (Quarters / Half)",
+                frequency: "15%",
+                description: "Split-field vs trips and empty. Quarters to the passing strength.",
+                tags: ["when:vs 3x1", "when:vs Empty", "general:Split-Field"],
+                isPrimary: false
+            },
+            {
+                formation: "Dime Normal",
                 name: "Cover 4 Palms",
                 coverage: "Quarters Pattern-Match",
-                frequency: "25%",
-                description: "Pattern-match their obvious pass concepts. Excellent vs bunch/mesh/levels. Defenders read routes, not just zones.",
-                tags: ["when:vs Bunch", "when:vs Mesh", "general:Pattern-Match"],
-                isPrimary: true
-            },
-            {
-                formation: "3-3-5 Over Flex",
-                name: "Tampa 2",
-                coverage: "Two-Deep, MLB Drops Hole",
-                frequency: "20%",
-                description: "MLB drops to deep middle seam. Forces sideline throws on long yardage. Protects vs 4 verts. Speed rush from edges.",
-                tags: ["when:3rd & 12+", "when:vs 4 Verts", "general:Anti-Seam"],
-                isPrimary: false
-            },
-            {
-                formation: "Dime 1-5-5",
-                name: "Cover 2 Man",
-                coverage: "Man Under, Two-Deep Safeties",
                 frequency: "10%",
-                description: "Six DBs on field. Man coverage underneath, 2 safeties protect deep. Aggressive vs empty/5-wide. Speed to match receivers.",
-                tags: ["when:vs Empty", "when:3rd & 15+", "general:Man Coverage"],
+                description: "Pattern-match change-up from the same 2-high shell.",
+                tags: ["general:Pattern-Match", "when:vs Bunch"],
                 isPrimary: false
             },
             {
-                formation: "Nickel 2-4",
-                name: "Quarter-Quarter-Half",
-                coverage: "Hybrid Quarters/Halves",
-                frequency: "8%",
-                description: "Two defenders play quarters, one plays deep half. Advanced pattern-match. Adapts to route distribution. Use vs elite QB.",
-                tags: ["general:Pattern-Match", "general:Advanced", "when:vs Elite QB"],
+                formation: "Nickel Single Mug",
+                name: "Nickel 2 Trap",
+                coverage: "5-Man Sonic (2 Deep)",
+                frequency: "10%",
+                description: "Five rush, two deep. The only blitz on obvious pass downs.",
+                tags: ["general:Sonic", "general:Pressure"],
                 isPrimary: false
             },
             {
-                formation: "3-3-5 Over Flex",
-                name: "Cover 1 Robber",
-                coverage: "Man-Free, Safety Robs Middle",
+                formation: "Dime Normal",
+                name: "Overload 3 Show 2",
+                coverage: "Show 2-High, Rotate to 3",
                 frequency: "5%",
-                description: "Man coverage, free safety robs middle. Change-up after zones. Speed personnel for man-to-man. Use sparingly.",
-                tags: ["when:After Zones", "general:Man Coverage", "general:Change-Up"],
-                isPrimary: false
-            },
-            {
-                formation: "Nickel 2-4",
-                name: "Fire Zone 2",
-                coverage: "Fire Zone (5-Man Rush)",
-                frequency: "2%",
-                description: "Five rush, different drop pattern than Fire 3. End drops, LB rushes opposite. 3-under 3-deep zone behind. Disguised pressure.",
-                tags: ["when:3rd & 12+", "general:Blitz", "avoid:vs Elite QB"],
+                description: "Disguise: shows two-high, rotates to three deep with overload pressure. Sparingly.",
+                tags: ["general:Disguise", "general:Change-Up"],
                 isPrimary: false
             }
         ],
         stats: {
-            totalPlays: 7,
-            blitzRate: "12%",
-            twoHighRate: "63%",
-            stuntRate: "55%"
+            totalPlays: 6,
+            blitzRate: "15%",
+            twoHighRate: "85%",
+            stuntRate: "0%"
         }
     },
     shortYardage: {
         label: "Short Yardage",
-        subtitle: "3rd & 1-3, Goal Line",
-        coverageNote: "RUN STOP PRIORITY: Use Nickel 3-3 Mint (8 in box) and 4-2-5 Over G. Cover 1 Hole (25%), Cover 3 Sky (20%), Cover 3 Match (18%), Pirate Stunt (15%), Cover 1 - 4-3 (12%), Cover 3 Sky - Load (7%), Cover 1 - Base (3%).",
+        subtitle: "3rd & 1-3, 4th & 1-2",
+        coverageNote: "v3.2: 3rd & 1-3 = 4-man sim with 3 deep. 4th & 1-2 = Sonic (5 rush, 2 deep). KC went 2 for 2 vs 4-man Cover 3 on 4th & 1 in Week 7 \u2014 don't repeat it. Play names verified on cfb.fan (4-2-5 and 3-4 playbooks). Stats below are plan targets, not observed rates.",
         plays: [
             {
-                formation: "Nickel 3-3 Mint",
-                name: "Cover 1 Hole",
-                coverage: "Man-Free, Safety Helps Middle",
-                frequency: "25%",
-                description: "8 in box. Man coverage on receivers, free safety over top. LBs attack gaps aggressively. Best short yardage coverage for run/pass balance.",
-                tags: ["when:3rd & Short", "when:Goal Line", "general:8 in Box"],
+                formation: "Nickel Over",
+                name: "Field Sim 3",
+                coverage: "4-Man Sim, 3 Deep",
+                frequency: "30%",
+                description: "3rd & 1-3 base. Drop an end, bring a second-level player. Looks like pressure, rushes four, stays 3 deep.",
+                tags: ["general:Sim", "when:3rd & 1-3"],
                 isPrimary: true
             },
             {
-                formation: "Nickel 3-3 Mint",
-                name: "Cover 3 Sky",
-                coverage: "Three-Deep, SS Force",
+                formation: "Nickel Double Mug",
+                name: "Nickel Dog 3 Buzz",
+                coverage: "Mugged A-Gaps, 3 Deep",
                 frequency: "20%",
-                description: "SS forces run to strong side. 8 in box. Corner drops deep third. Dominant vs inside zone and power runs.",
-                tags: ["when:Run Heavy", "when:Inside Zone", "general:Run Support"],
+                description: "Both ILBs in the A-gaps. Freezes the center and kills QB sneak.",
+                tags: ["general:Mug", "when:vs Sneak"],
+                isPrimary: true
+            },
+            {
+                formation: "4-2-5 Under",
+                name: "Sam Blitz 2",
+                coverage: "5-Man Sonic (2 Deep)",
+                frequency: "20%",
+                description: "4th & 1-2 base. Five rush with two deep, not four-man Cover 3.",
+                tags: ["general:Sonic", "when:4th & Short"],
+                isPrimary: true
+            },
+            {
+                formation: "Nickel Double Mug",
+                name: "Nickel 2 Trap",
+                coverage: "5-Man Sonic (2 Deep)",
+                frequency: "10%",
+                description: "4th & short change-up from the mug look.",
+                tags: ["general:Sonic", "when:4th & Short"],
                 isPrimary: false
             },
             {
-                formation: "4-2-5 Over G",
-                name: "Cover 3 Match",
-                coverage: "Three-Deep Zone Match",
-                frequency: "18%",
-                description: "Over G front = gap integrity. Zones match routes. Safe vs play-action. Good if offense shows pass tendency on short yardage.",
-                tags: ["when:Play-Action", "general:Balanced", "general:Gap Control"],
-                isPrimary: false
-            },
-            {
-                formation: "Nickel 3-3 Mint",
-                name: "Cover 3 w/ Pirate Stunt",
-                coverage: "Three-Deep + Weakside Crash",
-                frequency: "15%",
-                description: "Pirate stunt weakside (DE→B, DT→A, LB scrapes C). Stops cutback lanes. Cover 3 zone behind. Great vs zone read and inside zone.",
-                tags: ["when:Zone Read", "when:Cutback", "general:Stunt"],
-                isPrimary: false
-            },
-            {
-                formation: "4-3 Over",
-                name: "Cover 1",
-                coverage: "Man-Free, Traditional Base",
-                frequency: "12%",
-                description: "Traditional 4-3 defense. Four down linemen, 3 LBs, 4 DBs. Man coverage. Use vs heavy/jumbo packages (22/23 personnel). Need size, can't play nickel.",
-                tags: ["when:vs Heavy", "when:vs Jumbo", "general:Man Coverage"],
-                isPrimary: false
-            },
-            {
-                formation: "Nickel 2-4 Load",
-                name: "Cover 3 Sky",
-                coverage: "Three-Deep, Big Nickel",
-                frequency: "7%",
-                description: "Big nickel package - LB/S hybrid at nickel. Better vs run. SS forces, 7 in box. Use vs 12 personnel, heavy formations.",
-                tags: ["when:vs 12 Personnel", "when:vs Heavy", "general:Run Support"],
-                isPrimary: false
-            },
-            {
-                formation: "Nickel 2-4",
+                formation: "Nickel Over",
                 name: "Cover 1 Hole",
-                coverage: "Man-Free from Base",
-                frequency: "3%",
-                description: "Standard nickel personnel with Cover 1. Use if you can't get into Mint formation in time (hurry-up offense). Man coverage, safety help.",
-                tags: ["when:No-Huddle", "general:Man Coverage", "general:Backup"],
+                coverage: "Man-Free, Hole Player",
+                frequency: "10%",
+                description: "Man change-up vs quick game on 3rd & 2-3. User the hole player.",
+                tags: ["general:Man", "when:vs Quick Game"],
+                isPrimary: false
+            },
+            {
+                formation: "3-4 Odd",
+                name: "Cross 3 Fire",
+                coverage: "3-Deep Fire Zone",
+                frequency: "10%",
+                description: "Heavy personnel (12/21/22) on 3rd & 1. Add from the 3-4 playbook.",
+                tags: ["when:vs Heavy", "general:Fire Zone"],
                 isPrimary: false
             }
         ],
         stats: {
-            totalPlays: 7,
-            blitzRate: "0%",
+            totalPlays: 6,
+            blitzRate: "50%",
             twoHighRate: "30%",
-            stuntRate: "15%"
+            stuntRate: "0%"
         }
     },
     redZone: {

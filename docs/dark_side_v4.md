@@ -44,6 +44,7 @@ Base template: **3-3-5** (Nickel 3-3 Over as primary workhorse at ~45% snaps)
 5. Red zone = STUFF or SQUAT.
 6. Hurry-up = Simplify to DANGER + POUND only.
 7. Make the QB think every single play.
+8. Send 5? Keep 2 deep (Sonic: Nickel 2 Trap in 3-3 Over / Dbl Mug, Dime Blitz 2 in Dime Rush). 3rd & 4+ = Dime. Never rush 3 on 3rd & medium. *(v3.2, Week 7 2026)*
 
 ---
 
@@ -332,7 +333,9 @@ Count #3 from the sideline before every snap.
 
 ---
 
-## Situation Call Sheet (14)
+## Situation Call Sheet (15)
+
+*v3.2 (Nov. 1, 2026): 3rd/4th-down rows rebuilt from Seattle vs KC, Week 7 2026.*
 
 | Situation | Formation | Primary | Pressure |
 |-----------|-----------|---------|----------|
@@ -341,9 +344,10 @@ Count #3 from the sideline before every snap.
 | 2nd & short (≤3) | 3-3 Over | Cover 1 Hole | Blitz selective |
 | 2nd & medium (4-6) | Over / 2-4 | STUFF (Palms) / DANGER | Sim every 4–5 |
 | 2nd & long (7+) | 3-3 Over | POUND (C4 Qtrs) | SAND DEUCE |
-| 3rd & short (1-3) | 3-4 Bear / Mug | Cover 1 Hole | Blitz |
-| 3rd & medium (4-6) | Dbl Mug | DANGER (C3 Match) | Sim / Dog |
-| 3rd & long (7+) | Dime Rush / Mug | POUND (Qtrs) / CLOUD | Mug Sim / Tex |
+| 3rd & short (1-3) | 3-3 Over / Dbl Mug | 4-man sim, 3 deep (3-3 Over Field Sim 3) | Sim / Dog |
+| 3rd & medium (4-7) | Dime Rush | POUND (Palms) / STUFF (C6) | 4-man / Mug Blitz Tex 3 change-up |
+| 3rd & long (8+) | Dime Rush | CLOUD (Tampa 2) / POUND (Qtrs) | Sonic only (Dime Blitz 2) |
+| 4th & short (1-2) | Nickel 3-3 Dbl Mug | Sonic (Nickel 2 Trap) | 5 rush, 2 deep — not 4-man C3 |
 | Red Zone | 3-3 Over | STUFF (Palms) / SQUAT | Conservative |
 | Goal Line | GL 5-3 / 6-2 | Man / Gap | Blitz |
 | 2-Minute | 3-3 Over | DANGER + POUND only | Minimal |

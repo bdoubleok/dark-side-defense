@@ -155,20 +155,25 @@ Target: 20-25%
 
 ## Macdonald's Pressure Rules
 
+> **v3.2 update (Nov. 1, 2026), Seattle vs KC, Week 7 2026:** 5 of Seattle's 8 five-man rushes came on 1st/2nd down, and 6 of 8 kept two deep (Sonic — in-game, `Nickel 2 Trap`). On 3rd & 4+ they went Dime and mostly rushed four. The rules below are adjusted to match.
+
 ### ✅ **When to Pressure:**
-1. 3rd & 7+ (after showing 3-4 zones first)
-2. Red zone passing situations
-3. vs backup QBs
-4. After successful straight rush
-5. Creative fire zones
+1. Early downs as a surprise — Sonic (5 rush, 2 deep), not zero
+2. 3rd & 7+ (after showing 3-4 zones first) — Sonic or a 4-man stunt
+3. 4th & 1-2 — Sonic (`Sam Blitz 2` in 4-2-5 Under, or `Nickel 2 Trap` in a Dbl Mug), not 4-man Cover 3
+4. Red zone passing situations
+5. vs backup QBs
+6. After successful straight rush
+7. Creative fire zones
 
 ### ❌ **Never Pressure:**
-1. 1st down
+1. 1st down with zero coverage behind it
 2. 2nd & short
 3. vs elite QBs
 4. When 4-man rush is winning
 5. Goal line run situations
 6. Two-minute drill
+7. A 3-man rush on 3rd & medium (+2.60 EPA allowed in Week 7)
 
 ### 📊 **Target Percentages:**
 - **Total Blitz Rate:** 20-25% max (college), 15-20% (NFL)
