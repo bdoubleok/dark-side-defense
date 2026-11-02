@@ -446,7 +446,7 @@ Same architecture as the CFB build. Every formation fills the four core token sl
 | **2nd & short (≤3)** | Nickel 2-4 | DANGER (`Cover 3 Match`) | ROBBER (`Cover 1 Robber`), Show Blitz + Pinch DL |
 | **2nd & medium (4-6)** | Nickel 2-4 | POUND (`Cover 4 Palms`) | SAND DEUCE (`Edge Blitz 3`) |
 | **2nd & long (7+)** | Nickel 2-4 | POUND (`Cover 4 Quarters`) | SHOW 2 (`Cover 9 Show 2`), `Hot Blitz Bail` (3-3 Odd) |
-| **3rd & short (1-3)** | Nickel 2-4 or 2-4 Dbl Mug | 4-man sim, 3 deep: `Field Sim 3` / `Sim Pressure 3` | `Nickel Dog 3 Buzz` (Dbl Mug), ROBBER (`Cover 1 Hole`) |
+| **3rd & short (1-3)** | Nickel 2-4 or 2-4 Dbl Mug | 4-man sim, 3 deep: Nickel 2-4 `Field Sim 3` / `Sim Pressure 3` | `Nickel Dog 3 Buzz` (Dbl Mug), ROBBER (`Cover 1 Hole`) |
 | **3rd & medium (4-7)** | **Dime 2-3** | POUND (`Cover 4 Palms`) | `Cover 6 Willie`; stunt: Single Mug `Blitz Tex 3 Sim 3` |
 | **3rd & long (8-11)** | **Dime 2-3** | `Tampa 2` | Sonic: Dime 2-3 `Nickel 2 Trap` |
 | **3rd & very long (12+)** | **Dime 2-3** | `Cover 4 Quarters` | `Cover 6 Willie` |
@@ -454,8 +454,8 @@ Same architecture as the CFB build. Every formation fills the four core token sl
 | **Red zone (inside 20)** | Nickel 2-4 or 3-3 Odd | ROBBER (`Cover 1 Robber Press` — 3-3 Odd) | STUFF (`Cover 6`), POUND |
 | **Goal line (inside 5)** | Goal Line 5-3 (unverified) or Tite 5 Tech | Man / gap | Tite 5 Tech `Pinch Buck 0` |
 | **2-minute** | Nickel 2-4 → Dime 2-3 | DANGER + POUND only | Simplify |
-| **vs Trips** | Any Nickel | STUFF (`Cover 6` / `Cover 6 Willie`) | — |
-| **vs Bunch** | Any Nickel | SQUAT (`Cover 4 Palms` w/ adjustments) | — |
+| **vs Trips** | Nickel 2-4 or 3-3 Odd (not the Mugs) | STUFF (`Cover 6` / `Cover 6 Willie`) | — |
+| **vs Bunch** | Nickel 2-4 or 3-3 Odd | SQUAT (`Cover 4 Palms` w/ adjustments) | — |
 | **vs Empty** | Nickel 2-4 or Dime 2-3 | POUND (`Cover 4 Quarters`) | `Edge Blitz 3`, `Nickel 2 Trap` |
 
 > **Never rush three on 3rd & medium.** Seattle's only 3-man rush vs KC gave up +2.60 EPA.

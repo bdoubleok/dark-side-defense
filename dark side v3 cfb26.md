@@ -502,10 +502,10 @@ Use this as your in-game quick reference. Find the down and distance, call the f
 |**1st & 10 (balanced)** |Nickel Over                       |DANGER (`Cover 3 Match`)                     |POUND (`Cover 4 Palms`), STUFF (`Cover 6`)       |
 |**1st & 10 (run-heavy)**|Nickel Over or 4-2-5 Over G       |DANGER (`Cover 3 Sky`)                       |Over G `Cover 6` (split-field vs 12/21)          |
 |**Early-down pressure** |Nickel Over                       |`Nickel 2 Trap` (Sonic)                      |Week 7: 5 of Seattle's 8 blitzes came on 1st/2nd |
-|**2nd & short (≤3)**    |Nickel Over                       |DANGER (`Cover 3 Match`)                     |ROBBER (`Cover 1 Hole`), `Show Blitz + Pinch DL` |
+|**2nd & short (≤3)**    |Nickel Over                       |DANGER (`Cover 3 Match`)                     |ROBBER (`Cover 1 Hole`), Show Blitz + Pinch DL (pre-snap adj.)|
 |**2nd & medium (4-6)**  |Nickel Over                       |POUND (`Cover 4 Palms`)                      |SAND DEUCE (`Edge Blitz 3`)                      |
 |**2nd & long (7+)**     |Nickel Over                       |POUND (`Cover 4 Quarters`)                   |SHOW 2 (`Cover 9 Show 2`), `Sim Pressure 3`      |
-|**3rd & short (1-3)**   |Nickel Over or Nickel Double Mug  |4-man sim, 3 deep: `Field Sim 3` / `Sim Pressure 3`|`Nickel Dog 3 Buzz`, ROBBER (`Cover 1 Hole`)|
+|**3rd & short (1-3)**   |Nickel Over or Nickel Double Mug  |4-man sim, 3 deep: Nickel Over `Field Sim 3` / `Sim Pressure 3`|Double Mug `Nickel Dog 3 Buzz`, ROBBER (`Cover 1 Hole`)|
 |**3rd & medium (4-7)**  |**Dime Normal**                   |POUND (`Cover 4 Palms`)                      |`Cover 6`; stunt: Single Mug `Blitz Tex 3 Sim 3` |
 |**3rd & long (8-11)**   |**Dime Normal**                   |`Tampa 2`                                    |Sonic: Single Mug `Nickel 2 Trap`                |
 |**3rd & very long (12+)**|**Dime Normal**                  |`Cover 4 Quarters`                           |`Cover 6`                                        |
@@ -513,9 +513,9 @@ Use this as your in-game quick reference. Find the down and distance, call the f
 |**Red zone (inside 20)**|Nickel Over or Mint               |ROBBER (`Cover 1 Robber Press` — Mint)       |STUFF (`Cover 6`), POUND                         |
 |**Goal line (inside 5)**|Goal Line 5-3 (unverified) or 3-4 Odd|Man / gap                                 |3-4 Odd `Pinch Buck 0`                           |
 |**2-minute**            |Nickel Over → Dime Normal         |DANGER + POUND only                          |Simplify                                         |
-|**vs Trips**            |Any Nickel                        |STUFF (`Cover 6` / `Cover 6 Willie`)         |—                                                |
-|**vs Bunch**            |Any Nickel                        |SQUAT (`Cover 4 Palms` w/ adjustments)       |—                                                |
-|**vs Empty**            |Nickel Over or Dime Normal        |POUND (`Cover 4 Quarters`)                   |`Edge Blitz 3` (Nickel Over), `Nickel 2 Trap`    |
+|**vs Trips**            |Nickel Over, Mint, Load or Load Mug (not the Mugs)|STUFF (`Cover 6` / `Cover 6 Willie`)         |—                                                |
+|**vs Bunch**            |Nickel Over, Mint or Load         |SQUAT (`Cover 4 Palms` w/ adjustments)       |—                                                |
+|**vs Empty**            |Nickel Over or Dime Normal        |POUND (`Cover 4 Quarters`)                   |`Edge Blitz 3`, `Nickel 2 Trap` (both Nickel Over)|
 
 > **Never rush three on 3rd & medium.** Seattle's only 3-man rush vs KC gave up +2.60 EPA. `Hot Blitz Bail` (Mint) stays in the book for 2nd & long only.
 
