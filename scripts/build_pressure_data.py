@@ -14,6 +14,9 @@ Sources (all public):
   - Pro Football Reference advanced defense via nflverse: player pressures
   - nflverse participation (2025 only): pressure flag + defensive personnel
   - data/espn_prwr_2026.json: ESPN pass rush win rate, copied by hand
+  - data/sumerbrain_2026_by_quarter.csv (optional): provider-reported 2026
+    pressure, coverage and personnel by game and quarter, pasted from a
+    SumerBrain chat. Unaudited; checked here against play-by-play counts.
 
 Requires pandas. Nothing here is estimated: a metric with no public source
 for a season is left out and the dashboard says so.
@@ -135,6 +138,29 @@ def main():
         })
     players.sort(key=lambda p: (-p["pressures"], -p["sacks"], -p["blitzes"]))
     out["s2026"] = {"weeks": w26, "players": players}
+
+    # Optional provider-reported table: pressure per dropback, by game and quarter
+    sb_path = os.path.join(ROOT, "data", "sumerbrain_2026_by_quarter.csv")
+    if os.path.exists(sb_path):
+        sb = pd.read_csv(sb_path)
+        pers = []
+        for w in w26:
+            g = sb[sb.week == w["week"]]
+            if len(g) != 4:
+                sys.exit("SumerBrain table is missing quarters for week %d" % w["week"])
+            for _, r in g.iterrows():
+                c = w["qtr"][str(int(r.quarter))]
+                if (c["n"], c["sacks"]) != (int(r.dropbacks), int(r.sacks)):
+                    sys.exit("SumerBrain week %d Q%d does not match play-by-play" % (w["week"], r.quarter))
+                c["pressure"] = int(r.pressures)
+            w["pressure"] = int(g.pressures.sum())
+            w["man"], w["zone"] = int(g.man.sum()), int(g.zone.sum())
+            pers.append({"label": w["label"], "Base": int(g.base.sum()),
+                         "Nickel": int(g.nickel.sum()), "Dime": int(g.dime.sum()), "Other": 0})
+        out["s2026"]["personnel"] = {
+            "weekly": pers, "dropbacks": int(sb.dropbacks.sum()),
+            "total": int(sb.base.sum() + sb.nickel.sum() + sb.dime.sum()),
+            "man": int(sb.man.sum()), "zone": int(sb.zone.sum()), "rush5": int(sb.rush5plus.sum())}
 
     # ---------- 2025: adds participation (pressure flag + personnel) ----------
     d25 = dropbacks(load("pbp25"), load("ftn25"))
