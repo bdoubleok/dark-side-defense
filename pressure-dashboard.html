@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dark Side Defense — Front &amp; Pressure Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Design tokens: every colour and font is named once here ---------- */
+  :root {
+    color-scheme: dark;
+    --page: #0b0d12;
+    --surface: #12161f;
+    --surface-2: #181d29;
+    --line: #232a39;
+    --axis: #333c50;
+    --ink: #f0efec;
+    --ink-2: #c3c7d1;
+    --muted: #8a91a1;
+    --accent: #f7c948;            /* brand accent: chrome and selection only, never data */
+    --s-pressure: #3987e5;        /* series 1 (blue)   */
+    --s-blitz: #d95926;           /* series 2 (orange) */
+    --s-base: #199e70;            /* series 3 (aqua)   */
+    --s-other: #596277;           /* de-emphasis gray  */
+    --rush-3: #3a4152; --rush-4: #596277; --rush-5: #b5481c; --rush-6: #f28b5b;
+    --heat-lo: #141c2c; --heat-hi: #86b6ef;
+    --display: "Bebas Neue", "Arial Narrow", sans-serif;
+    --sans: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink); font-family: var(--sans); font-size: 14px; line-height: 1.5; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px 16px 64px; }
+  a { color: var(--ink-2); }
+
+  header h1 { font-family: var(--display); font-weight: 400; font-size: clamp(34px, 6vw, 54px); letter-spacing: .02em; line-height: 1; margin: 0; }
+  header h1 span { color: var(--accent); }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+  .lede { color: var(--ink-2); max-width: 70ch; margin: 10px 0 0; }
+
+  nav.jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 8px; position: sticky; top: 0; z-index: 5; background: var(--page); padding: 8px 0; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  .jump button, .seg button {
+    background: var(--surface); border: 1px solid var(--line); color: var(--ink-2);
+    padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; min-height: 32px;
+  }
+  .jump button:hover, .seg button:hover { border-color: var(--axis); color: var(--ink); }
+  .seg { display: inline-flex; }
+  .seg button { border-radius: 0; margin-left: -1px; }
+  .seg button:first-child { border-radius: 6px 0 0 6px; margin-left: 0; }
+  .seg button:last-child { border-radius: 0 6px 6px 0; }
+  .seg button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #14110a; font-weight: 600; position: relative; }
+  button:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  section { margin-top: 36px; scroll-margin-top: 60px; }
+  h2 { font-family: var(--display); font-weight: 400; font-size: 28px; letter-spacing: .03em; margin: 0; line-height: 1.1; }
+  .sec-sub { color: var(--muted); margin: 4px 0 14px; max-width: 80ch; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+  .card h3 { font-size: 14px; font-weight: 600; margin: 0; }
+  .card .sub { color: var(--muted); font-size: 12px; margin: 2px 0 12px; }
+  .grid-2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+  @media (max-width: 860px) { .grid-2 { grid-template-columns: minmax(0, 1fr); } }
+
+  /* KPI tiles */
+  .kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+  @media (max-width: 980px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+  .kpi .lab { font-size: 12px; color: var(--ink-2); font-weight: 500; }
+  .kpi .val { font-family: var(--display); font-size: 44px; line-height: 1; margin: 6px 0 4px; letter-spacing: .01em; }
+  .kpi .det { font-size: 12px; color: var(--muted); }
+  .kpi .src { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
+  .kpi.lead { border-color: var(--accent); }
+
+  .filters { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; margin-bottom: 12px; }
+  .filters label { font-size: 11px; font-family: var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-right: 8px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--ink-2); margin: 0 0 8px; }
+  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+  .legend i.ln { height: 2px; width: 16px; vertical-align: 4px; border-radius: 1px; }
+  .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  svg { display: block; }
+  svg text { font-family: var(--sans); fill: var(--muted); font-size: 11px; }
+  svg text.strong { fill: var(--ink); font-weight: 600; }
+  svg text.sec { fill: var(--ink-2); }
+  svg .num { font-family: var(--mono); }
+  .note { font-size: 12px; color: var(--muted); border-left: 2px solid var(--axis); padding: 2px 0 2px 10px; margin: 12px 0 0; max-width: 90ch; }
+  .note b { color: var(--ink-2); font-weight: 600; }
+  .badge { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); border: 1px solid var(--axis); border-radius: 4px; padding: 1px 6px; margin-left: 8px; vertical-align: 2px; white-space: nowrap; }
+
+  /* Tables */
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th { text-align: right; font-weight: 500; font-size: 11px; color: var(--muted); padding: 6px 8px; border-bottom: 1px solid var(--axis); white-space: nowrap; }
+  td { text-align: right; padding: 7px 8px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; }
+  td.name { font-weight: 600; }
+  td.name small { font-weight: 400; color: var(--muted); margin-left: 6px; font-family: var(--mono); font-size: 10px; }
+  td .none { color: var(--muted); font-size: 12px; }
+  tr:last-child td { border-bottom: 0; }
+  .meter { display: inline-block; height: 8px; border-radius: 0 3px 3px 0; background: var(--s-pressure); vertical-align: middle; margin-right: 8px; }
+  .wk { display: inline-flex; gap: 2px; vertical-align: middle; }
+  .wk span { width: 18px; height: 20px; border-radius: 3px; font-family: var(--mono); font-size: 10px; line-height: 20px; text-align: center; }
+  details { margin-top: 12px; }
+  summary { cursor: pointer; color: var(--ink-2); font-size: 12px; }
+
+  .segbar { display: flex; gap: 2px; height: 44px; border-radius: 6px; overflow: hidden; margin: 4px 0 8px; }
+  .segbar div { display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px; color: #fff; min-width: 3px; }
+
+  #tip { position: fixed; pointer-events: none; z-index: 20; background: #05070b; border: 1px solid var(--axis); border-radius: 8px; padding: 10px 12px; font-size: 12px; max-width: 280px; display: none; box-shadow: 0 8px 24px rgba(0,0,0,.5); }
+  #tip .t { font-weight: 600; margin-bottom: 6px; }
+  #tip .r { display: flex; justify-content: space-between; gap: 16px; color: var(--ink-2); }
+  #tip .r b { color: var(--ink); font-family: var(--mono); font-weight: 500; }
+  #tip .r i { display: inline-block; width: 12px; height: 2px; margin-right: 6px; vertical-align: 4px; }
+  #tip .h { color: var(--muted); font-size: 10px; font-family: var(--mono); letter-spacing: .08em; text-transform: uppercase; margin: 8px 0 2px; }
+  footer { margin-top: 40px; color: var(--muted); font-size: 12px; }
+  footer li { margin-bottom: 4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Dark Side Defense · Seattle Seahawks · tendency data</p>
+    <h1>Front &amp; <span>Pressure</span> Dashboard</h1>
+    <p class="lede" id="lede"></p>
+  </header>
+
+  <nav class="jump" aria-label="Sections">
+    <button data-target="sec-snapshot">Snapshot</button>
+    <button data-target="sec-trend">Weekly trend</button>
+    <button data-target="sec-rushers">Pass rushers</button>
+    <button data-target="sec-personnel">Personnel</button>
+    <button data-target="sec-sources">Sources</button>
+  </nav>
+
+  <section id="sec-snapshot">
+    <h2>2026 Snapshot</h2>
+    <p class="sec-sub" id="snap-sub"></p>
+    <div class="kpis" id="kpis"></div>
+    <div class="card" style="margin-top:16px">
+      <h3>Team pass rush win rate, all 32 defenses</h3>
+      <p class="sub">Share of pass rushes where a rusher beats his block inside 2.5 seconds. Seattle highlighted. ESPN Analytics.</p>
+      <div id="league"></div>
+    </div>
+  </section>
+
+  <section id="sec-trend">
+    <h2>Weekly Trend by Quarter &amp; Down</h2>
+    <p class="sec-sub">One column per game. The lines show the game-level rate, the grid underneath splits the same game by quarter or by down, and the bars show how many rushers Seattle sent.</p>
+    <div class="filters">
+      <div><label>Season</label><span class="seg" id="f-season"></span></div>
+      <div><label>Split</label><span class="seg" id="f-split"></span></div>
+      <div><label>Grid metric</label><span class="seg" id="f-metric"></span></div>
+    </div>
+    <div class="card">
+      <h3 id="trend-title"></h3>
+      <p class="sub" id="trend-sub"></p>
+      <div class="legend" id="trend-legend"></div>
+      <div class="scroll-x"><div id="trend"></div></div>
+      <p class="note" id="trend-note"></p>
+      <details><summary>View as table</summary><div class="scroll-x" id="trend-table"></div></details>
+    </div>
+  </section>
+
+  <section id="sec-rushers">
+    <h2>Individual Pass Rushers <span class="badge" id="rush-badge"></span></h2>
+    <p class="sec-sub">QB pressures, hurries, hits and sacks credited to each player, with ESPN win rate where ESPN publishes one. Sorted by pressures.</p>
+    <div class="card">
+      <div class="scroll-x" id="players"></div>
+      <p class="note" id="players-note"></p>
+    </div>
+  </section>
+
+  <section id="sec-personnel">
+    <h2>Personnel Packages <span class="badge">2025 season · latest public</span></h2>
+    <p class="sec-sub">Base, nickel and dime on Seattle's defensive dropbacks, counted by how many defensive backs were on the field. Play-level personnel for 2026 has not been released publicly yet.</p>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Share of dropbacks by package</h3>
+        <p class="sub" id="pkg-sub"></p>
+        <div class="segbar" id="pkg-bar"></div>
+        <div class="legend" id="pkg-legend"></div>
+        <div class="scroll-x" id="pkg-table"></div>
+      </div>
+      <div class="card">
+        <h3>Package mix by game</h3>
+        <p class="sub">Each bar is one game's dropbacks, split by package. Dime climbed in the postseason.</p>
+        <div class="scroll-x"><div id="pkg-weekly"></div></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h3>Line / linebacker / DB counts inside each package</h3>
+      <p class="sub">DL-LB-DB by listed roster position. Seattle's edge rushers are listed as outside linebackers, so 2-4-5 is two interior linemen plus two stand-up edges.</p>
+      <div class="scroll-x" id="shape-table"></div>
+      <p class="note"><b>Personnel is not a front.</b> These counts say who was on the field, not where they lined up. They do not identify Plus, Bounce/Mint, Flex or Rush techniques, and they do not promote any CFB '27 formation mapping.</p>
+      <p class="note"><b>2026 reference, user-supplied.</b> The project's source-of-truth notes carry provider-reported 2026 Weeks 1–6 shares of Nickel 70.4% and Dime 24.9% of 213 dropbacks (2025 regular season: 74.7% and 21.6%). That data was not audited play by play and is not charted here.</p>
+    </div>
+  </section>
+
+  <section id="sec-sources">
+    <h2>Sources &amp; Definitions</h2>
+    <footer>
+      <ul>
+        <li><b>Pass rush win rate</b>: ESPN Analytics, <span id="src-espn"></span>. Team figure plus the top 20 edge rushers and top 20 defensive tackles only.</li>
+        <li><b>Pressures, hurries, QB hits, sacks, times blitzed (2026 players and team totals)</b>: Pro Football Reference advanced defense, via nflverse. Pressures are credited to players, so two rushers arriving on one play count twice.</li>
+        <li><b>Blitz rate and rusher count</b>: FTN charting via nflverse. Blitz = at least one charted blitzer on the dropback.</li>
+        <li><b>QB contact rate</b>: sack or QB hit on the dropback, from nflverse play-by-play. A subset of pressure, since hurries are not in play-by-play.</li>
+        <li><b>Pressure rate, 2025</b>: play-level pressure flag from nflverse participation data, available for 2025 only. Not comparable with the 2026 player-credited figure.</li>
+        <li><b>Dropbacks</b>: pass attempts, sacks and scrambles against Seattle, excluding spikes and two-point tries. Overtime is folded into Q4.</li>
+        <li>Rebuild with <code>python3 scripts/build_pressure_data.py</code>. Data built <span id="src-built"></span>.</li>
+      </ul>
+    </footer>
+  </section>
+</div>
+<div id="tip" role="status"></div>
+
+<script>
+const D = /*DATA:START*/{"team":"SEA","s2026":{"weeks":[{"week":1,"label":{"wk":"W1","opp":"vs NE"},"n":42,"contact":6,"sacks":3,"blitz":11,"qtr":{"1":{"n":5,"contact":1,"sacks":0,"blitz":2},"2":{"n":11,"contact":1,"sacks":0,"blitz":3},"3":{"n":10,"contact":0,"sacks":0,"blitz":3},"4":{"n":16,"contact":4,"sacks":3,"blitz":3}},"down":{"1":{"n":11,"contact":3,"sacks":2,"blitz":5},"2":{"n":15,"contact":1,"sacks":1,"blitz":1},"3":{"n":14,"contact":2,"sacks":0,"blitz":5},"4":{"n":2,"contact":0,"sacks":0,"blitz":0}},"rushers":{"3":1,"4":30,"5":7,"6":4},"pressures":8},{"week":2,"label":{"wk":"W2","opp":"@ ARI"},"n":31,"contact":7,"sacks":2,"blitz":6,"qtr":{"1":{"n":11,"contact":2,"sacks":1,"blitz":1},"2":{"n":10,"contact":1,"sacks":0,"blitz":0},"3":{"n":7,"contact":3,"sacks":0,"blitz":4},"4":{"n":3,"contact":1,"sacks":1,"blitz":1}},"down":{"1":{"n":9,"contact":1,"sacks":0,"blitz":2},"2":{"n":10,"contact":3,"sacks":0,"blitz":2},"3":{"n":11,"contact":3,"sacks":2,"blitz":2},"4":{"n":1,"contact":0,"sacks":0,"blitz":0}},"rushers":{"3":1,"4":24,"5":4,"6":2},"pressures":9},{"week":3,"label":{"wk":"W3","opp":"@ WAS"},"n":35,"contact":9,"sacks":2,"blitz":5,"qtr":{"1":{"n":7,"contact":2,"sacks":0,"blitz":3},"2":{"n":11,"contact":4,"sacks":1,"blitz":1},"3":{"n":9,"contact":1,"sacks":0,"blitz":0},"4":{"n":8,"contact":2,"sacks":1,"blitz":1}},"down":{"1":{"n":14,"contact":4,"sacks":0,"blitz":3},"2":{"n":10,"contact":4,"sacks":1,"blitz":0},"3":{"n":10,"contact":1,"sacks":1,"blitz":2},"4":{"n":1,"contact":0,"sacks":0,"blitz":0}},"rushers":{"3":0,"4":30,"5":4,"6":1},"pressures":16},{"week":4,"label":{"wk":"W4","opp":"vs LAC"},"n":41,"contact":10,"sacks":4,"blitz":10,"qtr":{"1":{"n":10,"contact":1,"sacks":0,"blitz":2},"2":{"n":8,"contact":3,"sacks":2,"blitz":2},"3":{"n":11,"contact":2,"sacks":0,"blitz":3},"4":{"n":12,"contact":4,"sacks":2,"blitz":3}},"down":{"1":{"n":15,"contact":3,"sacks":1,"blitz":2},"2":{"n":11,"contact":1,"sacks":1,"blitz":4},"3":{"n":13,"contact":5,"sacks":2,"blitz":4},"4":{"n":2,"contact":1,"sacks":0,"blitz":0}},"rushers":{"3":0,"4":31,"5":6,"6":4},"pressures":13},{"week":5,"label":{"wk":"W5","opp":"vs SF"},"n":34,"contact":9,"sacks":3,"blitz":7,"qtr":{"1":{"n":9,"contact":2,"sacks":1,"blitz":3},"2":{"n":9,"contact":3,"sacks":2,"blitz":1},"3":{"n":7,"contact":3,"sacks":0,"blitz":1},"4":{"n":9,"contact":1,"sacks":0,"blitz":2}},"down":{"1":{"n":13,"contact":5,"sacks":1,"blitz":4},"2":{"n":11,"contact":0,"sacks":0,"blitz":1},"3":{"n":10,"contact":4,"sacks":2,"blitz":2},"4":{"n":0,"contact":0,"sacks":0,"blitz":0}},"rushers":{"3":3,"4":24,"5":4,"6":3},"pressures":13},{"week":6,"label":{"wk":"W6","opp":"@ DEN"},"n":30,"contact":5,"sacks":2,"blitz":7,"qtr":{"1":{"n":8,"contact":2,"sacks":0,"blitz":2},"2":{"n":7,"contact":0,"sacks":0,"blitz":1},"3":{"n":7,"contact":1,"sacks":0,"blitz":3},"4":{"n":8,"contact":2,"sacks":2,"blitz":1}},"down":{"1":{"n":8,"contact":1,"sacks":1,"blitz":2},"2":{"n":10,"contact":0,"sacks":0,"blitz":2},"3":{"n":12,"contact":4,"sacks":1,"blitz":3},"4":{"n":0,"contact":0,"sacks":0,"blitz":0}},"rushers":{"3":2,"4":21,"5":5,"6":2},"pressures":9},{"week":7,"label":{"wk":"W7","opp":"vs KC"},"n":36,"contact":7,"sacks":1,"blitz":9,"qtr":{"1":{"n":8,"contact":1,"sacks":0,"blitz":2},"2":{"n":7,"contact":2,"sacks":0,"blitz":3},"3":{"n":9,"contact":2,"sacks":1,"blitz":2},"4":{"n":12,"contact":2,"sacks":0,"blitz":2}},"down":{"1":{"n":10,"contact":1,"sacks":0,"blitz":3},"2":{"n":13,"contact":4,"sacks":0,"blitz":2},"3":{"n":11,"contact":2,"sacks":1,"blitz":3},"4":{"n":2,"contact":0,"sacks":0,"blitz":1}},"rushers":{"3":0,"4":27,"5":9,"6":0},"pressures":9},{"week":8,"label":{"wk":"W8","opp":"vs CHI"},"n":36,"contact":3,"sacks":1,"blitz":11,"qtr":{"1":{"n":11,"contact":1,"sacks":0,"blitz":6},"2":{"n":15,"contact":0,"sacks":0,"blitz":0},"3":{"n":6,"contact":1,"sacks":0,"blitz":5},"4":{"n":4,"contact":1,"sacks":1,"blitz":0}},"down":{"1":{"n":9,"contact":0,"sacks":0,"blitz":3},"2":{"n":17,"contact":2,"sacks":1,"blitz":4},"3":{"n":10,"contact":1,"sacks":0,"blitz":4},"4":{"n":0,"contact":0,"sacks":0,"blitz":0}},"rushers":{"3":0,"4":25,"5":8,"6":3},"pressures":5},{"week":9,"label":{"wk":"W9","opp":"vs ARI"},"n":33,"contact":4,"sacks":3,"blitz":13,"qtr":{"1":{"n":7,"contact":1,"sacks":0,"blitz":1},"2":{"n":8,"contact":2,"sacks":2,"blitz":4},"3":{"n":7,"contact":1,"sacks":1,"blitz":2},"4":{"n":11,"contact":0,"sacks":0,"blitz":6}},"down":{"1":{"n":15,"contact":1,"sacks":1,"blitz":2},"2":{"n":6,"contact":0,"sacks":0,"blitz":5},"3":{"n":10,"contact":3,"sacks":2,"blitz":5},"4":{"n":2,"contact":0,"sacks":0,"blitz":1}},"rushers":{"3":1,"4":19,"5":8,"6":5},"pressures":5}],"players":[{"id":"WillLe02","name":"Leonard Williams","pos":"DL","games":8,"pressures":15.0,"hurries":5.0,"hits":7.0,"sacks":3.0,"blitzes":0.0,"weekly":[1,1,4,2,3,1,1,2,null]},{"id":"LawrDe00","name":"DeMarcus Lawrence","pos":"LB","games":9,"pressures":14.0,"hurries":7.0,"hits":6.0,"sacks":1.0,"blitzes":10.0,"weekly":[1,1,5,1,1,2,1,1,1]},{"id":"HallDe04","name":"Derick Hall","pos":"LB","games":9,"pressures":11.0,"hurries":2.0,"hits":6.0,"sacks":3.0,"blitzes":12.0,"weekly":[1,3,2,0,1,1,2,0,1]},{"id":"EmmaNi00","name":"Nick Emmanwori","pos":"DB","games":8,"pressures":10.0,"hurries":1.0,"hits":7.0,"sacks":2.0,"blitzes":38.0,"weekly":[null,0,0,2,2,3,1,1,1]},{"id":"MurpBy01","name":"Byron Murphy","pos":"DL","games":7,"pressures":8.0,"hurries":1.0,"hits":3.0,"sacks":4.0,"blitzes":0.0,"weekly":[null,null,2,1,3,0,1,0,1]},{"id":"NwosUc00","name":"Uchenna Nwosu","pos":"LB","games":6,"pressures":8.0,"hurries":5.0,"hits":2.0,"sacks":1.0,"blitzes":7.0,"weekly":[0,1,2,3,1,1,null,null,null]},{"id":"ReedJa02","name":"Jarran Reed","pos":"DL","games":3,"pressures":5.0,"hurries":1.0,"hits":3.0,"sacks":1.0,"blitzes":0.0,"weekly":[null,3,null,1,1,null,null,null,null]},{"id":"ThomDr00","name":"Drake Thomas","pos":"LB","games":7,"pressures":4.0,"hurries":1.0,"hits":2.0,"sacks":1.0,"blitzes":10.0,"weekly":[3,0,0,1,0,null,null,0,0]},{"id":"FowlDa00","name":"Dante Fowler","pos":"LB","games":4,"pressures":4.0,"hurries":2.0,"hits":1.0,"sacks":1.0,"blitzes":3.0,"weekly":[null,null,null,1,null,null,2,0,1]},{"id":"JoneEr01","name":"Ernest Jones","pos":"LB","games":9,"pressures":3.0,"hurries":0.0,"hits":0.0,"sacks":3.0,"blitzes":25.0,"weekly":[0,0,0,1,1,1,0,0,0]},{"id":"MorrMi00","name":"Mike Morris","pos":"DL","games":3,"pressures":2.0,"hurries":0.0,"hits":1.0,"sacks":1.0,"blitzes":0.0,"weekly":[null,null,null,null,null,0,1,1,null]},{"id":"WithDe00","name":"Devon Witherspoon","pos":"DB","games":9,"pressures":1.0,"hurries":0.0,"hits":1.0,"sacks":0.0,"blitzes":14.0,"weekly":[1,0,0,0,0,0,0,0,0]},{"id":"MillRy02","name":"Rylie Mills","pos":"DL","games":2,"pressures":1.0,"hurries":1.0,"hits":0.0,"sacks":0.0,"blitzes":0.0,"weekly":[null,null,1,null,null,null,null,0,null]},{"id":"ThomRo07","name":"Rodney Thomas II","pos":"DB","games":4,"pressures":1.0,"hurries":1.0,"hits":0.0,"sacks":0.0,"blitzes":0.0,"weekly":[1,0,0,0,null,null,null,null,null]},{"id":"LoveJu00","name":"Julian Love","pos":"DB","games":8,"pressures":0.0,"hurries":0.0,"hits":0.0,"sacks":0.0,"blitzes":7.0,"weekly":[0,0,null,0,0,0,0,0,0]},{"id":"JobeJo00","name":"Josh Jobe","pos":"DB","games":9,"pressures":0.0,"hurries":0.0,"hits":0.0,"sacks":0.0,"blitzes":6.0,"weekly":[0,0,0,0,0,0,0,0,0]},{"id":"PritNe00","name":"Nehemiah Pritchett","pos":"DB","games":8,"pressures":0.0,"hurries":0.0,"hits":0.0,"sacks":0.0,"blitzes":2.0,"weekly":[0,0,0,0,0,0,null,0,0]},{"id":"FinlAJ00","name":"AJ Finley","pos":"DB","games":1,"pressures":0.0,"hurries":0.0,"hits":0.0,"sacks":0.0,"blitzes":1.0,"weekly":[null,null,0,null,null,null,null,null,null]},{"id":"KnigTy00","name":"Tyrice Knight","pos":"LB","games":2,"pressures":0.0,"hurries":0.0,"hits":0.0,"sacks":0.0,"blitzes":1.0,"weekly":[null,null,null,null,null,0,0,null,null]},{"id":"OConPa01","name":"Patrick O'Connell","pos":"LB","games":2,"pressures":0.0,"hurries":0.0,"hits":0.0,"sacks":0.0,"blitzes":1.0,"weekly":[0,null,null,null,null,null,null,0,null]},{"id":"OkadTy00","name":"Ty Okada","pos":"DB","games":5,"pressures":0.0,"hurries":0.0,"hits":0.0,"sacks":0.0,"blitzes":1.0,"weekly":[null,null,null,null,0,0,0,0,0]}]},"s2025":{"weeks":[{"week":1,"label":{"wk":"W1","opp":"vs SF"},"n":39,"pressure":15,"contact":8,"sacks":1,"blitz":9,"qtr":{"1":{"n":9,"pressure":4,"contact":1,"sacks":0,"blitz":1},"2":{"n":11,"pressure":4,"contact":2,"sacks":1,"blitz":3},"3":{"n":7,"pressure":1,"contact":1,"sacks":0,"blitz":1},"4":{"n":12,"pressure":6,"contact":4,"sacks":0,"blitz":4}},"down":{"1":{"n":14,"pressure":6,"contact":4,"sacks":1,"blitz":5},"2":{"n":14,"pressure":5,"contact":2,"sacks":0,"blitz":1},"3":{"n":9,"pressure":4,"contact":2,"sacks":0,"blitz":2},"4":{"n":2,"pressure":0,"contact":0,"sacks":0,"blitz":1}},"rushers":{"3":2,"4":31,"5":6,"6":0}},{"week":2,"label":{"wk":"W2","opp":"@ PIT"},"n":38,"pressure":13,"contact":7,"sacks":3,"blitz":4,"qtr":{"1":{"n":6,"pressure":2,"contact":1,"sacks":0,"blitz":1},"2":{"n":8,"pressure":5,"contact":3,"sacks":2,"blitz":0},"3":{"n":8,"pressure":4,"contact":1,"sacks":0,"blitz":2},"4":{"n":16,"pressure":2,"contact":2,"sacks":1,"blitz":1}},"down":{"1":{"n":15,"pressure":5,"contact":3,"sacks":2,"blitz":3},"2":{"n":9,"pressure":1,"contact":0,"sacks":0,"blitz":1},"3":{"n":12,"pressure":7,"contact":4,"sacks":1,"blitz":0},"4":{"n":2,"pressure":0,"contact":0,"sacks":0,"blitz":0}},"rushers":{"3":1,"4":34,"5":3,"6":0}},{"week":3,"label":{"wk":"W3","opp":"vs NO"},"n":45,"pressure":17,"contact":7,"sacks":2,"blitz":14,"qtr":{"1":{"n":12,"pressure":4,"contact":1,"sacks":0,"blitz":3},"2":{"n":19,"pressure":5,"contact":2,"sacks":0,"blitz":6},"3":{"n":7,"pressure":3,"contact":3,"sacks":2,"blitz":3},"4":{"n":7,"pressure":5,"contact":1,"sacks":0,"blitz":2}},"down":{"1":{"n":14,"pressure":4,"contact":1,"sacks":0,"blitz":1},"2":{"n":17,"pressure":5,"contact":3,"sacks":1,"blitz":8},"3":{"n":12,"pressure":6,"contact":3,"sacks":1,"blitz":5},"4":{"n":2,"pressure":2,"contact":0,"sacks":0,"blitz":0}},"rushers":{"3":0,"4":35,"5":7,"6":3}},{"week":4,"label":{"wk":"W4","opp":"@ ARI"},"n":51,"pressure":12,"contact":7,"sacks":6,"blitz":8,"qtr":{"1":{"n":11,"pressure":3,"contact":1,"sacks":1,"blitz":1},"2":{"n":16,"pressure":3,"contact":2,"sacks":1,"blitz":0},"3":{"n":8,"pressure":3,"contact":2,"sacks":2,"blitz":2},"4":{"n":16,"pressure":3,"contact":2,"sacks":2,"blitz":5}},"down":{"1":{"n":17,"pressure":4,"contact":3,"sacks":3,"blitz":2},"2":{"n":19,"pressure":4,"contact":4,"sacks":3,"blitz":2},"3":{"n":14,"pressure":4,"contact":0,"sacks":0,"blitz":3},"4":{"n":1,"pressure":0,"contact":0,"sacks":0,"blitz":1}},"rushers":{"3":2,"4":41,"5":6,"6":2}},{"week":5,"label":{"wk":"W5","opp":"vs TB"},"n":38,"pressure":12,"contact":1,"sacks":1,"blitz":7,"qtr":{"1":{"n":11,"pressure":5,"contact":0,"sacks":0,"blitz":1},"2":{"n":9,"pressure":2,"contact":0,"sacks":0,"blitz":1},"3":{"n":9,"pressure":0,"contact":0,"sacks":0,"blitz":1},"4":{"n":9,"pressure":5,"contact":1,"sacks":1,"blitz":4}},"down":{"1":{"n":17,"pressure":7,"contact":0,"sacks":0,"blitz":3},"2":{"n":12,"pressure":4,"contact":1,"sacks":1,"blitz":1},"3":{"n":9,"pressure":1,"contact":0,"sacks":0,"blitz":3},"4":{"n":0,"pressure":0,"contact":0,"sacks":0,"blitz":0}},"rushers":{"3":0,"4":35,"5":2,"6":1}},{"week":6,"label":{"wk":"W6","opp":"@ JAX"},"n":50,"pressure":18,"contact":13,"sacks":7,"blitz":7,"qtr":{"1":{"n":12,"pressure":4,"contact":2,"sacks":1,"blitz":1},"2":{"n":13,"pressure":7,"contact":5,"sacks":2,"blitz":2},"3":{"n":11,"pressure":5,"contact":4,"sacks":3,"blitz":1},"4":{"n":14,"pressure":2,"contact":2,"sacks":1,"blitz":3}},"down":{"1":{"n":16,"pressure":3,"contact":3,"sacks":2,"blitz":0},"2":{"n":18,"pressure":6,"contact":4,"sacks":2,"blitz":3},"3":{"n":15,"pressure":8,"contact":5,"sacks":3,"blitz":4},"4":{"n":1,"pressure":1,"contact":1,"sacks":0,"blitz":0}},"rushers":{"3":1,"4":42,"5":6,"6":1}},{"week":7,"label":{"wk":"W7","opp":"vs HOU"},"n":54,"pressure":20,"contact":7,"sacks":3,"blitz":20,"qtr":{"1":{"n":4,"pressure":2,"contact":1,"sacks":1,"blitz":1},"2":{"n":16,"pressure":5,"contact":2,"sacks":1,"blitz":5},"3":{"n":9,"pressure":6,"contact":2,"sacks":1,"blitz":4},"4":{"n":25,"pressure":7,"contact":2,"sacks":0,"blitz":10}},"down":{"1":{"n":18,"pressure":7,"contact":1,"sacks":0,"blitz":5},"2":{"n":20,"pressure":7,"contact":2,"sacks":1,"blitz":8},"3":{"n":13,"pressure":5,"contact":3,"sacks":2,"blitz":7},"4":{"n":3,"pressure":1,"contact":1,"sacks":0,"blitz":0}},"rushers":{"3":0,"4":34,"5":14,"6":6}},{"week":9,"label":{"wk":"W9","opp":"@ WAS"},"n":35,"pressure":20,"contact":5,"sacks":4,"blitz":13,"qtr":{"1":{"n":7,"pressure":4,"contact":0,"sacks":0,"blitz":1},"2":{"n":10,"pressure":4,"contact":1,"sacks":0,"blitz":4},"3":{"n":12,"pressure":8,"contact":3,"sacks":3,"blitz":6},"4":{"n":6,"pressure":4,"contact":1,"sacks":1,"blitz":2}},"down":{"1":{"n":12,"pressure":4,"contact":0,"sacks":0,"blitz":5},"2":{"n":12,"pressure":10,"contact":3,"sacks":3,"blitz":3},"3":{"n":9,"pressure":4,"contact":2,"sacks":1,"blitz":3},"4":{"n":2,"pressure":2,"contact":0,"sacks":0,"blitz":2}},"rushers":{"3":0,"4":25,"5":7,"6":3}},{"week":10,"label":{"wk":"W10","opp":"vs ARI"},"n":54,"pressure":23,"contact":9,"sacks":5,"blitz":12,"qtr":{"1":{"n":5,"pressure":4,"contact":1,"sacks":1,"blitz":1},"2":{"n":21,"pressure":11,"contact":5,"sacks":4,"blitz":6},"3":{"n":21,"pressure":5,"contact":2,"sacks":0,"blitz":4},"4":{"n":7,"pressure":3,"contact":1,"sacks":0,"blitz":1}},"down":{"1":{"n":21,"pressure":12,"contact":2,"sacks":1,"blitz":2},"2":{"n":20,"pressure":6,"contact":4,"sacks":2,"blitz":4},"3":{"n":9,"pressure":4,"contact":2,"sacks":2,"blitz":4},"4":{"n":4,"pressure":1,"contact":1,"sacks":0,"blitz":2}},"rushers":{"3":0,"4":43,"5":10,"6":1}},{"week":11,"label":{"wk":"W11","opp":"@ LA"},"n":28,"pressure":6,"contact":3,"sacks":0,"blitz":8,"qtr":{"1":{"n":11,"pressure":1,"contact":0,"sacks":0,"blitz":2},"2":{"n":2,"pressure":2,"contact":1,"sacks":0,"blitz":1},"3":{"n":11,"pressure":2,"contact":1,"sacks":0,"blitz":4},"4":{"n":4,"pressure":1,"contact":1,"sacks":0,"blitz":1}},"down":{"1":{"n":10,"pressure":2,"contact":1,"sacks":0,"blitz":3},"2":{"n":9,"pressure":1,"contact":0,"sacks":0,"blitz":1},"3":{"n":8,"pressure":3,"contact":2,"sacks":0,"blitz":4},"4":{"n":1,"pressure":0,"contact":0,"sacks":0,"blitz":0}},"rushers":{"3":0,"4":17,"5":9,"6":2}},{"week":12,"label":{"wk":"W12","opp":"@ TEN"},"n":50,"pressure":19,"contact":11,"sacks":4,"blitz":14,"qtr":{"1":{"n":11,"pressure":4,"contact":2,"sacks":1,"blitz":2},"2":{"n":9,"pressure":5,"contact":2,"sacks":1,"blitz":5},"3":{"n":8,"pressure":1,"contact":1,"sacks":1,"blitz":5},"4":{"n":22,"pressure":9,"contact":6,"sacks":1,"blitz":2}},"down":{"1":{"n":13,"pressure":5,"contact":1,"sacks":0,"blitz":3},"2":{"n":17,"pressure":6,"contact":4,"sacks":1,"blitz":6},"3":{"n":15,"pressure":5,"contact":5,"sacks":3,"blitz":4},"4":{"n":5,"pressure":3,"contact":1,"sacks":0,"blitz":1}},"rushers":{"3":0,"4":35,"5":13,"6":2}},{"week":13,"label":{"wk":"W13","opp":"vs MIN"},"n":34,"pressure":14,"contact":6,"sacks":4,"blitz":11,"qtr":{"1":{"n":8,"pressure":1,"contact":1,"sacks":1,"blitz":3},"2":{"n":9,"pressure":6,"contact":2,"sacks":1,"blitz":3},"3":{"n":7,"pressure":4,"contact":1,"sacks":0,"blitz":3},"4":{"n":10,"pressure":3,"contact":2,"sacks":2,"blitz":2}},"down":{"1":{"n":9,"pressure":3,"contact":1,"sacks":0,"blitz":4},"2":{"n":13,"pressure":5,"contact":1,"sacks":1,"blitz":3},"3":{"n":10,"pressure":4,"contact":2,"sacks":2,"blitz":3},"4":{"n":2,"pressure":2,"contact":2,"sacks":1,"blitz":1}},"rushers":{"3":1,"4":24,"5":8,"6":1}},{"week":14,"label":{"wk":"W14","opp":"@ ATL"},"n":31,"pressure":16,"contact":7,"sacks":1,"blitz":11,"qtr":{"1":{"n":5,"pressure":2,"contact":1,"sacks":0,"blitz":2},"2":{"n":9,"pressure":6,"contact":3,"sacks":0,"blitz":3},"3":{"n":7,"pressure":4,"contact":2,"sacks":0,"blitz":2},"4":{"n":10,"pressure":4,"contact":1,"sacks":1,"blitz":4}},"down":{"1":{"n":12,"pressure":6,"contact":3,"sacks":0,"blitz":5},"2":{"n":7,"pressure":7,"contact":3,"sacks":1,"blitz":3},"3":{"n":11,"pressure":3,"contact":1,"sacks":0,"blitz":3},"4":{"n":1,"pressure":0,"contact":0,"sacks":0,"blitz":0}},"rushers":{"3":0,"4":23,"5":6,"6":2}},{"week":15,"label":{"wk":"W15","opp":"vs IND"},"n":28,"pressure":4,"contact":4,"sacks":1,"blitz":8,"qtr":{"1":{"n":8,"pressure":2,"contact":2,"sacks":0,"blitz":4},"2":{"n":9,"pressure":1,"contact":1,"sacks":1,"blitz":4},"3":{"n":4,"pressure":0,"contact":0,"sacks":0,"blitz":0},"4":{"n":7,"pressure":1,"contact":1,"sacks":0,"blitz":0}},"down":{"1":{"n":4,"pressure":1,"contact":1,"sacks":1,"blitz":1},"2":{"n":12,"pressure":2,"contact":2,"sacks":0,"blitz":3},"3":{"n":12,"pressure":1,"contact":1,"sacks":0,"blitz":4},"4":{"n":0,"pressure":0,"contact":0,"sacks":0,"blitz":0}},"rushers":{"3":4,"4":19,"5":4,"6":1}},{"week":16,"label":{"wk":"W16","opp":"vs LA"},"n":51,"pressure":10,"contact":4,"sacks":0,"blitz":11,"qtr":{"1":{"n":11,"pressure":1,"contact":0,"sacks":0,"blitz":5},"2":{"n":8,"pressure":2,"contact":1,"sacks":0,"blitz":1},"3":{"n":7,"pressure":0,"contact":0,"sacks":0,"blitz":1},"4":{"n":25,"pressure":7,"contact":3,"sacks":0,"blitz":4}},"down":{"1":{"n":17,"pressure":2,"contact":0,"sacks":0,"blitz":3},"2":{"n":16,"pressure":5,"contact":3,"sacks":0,"blitz":1},"3":{"n":17,"pressure":3,"contact":1,"sacks":0,"blitz":6},"4":{"n":1,"pressure":0,"contact":0,"sacks":0,"blitz":1}},"rushers":{"3":1,"4":37,"5":10,"6":3}},{"week":17,"label":{"wk":"W17","opp":"@ CAR"},"n":31,"pressure":6,"contact":4,"sacks":2,"blitz":5,"qtr":{"1":{"n":6,"pressure":1,"contact":1,"sacks":0,"blitz":1},"2":{"n":10,"pressure":2,"contact":0,"sacks":0,"blitz":1},"3":{"n":9,"pressure":1,"contact":1,"sacks":0,"blitz":2},"4":{"n":6,"pressure":2,"contact":2,"sacks":2,"blitz":1}},"down":{"1":{"n":10,"pressure":0,"contact":0,"sacks":0,"blitz":1},"2":{"n":10,"pressure":3,"contact":2,"sacks":1,"blitz":1},"3":{"n":8,"pressure":2,"contact":2,"sacks":1,"blitz":1},"4":{"n":3,"pressure":1,"contact":0,"sacks":0,"blitz":2}},"rushers":{"3":2,"4":24,"5":3,"6":2}},{"week":18,"label":{"wk":"W18","opp":"@ SF"},"n":32,"pressure":10,"contact":8,"sacks":3,"blitz":9,"qtr":{"1":{"n":4,"pressure":2,"contact":2,"sacks":1,"blitz":1},"2":{"n":12,"pressure":4,"contact":3,"sacks":1,"blitz":3},"3":{"n":7,"pressure":3,"contact":2,"sacks":1,"blitz":3},"4":{"n":9,"pressure":1,"contact":1,"sacks":0,"blitz":2}},"down":{"1":{"n":8,"pressure":1,"contact":0,"sacks":0,"blitz":1},"2":{"n":13,"pressure":4,"contact":3,"sacks":2,"blitz":6},"3":{"n":9,"pressure":3,"contact":3,"sacks":1,"blitz":1},"4":{"n":2,"pressure":2,"contact":2,"sacks":0,"blitz":1}},"rushers":{"3":0,"4":23,"5":7,"6":2}},{"week":20,"label":{"wk":"DIV","opp":"vs SF"},"n":38,"pressure":7,"contact":5,"sacks":2,"blitz":4,"qtr":{"1":{"n":6,"pressure":1,"contact":1,"sacks":0,"blitz":1},"2":{"n":14,"pressure":1,"contact":1,"sacks":0,"blitz":1},"3":{"n":9,"pressure":4,"contact":2,"sacks":1,"blitz":1},"4":{"n":9,"pressure":1,"contact":1,"sacks":1,"blitz":1}},"down":{"1":{"n":14,"pressure":2,"contact":2,"sacks":0,"blitz":2},"2":{"n":14,"pressure":1,"contact":1,"sacks":1,"blitz":1},"3":{"n":8,"pressure":2,"contact":1,"sacks":0,"blitz":0},"4":{"n":2,"pressure":2,"contact":1,"sacks":1,"blitz":1}},"rushers":{"3":1,"4":33,"5":4,"6":0}},{"week":21,"label":{"wk":"CONF","opp":"vs LA"},"n":37,"pressure":6,"contact":3,"sacks":1,"blitz":5,"qtr":{"1":{"n":6,"pressure":2,"contact":0,"sacks":0,"blitz":0},"2":{"n":11,"pressure":1,"contact":1,"sacks":1,"blitz":1},"3":{"n":6,"pressure":1,"contact":1,"sacks":0,"blitz":3},"4":{"n":14,"pressure":2,"contact":1,"sacks":0,"blitz":1}},"down":{"1":{"n":15,"pressure":1,"contact":1,"sacks":0,"blitz":2},"2":{"n":13,"pressure":2,"contact":0,"sacks":0,"blitz":2},"3":{"n":7,"pressure":2,"contact":2,"sacks":1,"blitz":1},"4":{"n":2,"pressure":1,"contact":0,"sacks":0,"blitz":0}},"rushers":{"3":5,"4":27,"5":5,"6":0}},{"week":22,"label":{"wk":"SB","opp":"@ NE"},"n":53,"pressure":15,"contact":11,"sacks":6,"blitz":12,"qtr":{"1":{"n":8,"pressure":4,"contact":4,"sacks":2,"blitz":3},"2":{"n":7,"pressure":2,"contact":1,"sacks":1,"blitz":3},"3":{"n":10,"pressure":4,"contact":3,"sacks":2,"blitz":3},"4":{"n":28,"pressure":5,"contact":3,"sacks":1,"blitz":3}},"down":{"1":{"n":20,"pressure":6,"contact":5,"sacks":3,"blitz":2},"2":{"n":19,"pressure":5,"contact":2,"sacks":1,"blitz":5},"3":{"n":14,"pressure":4,"contact":4,"sacks":2,"blitz":5},"4":{"n":0,"pressure":0,"contact":0,"sacks":0,"blitz":0}},"rushers":{"3":0,"4":45,"5":5,"6":3}}],"personnel":{"total":817,"unclassified":0,"packages":[{"name":"Base","n":24,"pressure":10,"blitz":5,"sacks":2,"byDown":{"1":10,"2":5,"3":9,"4":0},"shapes":[{"shape":"3-4-4","n":14,"pressure":6,"blitz":2},{"shape":"4-3-4","n":5,"pressure":4,"blitz":3},{"shape":"2-5-4","n":4,"pressure":0,"blitz":0},{"shape":"1-6-4","n":1,"pressure":0,"blitz":0}]},{"name":"Nickel","n":570,"pressure":197,"blitz":146,"sacks":43,"byDown":{"1":233,"2":206,"3":111,"4":20},"shapes":[{"shape":"2-4-5","n":413,"pressure":142,"blitz":98},{"shape":"3-3-5","n":139,"pressure":47,"blitz":38},{"shape":"1-5-5","n":16,"pressure":7,"blitz":9},{"shape":"4-2-5","n":2,"pressure":1,"blitz":1}]},{"name":"Dime","n":211,"pressure":55,"blitz":39,"sacks":11,"byDown":{"1":30,"2":68,"3":98,"4":15},"shapes":[{"shape":"2-3-6","n":185,"pressure":50,"blitz":34},{"shape":"1-4-6","n":21,"pressure":5,"blitz":5},{"shape":"3-2-6","n":5,"pressure":0,"blitz":0}]},{"name":"Other","n":12,"pressure":1,"blitz":2,"sacks":0,"byDown":{"1":3,"2":5,"3":3,"4":1},"shapes":[{"shape":"1-3-7","n":6,"pressure":0,"blitz":0},{"shape":"3-5-3","n":6,"pressure":1,"blitz":2}]}],"weekly":[{"label":{"wk":"W1","opp":"vs SF"},"Base":3,"Nickel":33,"Dime":3,"Other":0},{"label":{"wk":"W2","opp":"@ PIT"},"Base":2,"Nickel":28,"Dime":8,"Other":0},{"label":{"wk":"W3","opp":"vs NO"},"Base":0,"Nickel":45,"Dime":0,"Other":0},{"label":{"wk":"W4","opp":"@ ARI"},"Base":0,"Nickel":50,"Dime":0,"Other":1},{"label":{"wk":"W5","opp":"vs TB"},"Base":1,"Nickel":34,"Dime":3,"Other":0},{"label":{"wk":"W6","opp":"@ JAX"},"Base":2,"Nickel":47,"Dime":1,"Other":0},{"label":{"wk":"W7","opp":"vs HOU"},"Base":3,"Nickel":51,"Dime":0,"Other":0},{"label":{"wk":"W9","opp":"@ WAS"},"Base":0,"Nickel":31,"Dime":4,"Other":0},{"label":{"wk":"W10","opp":"vs ARI"},"Base":2,"Nickel":36,"Dime":16,"Other":0},{"label":{"wk":"W11","opp":"@ LA"},"Base":1,"Nickel":14,"Dime":11,"Other":2},{"label":{"wk":"W12","opp":"@ TEN"},"Base":1,"Nickel":24,"Dime":24,"Other":1},{"label":{"wk":"W13","opp":"vs MIN"},"Base":0,"Nickel":19,"Dime":15,"Other":0},{"label":{"wk":"W14","opp":"@ ATL"},"Base":0,"Nickel":19,"Dime":12,"Other":0},{"label":{"wk":"W15","opp":"vs IND"},"Base":0,"Nickel":6,"Dime":22,"Other":0},{"label":{"wk":"W16","opp":"vs LA"},"Base":2,"Nickel":36,"Dime":11,"Other":2},{"label":{"wk":"W17","opp":"@ CAR"},"Base":1,"Nickel":20,"Dime":8,"Other":2},{"label":{"wk":"W18","opp":"@ SF"},"Base":0,"Nickel":21,"Dime":11,"Other":0},{"label":{"wk":"DIV","opp":"vs SF"},"Base":5,"Nickel":15,"Dime":17,"Other":1},{"label":{"wk":"CONF","opp":"vs LA"},"Base":1,"Nickel":23,"Dime":10,"Other":3},{"label":{"wk":"SB","opp":"@ NE"},"Base":0,"Nickel":18,"Dime":35,"Other":0}]}},"espn":{"source":"ESPN Analytics \u2014 2026 NFL pass rush, run stop, blocking win rate rankings","url":"https://www.espn.com/nfl/story/_/id/49742016/2026-win-rates-team-player-rankings-pass-rush-run-stop-blocking","asOf":"Through Week 9 games (updated Nov. 10, 2026)","note":"ESPN publishes only the top 20 edge rushers and top 20 defensive tackles. Seattle players outside those lists have no published win rate.","team":{"prwr":58,"rank":4,"rswr":31,"rswrRank":9},"leagueTeams":[["MIN",63],["NYG",61],["DET",59],["SEA",58],["JAX",55],["DEN",55],["CAR",54],["TB",54],["CLE",53],["ATL",53],["NE",52],["LAR",52],["BAL",52],["ARI",52],["NO",50],["CHI",50],["CIN",50],["WAS",50],["MIA",50],["SF",49],["HOU",49],["LAC",48],["KC",48],["NYJ",47],["PIT",47],["BUF",45],["LV",45],["TEN",45],["GB",45],["DAL",43],["PHI",43],["IND",40]],"players":[{"pfrId":"LawrDe00","name":"DeMarcus Lawrence","group":"Edge","rank":"T-7","wins":22,"plays":87,"prwr":25,"doubleTeamRate":36},{"pfrId":"MurpBy01","name":"Byron Murphy II","group":"DT","rank":"20","wins":20,"plays":126,"prwr":16,"doubleTeamRate":79}]},"meta":{"through2026":"Week 9","built":"2026-11-11"}}/*DATA:END*/;
+
+/* ---------- tiny helpers ---------- */
+const $ = id => document.getElementById(id);
+const pct = (a, b, dp = 1) => b ? (100 * a / b).toFixed(dp) + '%' : '–';
+const sum = (arr, f) => arr.reduce((t, x) => t + f(x), 0);
+const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+function el(tag, attrs, text) {           // HTML element; text always goes in as textContent
+  const e = document.createElement(tag);
+  for (const k in attrs || {}) e.setAttribute(k, attrs[k]);
+  if (text != null) e.textContent = text;
+  return e;
+}
+function sv(tag, attrs, text) {           // SVG element
+  const e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const k in attrs || {}) e.setAttribute(k, attrs[k]);
+  if (text != null) e.textContent = text;
+  return e;
+}
+function mix(a, b, t) {                   // blend two hex colours, t from 0 to 1
+  const p = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  const A = p(a), B = p(b);
+  return '#' + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, '0')).join('');
+}
+
+/* ---------- one shared tooltip ---------- */
+const tip = $('tip');
+function showTip(evt, title, rows) {
+  tip.replaceChildren(el('div', { class: 't' }, title));
+  rows.forEach(r => {
+    if (r.h) { tip.append(el('div', { class: 'h' }, r.h)); return; }
+    const row = el('div', { class: 'r' }), lab = el('span');
+    if (r.c) { const k = el('i'); k.style.background = r.c; lab.append(k); }
+    lab.append(r.k);
+    row.append(lab, el('b', null, r.v));
+    tip.append(row);
+  });
+  tip.style.display = 'block';
+  const box = evt.target.getBoundingClientRect();
+  const x = evt.clientX != null && evt.type !== 'focus' ? evt.clientX : box.left + box.width / 2;
+  const y = evt.clientY != null && evt.type !== 'focus' ? evt.clientY : box.top;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  tip.style.left = Math.max(8, Math.min(innerWidth - w - 8, x + 14)) + 'px';
+  tip.style.top = Math.max(8, Math.min(innerHeight - h - 8, y + 14)) + 'px';
+}
+const hideTip = () => { tip.style.display = 'none'; };
+function hover(node, fn) {
+  node.addEventListener('pointermove', e => showTip(e, ...fn()));
+  node.addEventListener('focus', e => showTip(e, ...fn()));
+  node.addEventListener('pointerleave', hideTip);
+  node.addEventListener('blur', hideTip);
+}
+
+/* ---------- nav: buttons with data-target (anchor links break in the mobile app) ---------- */
+document.querySelectorAll('[data-target]').forEach(b =>
+  b.addEventListener('click', () => $(b.dataset.target).scrollIntoView({ behavior: 'smooth' })));
+
+/* ---------- snapshot ---------- */
+const W26 = D.s2026.weeks, E = D.espn;
+const tot = k => sum(W26, w => w[k]);
+const last3 = W26.slice(-3), s3 = k => sum(last3, w => w[k]);
+$('lede').textContent = `How often Seattle wins its rush, gets home, and sends extra rushers. 2026 regular season through ${D.meta.through2026}, with the 2025 title season for comparison. Every number is pulled from a public source listed at the bottom; where a metric has no public 2026 source, the card says so instead of estimating.`;
+$('snap-sub').textContent = `${W26.length} games, ${tot('n')} opponent dropbacks. "Last 3" covers ${last3[0].label.wk}–${last3[2].label.wk}.`;
+[
+  { lab: 'Pass rush win rate', val: E.team.prwr + '%', det: `${E.team.rank}th of 32 defenses`, src: 'ESPN · ' + E.asOf.split(' (')[0], lead: 1 },
+  { lab: 'Pressure rate', val: pct(tot('pressures'), tot('n')), det: `${tot('pressures')} credited pressures · last 3: ${pct(s3('pressures'), s3('n'))}`, src: 'PFR via nflverse' },
+  { lab: 'Blitz rate', val: pct(tot('blitz'), tot('n')), det: `${tot('blitz')} of ${tot('n')} dropbacks · last 3: ${pct(s3('blitz'), s3('n'))}`, src: 'FTN charting' },
+  { lab: 'QB contact rate', val: pct(tot('contact'), tot('n')), det: `sack or QB hit · last 3: ${pct(s3('contact'), s3('n'))}`, src: 'nflverse play-by-play' },
+  { lab: 'Sack rate', val: pct(tot('sacks'), tot('n')), det: `${tot('sacks')} sacks · last 3: ${pct(s3('sacks'), s3('n'))}`, src: 'nflverse play-by-play' },
+].forEach(k => {
+  const t = el('div', { class: 'kpi' + (k.lead ? ' lead' : '') });
+  t.append(el('div', { class: 'lab' }, k.lab), el('div', { class: 'val' }, k.val), el('div', { class: 'det' }, k.det), el('div', { class: 'src' }, k.src));
+  $('kpis').append(t);
+});
+
+function drawLeague() {
+  const box = $('league'), W = Math.max(box.clientWidth, 300), H = 150, padB = 30, padT = 18;
+  const teams = E.leagueTeams, bw = W / teams.length, lo = 30, hi = 65;
+  const y = v => padT + (H - padT - padB) * (1 - (v - lo) / (hi - lo));
+  const g = sv('svg', { width: W, height: H, role: 'img', 'aria-label': 'Team pass rush win rate for all 32 defenses' });
+  teams.forEach(([t, v], i) => {
+    const me = t === D.team, x = i * bw + 1, w = Math.max(2, Math.min(24, bw - 2)), cx = i * bw + bw / 2;
+    const bar = sv('rect', { x: cx - w / 2, y: y(v), width: w, height: H - padB - y(v), rx: 2, fill: me ? css('--s-pressure') : css('--s-other'), tabindex: 0 });
+    hover(bar, () => [t, [{ k: 'Pass rush win rate', v: v + '%' }, { k: 'Rank', v: '#' + (i + 1) }]]);
+    g.append(bar);
+    if (me || (i === 0 && bw >= 20))
+      g.append(sv('text', { x: cx, y: y(v) - 5, 'text-anchor': i === 0 ? 'start' : 'middle', class: me ? 'strong' : '' }, `${t} ${v}%`));
+    if (bw >= 26 || me) g.append(sv('text', { x: cx, y: H - 14, 'text-anchor': 'middle', class: me ? 'strong' : '', 'font-size': 9 }, t));
+  });
+  g.append(sv('line', { x1: 0, x2: W, y1: H - padB, y2: H - padB, stroke: css('--axis') }));
+  g.append(sv('text', { x: 0, y: H - 1 }, 'Ranked 1st to 32nd. Bars start at 30%.'));
+  box.replaceChildren(g);
+}
+
+/* ---------- weekly trend ---------- */
+const state = { season: '2026', split: 'qtr', metric: 'contact' };
+const SEASONS = {
+  '2026': { label: '2026 · through ' + D.meta.through2026, weeks: W26, press: 'pressures',
+            pressName: 'Pressure rate (player-credited, PFR)', metrics: ['contact', 'blitz'] },
+  '2025': { label: '2025 · full season + playoffs', weeks: D.s2025.weeks, press: 'pressure',
+            pressName: 'Pressure rate (play-level flag)', metrics: ['pressure', 'contact', 'blitz'] },
+};
+const METRICS = { pressure: 'Pressure rate', contact: 'QB contact rate', blitz: 'Blitz rate' };
+const SPLITS = { qtr: { label: 'Quarter', keys: ['1', '2', '3', '4'], names: ['Q1', 'Q2', 'Q3', 'Q4'] },
+                 down: { label: 'Down', keys: ['1', '2', '3', '4'], names: ['1st', '2nd', '3rd', '4th'] } };
+
+function segmented(id, options, key, after) {
+  const box = $(id);
+  box.replaceChildren();
+  options.forEach(([v, label]) => {
+    const b = el('button', { type: 'button', 'aria-pressed': String(state[key] === v) }, label);
+    b.addEventListener('click', () => { state[key] = v; after(); });
+    box.append(b);
+  });
+}
+function renderFilters() {
+  const S = SEASONS[state.season];
+  if (!S.metrics.includes(state.metric)) state.metric = S.metrics[0];
+  segmented('f-season', ['2026', '2025'].map(k => [k, k]), 'season', renderTrendAll);
+  segmented('f-split', Object.entries(SPLITS).map(([k, v]) => [k, v.label]), 'split', renderTrendAll);
+  segmented('f-metric', S.metrics.map(k => [k, METRICS[k]]), 'metric', renderTrendAll);
+}
+
+function drawTrend() {
+  const S = SEASONS[state.season], weeks = S.weeks, SP = SPLITS[state.split], M = state.metric;
+  const box = $('trend'), gut = 44, sumW = 62, n = weeks.length;
+  const avail = Math.max(box.parentNode.clientWidth, 300);
+  const col = Math.max(44, Math.floor((avail - gut - sumW - 8) / n));
+  const W = gut + col * n + 8 + sumW;
+  const lineH = 170, lineTop = 14, heatTop = lineTop + lineH + 62, cellH = 30, heatH = cellH * 4;
+  const rushTop = heatTop + heatH + 40, rushH = 70, H = rushTop + rushH + 8;
+  const g = sv('svg', { width: W, height: H, role: 'img', 'aria-label': 'Weekly pressure and blitz trend with quarter or down grid' });
+  const cx = i => gut + col * i + col / 2, yMax = 60;
+  const y = v => lineTop + lineH * (1 - Math.min(v, yMax) / yMax);
+  const blue = css('--s-pressure'), orange = css('--s-blitz'), surface = css('--surface');
+
+  // gridlines + y ticks
+  [0, 20, 40, 60].forEach(t => {
+    g.append(sv('line', { x1: gut, x2: gut + col * n, y1: y(t), y2: y(t), stroke: t ? css('--line') : css('--axis') }));
+    g.append(sv('text', { x: gut - 8, y: y(t) + 4, 'text-anchor': 'end', class: 'num' }, t + '%'));
+  });
+  // two lines: pressure and blitz
+  const series = [{ k: S.press, c: blue, name: 'Pressure' }, { k: 'blitz', c: orange, name: 'Blitz' }];
+  series.forEach(s => {
+    const pts = weeks.map((w, i) => [cx(i), y(100 * w[s.k] / w.n)]);
+    g.append(sv('path', { d: 'M' + pts.map(p => p.join(',')).join('L'), fill: 'none', stroke: s.c, 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
+    pts.forEach(p => g.append(sv('circle', { cx: p[0], cy: p[1], r: 4, fill: s.c, stroke: surface, 'stroke-width': 2 })));
+  });
+  // season averages in the summary column (direct labels for the two lines)
+  const sx = gut + col * n + 8;
+  const avg = series.map(s => ({ ...s, v: 100 * sum(weeks, w => w[s.k]) / sum(weeks, w => w.n) }));
+  g.append(sv('text', { x: sx + sumW, y: lineTop - 2, 'text-anchor': 'end' }, 'Season'));
+  let ys = avg.map(a => y(a.v));
+  if (Math.abs(ys[0] - ys[1]) < 30) { const mid = (ys[0] + ys[1]) / 2, up = ys[0] <= ys[1] ? 0 : 1; ys[up] = mid - 16; ys[1 - up] = mid + 16; }
+  avg.forEach((a, i) => {
+    g.append(sv('line', { x1: sx, x2: sx + 10, y1: ys[i] - 4, y2: ys[i] - 4, stroke: a.c, 'stroke-width': 2 }));
+    g.append(sv('text', { x: sx + sumW, y: ys[i], 'text-anchor': 'end', class: 'strong num' }, a.v.toFixed(1) + '%'));
+    g.append(sv('text', { x: sx + sumW, y: ys[i] + 12, 'text-anchor': 'end', 'font-size': 10 }, a.name));
+  });
+  // week labels (shared x axis for all three panels)
+  weeks.forEach((w, i) => {
+    g.append(sv('text', { x: cx(i), y: lineTop + lineH + 16, 'text-anchor': 'middle', class: 'sec' }, w.label.wk));
+    g.append(sv('text', { x: cx(i), y: lineTop + lineH + 29, 'text-anchor': 'middle', 'font-size': 9 }, w.label.opp));
+  });
+
+  // heat grid: rows = quarter or down, columns = games
+  const scaleMax = { pressure: 60, contact: 45, blitz: 60 }[M], lo = css('--heat-lo'), hi = css('--heat-hi');
+  const cell = (x, yy, w, c) => {
+    if (!c.n) { g.append(sv('text', { x: x + w / 2, y: yy + cellH / 2 + 4, 'text-anchor': 'middle' }, '·')); return; }
+    const r = c[M] / c.n, t = Math.min(1, 100 * r / scaleMax);
+    g.append(sv('rect', { x: x + 1, y: yy + 1, width: w - 2, height: cellH - 2, rx: 3, fill: mix(lo, hi, t) }));
+    const txt = sv('text', { x: x + w / 2, y: yy + cellH / 2 + 4, 'text-anchor': 'middle', class: 'num' }, Math.round(100 * r));
+    txt.style.fill = t > .55 ? '#0b0d12' : c.n < 5 ? css('--muted') : css('--ink');
+    g.append(txt);
+  };
+  g.append(sv('text', { x: 0, y: heatTop - 8, class: 'sec' }, `${METRICS[M]} by ${SP.label.toLowerCase()}, % of dropbacks`));
+  SP.keys.forEach((k, r) => {
+    const yy = heatTop + r * cellH;
+    g.append(sv('text', { x: gut - 8, y: yy + cellH / 2 + 4, 'text-anchor': 'end', class: 'sec' }, SP.names[r]));
+    weeks.forEach((w, i) => cell(gut + col * i, yy, col, w[state.split][k]));
+    const all = { n: sum(weeks, w => w[state.split][k].n), [M]: sum(weeks, w => w[state.split][k][M]) };
+    cell(sx, yy, sumW, all);
+  });
+
+  // rusher-count stacked bars
+  const rk = [['3', '--rush-3'], ['4', '--rush-4'], ['5', '--rush-5'], ['6', '--rush-6']];
+  g.append(sv('text', { x: 0, y: rushTop - 8, class: 'sec' }, 'Rushers sent, share of charted dropbacks'));
+  const stack = (x, w, counts) => {
+    const total = sum(rk, r => counts[r[0]]); let yy = rushTop + rushH;
+    rk.forEach(([k, c]) => {
+      const h = rushH * counts[k] / total; yy -= h;
+      if (h > 2.5) g.append(sv('rect', { x, y: yy + 1, width: w, height: h - 2, rx: 2, fill: css(c) }));
+    });
+  };
+  const bw = Math.min(24, col - 10);
+  weeks.forEach((w, i) => stack(cx(i) - bw / 2, bw, w.rushers));
+  const allR = {}; rk.forEach(([k]) => allR[k] = sum(weeks, w => w.rushers[k]));
+  stack(sx + sumW / 2 - 12, 24, allR);
+  const five = allR['5'] + allR['6'], allT = sum(rk, r => allR[r[0]]);
+  g.append(sv('text', { x: sx + sumW, y: rushTop - 8, 'text-anchor': 'end', class: 'strong num' }, pct(five, allT, 0) + ' 5+'));
+
+  // hover / focus layer: one tall hit target per game, plus the crosshair
+  const cross = sv('rect', { y: lineTop, width: col, height: H - lineTop - 4, fill: '#fff', opacity: 0, rx: 4, 'pointer-events': 'none' });
+  g.append(cross);
+  weeks.forEach((w, i) => {
+    const hit = sv('rect', { x: gut + col * i, y: 0, width: col, height: H, fill: 'transparent', tabindex: 0, 'aria-label': `${w.label.wk} ${w.label.opp}` });
+    const rows = () => {
+      const rt = sum(rk, r => w.rushers[r[0]]);
+      const out = [
+        { k: 'Dropbacks', v: String(w.n) },
+        { k: 'Pressure', c: blue, v: `${pct(w[S.press], w.n)} (${w[S.press]})` },
+        { k: 'Blitz', c: orange, v: `${pct(w.blitz, w.n)} (${w.blitz})` },
+        { k: 'QB contact', v: `${pct(w.contact, w.n)} (${w.contact})` },
+        { k: 'Sacks', v: String(w.sacks) },
+        { h: `${METRICS[M]} by ${SP.label.toLowerCase()}` },
+        ...SP.keys.map((k, r) => ({ k: SP.names[r], v: `${pct(w[state.split][k][M], w[state.split][k].n, 0)} (${w[state.split][k][M]}/${w[state.split][k].n})` })),
+        { h: 'Rushers sent' },
+        { k: '3 or fewer / 4 / 5 / 6+', v: rk.map(r => w.rushers[r[0]]).join(' / ') },
+      ];
+      return [`${w.label.wk} ${w.label.opp}`, out];
+    };
+    const on = e => { cross.setAttribute('x', gut + col * i); cross.setAttribute('opacity', .06); showTip(e, ...rows()); };
+    const off = () => { cross.setAttribute('opacity', 0); hideTip(); };
+    hit.addEventListener('pointermove', on); hit.addEventListener('focus', on);
+    hit.addEventListener('pointerleave', off); hit.addEventListener('blur', off);
+    g.append(hit);
+  });
+  box.replaceChildren(g);
+  box.style.width = W + 'px';
+}
+
+function renderTrendAll() {
+  renderFilters();
+  const S = SEASONS[state.season], weeks = S.weeks;
+  $('trend-title').textContent = `Pressure and blitz rate by game, ${S.label}`;
+  $('trend-sub').textContent = `Percent of opponent dropbacks. ${S.pressName}; blitz rate from FTN charting.`;
+  const lg = $('trend-legend'); lg.replaceChildren();
+  [['--s-pressure', 'Pressure rate', 'ln'], ['--s-blitz', 'Blitz rate', 'ln'], ['--rush-3', '3 or fewer rushers'], ['--rush-4', '4 rushers'], ['--rush-5', '5 rushers'], ['--rush-6', '6+ rushers']]
+    .forEach(([c, t, cls]) => { const s = el('span'), i = el('i', cls ? { class: cls } : {}); i.style.background = `var(${c})`; s.append(i, t); lg.append(s); });
+  $('trend-note').replaceChildren(el('b', null, state.season === '2026' ? 'Why the 2026 grid shows QB contact, not pressure. ' : 'Small samples. '),
+    state.season === '2026'
+      ? 'No public source tags pressure play by play for 2026 yet, so pressure cannot be split by quarter or down. The grid uses sacks plus QB hits, which play-by-play does record. Switch to 2025 for the true pressure split. A single game cell is about 5 to 15 dropbacks; read the Season column for the tendency and the game cells for the story.'
+      : 'This season has a play-level pressure flag, so the grid can show true pressure rate. A single game cell is about 5 to 15 dropbacks, and dim numbers mark cells under 5. The 2025 pressure rate uses a different definition from the 2026 player-credited figure, so do not compare the two lines across seasons.');
+  drawTrend();
+
+  // table view
+  const SP = SPLITS[state.split], M = state.metric, t = el('table'), hr = el('tr');
+  ['Game', 'Dropbacks', 'Pressure', 'Blitz', 'QB contact', 'Sacks', ...SP.names.map(nm => `${nm} ${METRICS[M].toLowerCase()}`), '5+ rushers'].forEach(h => hr.append(el('th', null, h)));
+  t.append(hr);
+  weeks.forEach(w => {
+    const r = el('tr');
+    [`${w.label.wk} ${w.label.opp}`, w.n, pct(w[S.press], w.n), pct(w.blitz, w.n), pct(w.contact, w.n), w.sacks,
+      ...SP.keys.map(k => `${pct(w[state.split][k][M], w[state.split][k].n, 0)} (${w[state.split][k][M]}/${w[state.split][k].n})`),
+      w.rushers['5'] + w.rushers['6']].forEach(v => r.append(el('td', null, String(v))));
+    t.append(r);
+  });
+  $('trend-table').replaceChildren(t);
+}
+
+/* ---------- individual rushers ---------- */
+function renderPlayers() {
+  const P = D.s2026.players.filter(p => p.pressures > 0), max = Math.max(...P.map(p => p.pressures));
+  const espn = Object.fromEntries(E.players.map(p => [p.pfrId, p]));
+  $('rush-badge').textContent = '2026 · through ' + D.meta.through2026;
+  const t = el('table'), hr = el('tr');
+  ['Player', 'Win rate (ESPN)', 'Pressures', 'Hurries', 'QB hits', 'Sacks', 'Times blitzed', 'Pressures by week'].forEach(h => hr.append(el('th', null, h)));
+  hr.lastChild.style.textAlign = 'left'; hr.children[2].style.textAlign = 'left';
+  t.append(hr);
+  const lo = css('--heat-lo'), hi = css('--heat-hi');
+  P.forEach(p => {
+    const r = el('tr'), nm = el('td', { class: 'name' }, p.name);
+    nm.append(el('small', null, p.pos || ''));
+    const wr = el('td'), e = espn[p.id];
+    if (e) { wr.append(el('b', null, e.prwr + '%'), ` · ${e.wins}/${e.plays} · #${e.rank} ${e.group}`); wr.title = `Double-teamed on ${e.doubleTeamRate}% of rushes`; }
+    else wr.append(el('span', { class: 'none' }, 'not published'));
+    const pr = el('td'); pr.style.textAlign = 'left';
+    const m = el('span', { class: 'meter' }); m.style.width = Math.round(110 * p.pressures / max) + 'px';
+    pr.append(m, String(p.pressures));
+    const wk = el('td'); wk.style.textAlign = 'left';
+    const strip = el('span', { class: 'wk' });
+    p.weekly.forEach((v, i) => {
+      const c = el('span', { tabindex: 0 }, v == null ? '' : String(v));
+      if (v == null) c.style.border = '1px dashed ' + css('--line');
+      else { const tt = Math.min(1, v / 5); c.style.background = v ? mix(lo, hi, .25 + .75 * tt) : lo; c.style.color = tt > .5 ? '#0b0d12' : v ? css('--ink') : css('--muted'); }
+      hover(c, () => [`${p.name}, ${W26[i].label.wk} ${W26[i].label.opp}`, [{ k: 'Pressures', v: v == null ? 'did not play / no stats' : String(v) }]]);
+      strip.append(c);
+    });
+    wk.append(strip);
+    r.append(nm, wr, pr, el('td', null, String(p.hurries)), el('td', null, String(p.hits)), el('td', null, String(p.sacks)), el('td', null, String(p.blitzes)), wk);
+    t.append(r);
+  });
+  $('players').replaceChildren(t);
+  $('players-note').replaceChildren(el('b', null, 'Win rate coverage. '), E.note + ' Pressures, hurries, hits, sacks and times blitzed are Pro Football Reference charting. "Times blitzed" counts rushes from a non-line alignment, which is why the safeties and linebackers lead it. Dashed boxes are weeks with no defensive stats for that player.');
+}
+
+/* ---------- personnel ---------- */
+const PKG = { Nickel: '--s-pressure', Dime: '--s-blitz', Base: '--s-base', Other: '--s-other' };
+function renderPersonnel() {
+  const P = D.s2025.personnel, order = ['Nickel', 'Dime', 'Base', 'Other'];
+  const pk = order.map(n => P.packages.find(p => p.name === n)).filter(Boolean);
+  $('pkg-sub').textContent = `${P.total} dropbacks with personnel recorded, regular season and playoffs.`;
+  const bar = $('pkg-bar'), lg = $('pkg-legend');
+  pk.forEach(p => {
+    const d = el('div', { tabindex: 0 }, p.n / P.total > .08 ? pct(p.n, P.total, 0) : '');
+    d.style.flex = p.n + ' 0 0'; d.style.background = `var(${PKG[p.name]})`;
+    hover(d, () => [p.name, [{ k: 'Dropbacks', v: `${p.n} (${pct(p.n, P.total)})` }, { k: 'Pressure rate', v: pct(p.pressure, p.n) }, { k: 'Blitz rate', v: pct(p.blitz, p.n) }]]);
+    bar.append(d);
+    const s = el('span'), i = el('i'); i.style.background = `var(${PKG[p.name]})`; s.append(i, `${p.name} (${p.name === 'Base' ? '4' : p.name === 'Nickel' ? '5' : p.name === 'Dime' ? '6' : '3 or 7'} DBs)`); lg.append(s);
+  });
+  const t = el('table'), hr = el('tr');
+  ['Package', 'Dropbacks', 'Share', 'Pressure rate', 'Blitz rate', 'Sack rate', '3rd/4th down share'].forEach(h => hr.append(el('th', null, h)));
+  t.append(hr);
+  pk.forEach(p => {
+    const r = el('tr');
+    [p.name, p.n, pct(p.n, P.total), pct(p.pressure, p.n), pct(p.blitz, p.n), pct(p.sacks, p.n), pct(p.byDown['3'] + p.byDown['4'], p.n, 0)]
+      .forEach((v, i) => r.append(el('td', i ? null : { class: 'name' }, String(v))));
+    t.append(r);
+  });
+  $('pkg-table').replaceChildren(t);
+
+  const st = el('table'), sh = el('tr');
+  ['Package', 'DL-LB-DB', 'Dropbacks', 'Share of all', 'Pressure rate', 'Blitz rate'].forEach(h => sh.append(el('th', null, h)));
+  st.append(sh);
+  pk.forEach(p => p.shapes.filter(s => s.n >= 5).forEach(s => {
+    const r = el('tr');
+    [p.name, s.shape, s.n, pct(s.n, P.total), s.n >= 20 ? pct(s.pressure, s.n) : `${s.pressure}/${s.n}`, s.n >= 20 ? pct(s.blitz, s.n) : `${s.blitz}/${s.n}`]
+      .forEach((v, i) => r.append(el('td', i ? null : { class: 'name' }, String(v))));
+    st.append(r);
+  }));
+  $('shape-table').replaceChildren(st);
+}
+function drawPkgWeekly() {
+  const P = D.s2025.personnel, box = $('pkg-weekly'), n = P.weekly.length, gut = 36;
+  const col = Math.max(24, Math.floor((Math.max(box.parentNode.clientWidth, 300) - gut - 2) / n)), W = gut + col * n, top = 8, h = 150, H = top + h + 34;
+  const g = sv('svg', { width: W, height: H, role: 'img', 'aria-label': 'Personnel package share by game, 2025' });
+  [0, 50, 100].forEach(t => {
+    g.append(sv('line', { x1: gut, x2: W, y1: top + h * (1 - t / 100), y2: top + h * (1 - t / 100), stroke: t ? css('--line') : css('--axis') }));
+    g.append(sv('text', { x: gut - 6, y: top + h * (1 - t / 100) + 4, 'text-anchor': 'end', class: 'num' }, t + '%'));
+  });
+  const order = ['Nickel', 'Dime', 'Base', 'Other'], bw = Math.min(24, col - 6);
+  P.weekly.forEach((w, i) => {
+    const total = sum(order, k => w[k]), x = gut + col * i + (col - bw) / 2; let yy = top + h;
+    order.forEach(k => { const hh = h * w[k] / total; yy -= hh; if (hh > 2.5) g.append(sv('rect', { x, y: yy + 1, width: bw, height: hh - 2, rx: 2, fill: css(PKG[k]) })); });
+    g.append(sv('text', { x: x + bw / 2, y: top + h + 14, 'text-anchor': 'middle', 'font-size': w.label.wk[0] === 'W' ? 9 : 7.5, class: 'sec' }, w.label.wk.replace('W', '')));
+    const hit = sv('rect', { x: gut + col * i, y: 0, width: col, height: H, fill: 'transparent', tabindex: 0 });
+    hover(hit, () => [`${w.label.wk} ${w.label.opp}`, order.filter(k => w[k]).map(k => ({ k, c: css(PKG[k]), v: `${pct(w[k], total, 0)} (${w[k]})` }))]);
+    g.append(hit);
+  });
+  g.append(sv('text', { x: gut, y: H - 4 }, 'Week (DIV, CONF, SB = playoffs)'));
+  box.replaceChildren(g); box.style.width = W + 'px';
+}
+
+/* ---------- sources ---------- */
+const a = el('a', { href: E.url, target: '_blank', rel: 'noopener' }, E.asOf);
+$('src-espn').append(a);
+$('src-built').textContent = D.meta.built;
+
+/* ---------- boot + redraw the SVG charts when the width changes ---------- */
+function drawAll() { drawLeague(); drawTrend(); drawPkgWeekly(); }
+renderTrendAll(); renderPlayers(); renderPersonnel(); drawLeague(); drawPkgWeekly();
+let rz; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(drawAll, 120); });
+</script>
+</body>
+</html>

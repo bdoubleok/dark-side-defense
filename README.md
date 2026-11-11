@@ -20,6 +20,16 @@ An interactive web-based playbook for the Seattle Seahawks' 2025 championship de
 
 ---
 
+## 📊 Front & Pressure Dashboard
+
+`pressure-dashboard.html` is a standalone page of real Seahawks tendency data: pass rush win rate (ESPN), pressure and blitz rates by game, quarter and down, individual rusher pressures, and base/nickel/dime personnel.
+
+- Rebuild the data with `python3 scripts/build_pressure_data.py` (needs `pandas`; downloads public nflverse files into `.cache/nflverse`).
+- ESPN win rates are not downloadable, so they are copied by hand into `data/espn_prwr_2026.json`. Update that file when ESPN refreshes its page.
+- Tendency data only. It does not promote any scheme or CFB '27 formation mapping.
+
+---
+
 ## 📋 Situation Tabs
 
 1. **Standard Downs** (1st & 10, 2nd & 5-7) - 10 plays

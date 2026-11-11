@@ -1,0 +1,17 @@
+{
+  "source": "ESPN Analytics — 2026 NFL pass rush, run stop, blocking win rate rankings",
+  "url": "https://www.espn.com/nfl/story/_/id/49742016/2026-win-rates-team-player-rankings-pass-rush-run-stop-blocking",
+  "asOf": "Through Week 9 games (updated Nov. 10, 2026)",
+  "note": "ESPN publishes only the top 20 edge rushers and top 20 defensive tackles. Seattle players outside those lists have no published win rate.",
+  "team": { "prwr": 58, "rank": 4, "rswr": 31, "rswrRank": 9 },
+  "leagueTeams": [
+    ["MIN",63],["NYG",61],["DET",59],["SEA",58],["JAX",55],["DEN",55],["CAR",54],["TB",54],
+    ["CLE",53],["ATL",53],["NE",52],["LAR",52],["BAL",52],["ARI",52],["NO",50],["CHI",50],
+    ["CIN",50],["WAS",50],["MIA",50],["SF",49],["HOU",49],["LAC",48],["KC",48],["NYJ",47],
+    ["PIT",47],["BUF",45],["LV",45],["TEN",45],["GB",45],["DAL",43],["PHI",43],["IND",40]
+  ],
+  "players": [
+    { "pfrId": "LawrDe00", "name": "DeMarcus Lawrence", "group": "Edge", "rank": "T-7", "wins": 22, "plays": 87, "prwr": 25, "doubleTeamRate": 36 },
+    { "pfrId": "MurpBy01", "name": "Byron Murphy II", "group": "DT", "rank": "20", "wins": 20, "plays": 126, "prwr": 16, "doubleTeamRate": 79 }
+  ]
+}
