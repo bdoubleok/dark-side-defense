@@ -14,7 +14,7 @@ Sources (all public):
   - Pro Football Reference advanced defense via nflverse: player pressures
   - nflverse participation (2025 only): pressure flag + defensive personnel
   - data/espn_prwr_2026.json: ESPN pass rush win rate, copied by hand
-  - data/sumerbrain_2026_by_quarter.csv, _by_down.csv, _season.csv (optional):
+  - data/sumerbrain_2026_by_quarter.csv, _by_down.csv, _season.csv, _rushers.csv (optional):
     provider-reported 2026 pressure by game and quarter/down, plus season
     splits by coverage, rusher count and personnel, pasted from SumerBrain
     chats. Unaudited; dropbacks and sacks are checked against play-by-play.
@@ -128,8 +128,6 @@ def main():
     weeks26 = [w["week"] for w in w26]
     for (pid, name), g in pfr.groupby(["pfr_player_id", "pfr_player_name"]):
         tot = {k: float(g[c].sum()) for k, c in cols.items()}
-        if tot["pressures"] == 0 and tot["blitzes"] == 0:
-            continue
         byw = g.set_index("week")
         players.append({
             "id": pid, "name": name,
@@ -137,7 +135,21 @@ def main():
             "games": int(len(g)), **tot,
             "weekly": [int(byw.def_pressures.get(w, 0)) if w in byw.index else None for w in weeks26],
         })
-    players.sort(key=lambda p: (-p["pressures"], -p["sacks"], -p["blitzes"]))
+    # Optional provider-reported rusher table (pass rush snaps and wins per player)
+    ru_path = os.path.join(ROOT, "data", "sumerbrain_2026_rushers.csv")
+    if os.path.exists(ru_path):
+        by_name = {p["name"].lower(): p for p in players}
+        for _, r in pd.read_csv(ru_path).iterrows():
+            p = by_name.get(r.player.lower())
+            if p is None:   # no PFR defensive stats for this player
+                p = {"id": None, "name": r.player, "pos": None, "games": None, "pressures": None,
+                     "hurries": None, "hits": None, "sacks": None, "blitzes": None, "weekly": None}
+                players.append(p)
+            p["sb"] = {"pos": r.position, "snaps": int(r.rush_snaps), "wins": int(r.wins),
+                       "pressures": int(r.pressures), "hurries": int(r.hurries),
+                       "hits": int(r.qb_hits), "sacks": float(r.sacks)}
+    players = [p for p in players if p.get("sb") or p["pressures"]]
+    players.sort(key=lambda p: (-(p["sb"]["pressures"] if p.get("sb") else -1), -(p["pressures"] or 0)))
     out["s2026"] = {"weeks": w26, "players": players}
 
     # Optional provider-reported table: pressure per dropback, by game and quarter
