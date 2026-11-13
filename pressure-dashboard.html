@@ -554,7 +554,7 @@ function renderPlayers() {
   $('players').replaceChildren(t);
   $('players-note').replaceChildren(
     el('b', null, 'Three sources, three definitions. '),
-    (HAS ? 'The first eight number columns are SümerBrain (provider-reported, unaudited), for players with at least 10 pass rush snaps. Its win is a rusher beating his blocker; unblocked and cleanup pressures do not count, which is why a blitzing safety can have more pressures than wins. Pressures are credited to every player who got there, so the column adds up to more than the team\'s 126 pressured dropbacks, and hurries are charted separately from pressures. Rates are shown only at 50 or more rush snaps. ' : '') +
+    (HAS ? 'The first eight number columns are SümerBrain (provider-reported, unaudited), for players with at least 10 pass rush snaps. Its win is a rusher beating his blocker; unblocked and cleanup pressures do not count, which is why a blitzing safety can have more pressures than wins. Pressures are credited to every player who got there: SümerBrain reports that 39 of the team\'s 126 pressured dropbacks had two or more Seattle defenders credited (three at most), so the column adds up to more than 126. Wins work the same way (24 plays had two or more). Hurries are charted separately from pressures. Rates are shown only at 50 or more rush snaps. ' : '') +
     'ESPN win rate requires the win inside 2.5 seconds and counts fewer plays, so it is not comparable with the SümerBrain rate. ' + E.note +
     ' Pro Football Reference pressures use a stricter definition and run lower. Sources mostly agree on sacks; Ernest Jones is the exception (1 here, 3 at Pro Football Reference). Dashed boxes are weeks with no defensive stats for that player.');
 }
