@@ -14,7 +14,8 @@ Sources (all public):
   - Pro Football Reference advanced defense via nflverse: player pressures
   - nflverse participation (2025 only): pressure flag + defensive personnel
   - data/espn_prwr_2026.json: ESPN pass rush win rate, copied by hand
-  - data/sumerbrain_2026_by_quarter.csv, _by_down.csv, _season.csv, _rushers.csv (optional):
+  - data/sumerbrain_2026_by_quarter.csv, _by_down.csv, _season.csv, _rushers.csv,
+    _personnel_by_week.csv (optional):
     provider-reported 2026 pressure by game and quarter/down, plus season
     splits by coverage, rusher count and personnel, pasted from SumerBrain
     chats. Unaudited; dropbacks and sacks are checked against play-by-play.
@@ -174,6 +175,24 @@ def main():
             "weekly": pers, "dropbacks": int(sb.dropbacks.sum()),
             "total": int(sb.base.sum() + sb.nickel.sum() + sb.dime.sum()),
             "man": int(sb.man.sum()), "zone": int(sb.zone.sum()), "rush5": int(sb.rush5plus.sum())}
+
+        pw_path = os.path.join(ROOT, "data", "sumerbrain_2026_personnel_by_week.csv")
+        if os.path.exists(pw_path):
+            pwk = pd.read_csv(pw_path)
+            P = out["s2026"]["personnel"]
+            for w, row in zip(w26, P["weekly"]):
+                g = pwk[pwk.week == w["week"]]
+                if (int(g.dropbacks.sum()), int(g.pressures.sum()), int(g.sacks.sum())) != (w["n"], w["pressure"], w["sacks"]):
+                    sys.exit("SumerBrain personnel table does not match week %d totals" % w["week"])
+                row["detail"] = {}
+                for _, r in g.iterrows():
+                    if r.package != "Other" and row[r.package] != int(r.dropbacks):
+                        sys.exit("SumerBrain personnel tables disagree in week %d" % w["week"])
+                    row[r.package] = int(r.dropbacks)
+                    row["detail"][r.package] = {"pressure": int(r.pressures), "sacks": int(r.sacks), "rush5": int(r.rush5plus)}
+            tot = pwk.groupby("package")[["dropbacks", "pressures", "sacks", "rush5plus"]].sum()
+            P["packages"] = {k: {"n": int(v.dropbacks), "pressure": int(v.pressures), "sacks": int(v.sacks),
+                                 "rush5": int(v.rush5plus)} for k, v in tot.iterrows()}
 
         dn_path = os.path.join(ROOT, "data", "sumerbrain_2026_by_down.csv")
         if os.path.exists(dn_path):
