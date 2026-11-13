@@ -158,10 +158,12 @@ def main():
     if os.path.exists(sb_path):
         sb = pd.read_csv(sb_path)
         pers = []
-        for w in w26:
+        # A game newer than the pasted tables simply has no provider data yet:
+        # the page shows it from public sources and marks the provider cells empty.
+        covered = [w for w in w26 if (sb.week == w["week"]).sum() == 4]
+        out["s2026"]["providerThrough"] = "Week %d" % max(w["week"] for w in covered)
+        for w in covered:
             g = sb[sb.week == w["week"]]
-            if len(g) != 4:
-                sys.exit("SumerBrain table is missing quarters for week %d" % w["week"])
             for _, r in g.iterrows():
                 c = w["qtr"][str(int(r.quarter))]
                 if (c["n"], c["sacks"]) != (int(r.dropbacks), int(r.sacks)):
@@ -180,7 +182,7 @@ def main():
         if os.path.exists(pw_path):
             pwk = pd.read_csv(pw_path)
             P = out["s2026"]["personnel"]
-            for w, row in zip(w26, P["weekly"]):
+            for w, row in zip(covered, P["weekly"]):
                 g = pwk[pwk.week == w["week"]]
                 if (int(g.dropbacks.sum()), int(g.pressures.sum()), int(g.sacks.sum())) != (w["n"], w["pressure"], w["sacks"]):
                     sys.exit("SumerBrain personnel table does not match week %d totals" % w["week"])
@@ -197,7 +199,7 @@ def main():
         dn_path = os.path.join(ROOT, "data", "sumerbrain_2026_by_down.csv")
         if os.path.exists(dn_path):
             dn = pd.read_csv(dn_path)
-            for w in w26:
+            for w in covered:
                 for _, r in dn[dn.week == w["week"]].iterrows():
                     c = w["down"][str(int(r.down))]
                     if (c["n"], c["sacks"]) != (int(r.dropbacks), int(r.sacks)):
