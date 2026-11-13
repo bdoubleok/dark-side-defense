@@ -14,9 +14,10 @@ Sources (all public):
   - Pro Football Reference advanced defense via nflverse: player pressures
   - nflverse participation (2025 only): pressure flag + defensive personnel
   - data/espn_prwr_2026.json: ESPN pass rush win rate, copied by hand
-  - data/sumerbrain_2026_by_quarter.csv (optional): provider-reported 2026
-    pressure, coverage and personnel by game and quarter, pasted from a
-    SumerBrain chat. Unaudited; checked here against play-by-play counts.
+  - data/sumerbrain_2026_by_quarter.csv, _by_down.csv, _season.csv (optional):
+    provider-reported 2026 pressure by game and quarter/down, plus season
+    splits by coverage, rusher count and personnel, pasted from SumerBrain
+    chats. Unaudited; dropbacks and sacks are checked against play-by-play.
 
 Requires pandas. Nothing here is estimated: a metric with no public source
 for a season is left out and the dashboard says so.
@@ -161,6 +162,27 @@ def main():
             "weekly": pers, "dropbacks": int(sb.dropbacks.sum()),
             "total": int(sb.base.sum() + sb.nickel.sum() + sb.dime.sum()),
             "man": int(sb.man.sum()), "zone": int(sb.zone.sum()), "rush5": int(sb.rush5plus.sum())}
+
+        dn_path = os.path.join(ROOT, "data", "sumerbrain_2026_by_down.csv")
+        if os.path.exists(dn_path):
+            dn = pd.read_csv(dn_path)
+            for w in w26:
+                for _, r in dn[dn.week == w["week"]].iterrows():
+                    c = w["down"][str(int(r.down))]
+                    if (c["n"], c["sacks"]) != (int(r.dropbacks), int(r.sacks)):
+                        sys.exit("SumerBrain week %d down %d does not match play-by-play" % (w["week"], r.down))
+                    c["pressure"] = int(r.pressures)
+                if sum(c.get("pressure", 0) for c in w["down"].values()) != w["pressure"]:
+                    sys.exit("SumerBrain down and quarter tables disagree in week %d" % w["week"])
+
+        ss_path = os.path.join(ROOT, "data", "sumerbrain_2026_season.csv")
+        if os.path.exists(ss_path):
+            ss = pd.read_csv(ss_path)
+            for cat, g in ss.groupby("category"):
+                if (int(g.dropbacks.sum()), int(g.pressures.sum())) != (int(sb.dropbacks.sum()), int(sb.pressures.sum())):
+                    sys.exit("SumerBrain season split '%s' does not add up to the game totals" % cat)
+            out["s2026"]["splits"] = {cat: [{"name": str(r.value), "n": int(r.dropbacks), "pressure": int(r.pressures)}
+                                            for _, r in g.iterrows()] for cat, g in ss.groupby("category", sort=False)}
 
     # ---------- 2025: adds participation (pressure flag + personnel) ----------
     d25 = dropbacks(load("pbp25"), load("ftn25"))
