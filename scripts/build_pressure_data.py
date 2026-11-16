@@ -153,9 +153,10 @@ def main():
         })
     # Optional provider-reported rusher table (pass rush snaps and wins per player)
     ru_path = os.path.join(ROOT, "data", "sumerbrain_2026_rushers.csv")
+    rushers_through = None
     if os.path.exists(ru_path):
         by_name = {p["name"].lower(): p for p in players}
-        out["s2026"]["rushersThrough"] = "Week %d" % through_week(ru_path)
+        rushers_through = "Week %d" % through_week(ru_path)
         for _, r in pd.read_csv(ru_path, comment="#").iterrows():
             p = by_name.get(r.player.lower())
             if p is None:   # no PFR defensive stats for this player
@@ -168,6 +169,8 @@ def main():
     players = [p for p in players if p.get("sb") or p["pressures"]]
     players.sort(key=lambda p: (-(p["sb"]["pressures"] if p.get("sb") else -1), -(p["pressures"] or 0)))
     out["s2026"] = {"weeks": w26, "players": players}
+    if rushers_through:
+        out["s2026"]["rushersThrough"] = rushers_through
 
     # Optional provider-reported table: pressure per dropback, by game and quarter
     sb_path = os.path.join(ROOT, "data", "sumerbrain_2026_by_quarter.csv")
