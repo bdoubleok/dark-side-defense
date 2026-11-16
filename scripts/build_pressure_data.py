@@ -113,11 +113,20 @@ def main():
 
     # ---------- 2026: play-by-play + FTN + PFR ----------
     d26 = dropbacks(load("pbp26"), load("ftn26"))
+    pfr_all = load("pfr26")
+    # The three public sources land on different days after a game. A game that
+    # is missing its rush charting or its player pressures is held back whole,
+    # so the page never shows a zero that really means "not published yet".
+    charted = set(d26[d26.n_pass_rushers.notna()].week)
+    credited = set(pfr_all[pfr_all.team == TEAM].week)
+    held = sorted(set(d26.week) - (charted & credited))
+    if held:
+        print("holding back week(s) %s: charting or pressure data not published yet" % held)
+        d26 = d26[~d26.week.isin(held)]
     m26 = {"contact": "contact", "sacks": "sack", "blitz": "blitz"}
     w26 = weekly(d26, m26, game_label)
 
-    pfr = load("pfr26")
-    pfr = pfr[pfr.team == TEAM]
+    pfr = pfr_all[(pfr_all.team == TEAM) & ~pfr_all.week.isin(held)]
     pw = pfr.groupby("week").def_pressures.sum()
     for w in w26:
         w["pressures"] = int(pw.get(w["week"], 0))
