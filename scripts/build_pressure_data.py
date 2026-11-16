@@ -64,6 +64,12 @@ def dropbacks(pbp, ftn):
     return d
 
 
+def through_week(path):
+    """Season-to-date provider files start with '# season to date through week N'."""
+    m = re.search(r"through week (\d+)", open(path).readline())
+    return int(m.group(1)) if m else None
+
+
 def cell(g, metrics):
     out = {"n": int(len(g))}
     for name, col in metrics.items():
@@ -149,7 +155,8 @@ def main():
     ru_path = os.path.join(ROOT, "data", "sumerbrain_2026_rushers.csv")
     if os.path.exists(ru_path):
         by_name = {p["name"].lower(): p for p in players}
-        for _, r in pd.read_csv(ru_path).iterrows():
+        out["s2026"]["rushersThrough"] = "Week %d" % through_week(ru_path)
+        for _, r in pd.read_csv(ru_path, comment="#").iterrows():
             p = by_name.get(r.player.lower())
             if p is None:   # no PFR defensive stats for this player
                 p = {"id": None, "name": r.player, "pos": None, "games": None, "pressures": None,
@@ -171,6 +178,7 @@ def main():
         # the page shows it from public sources and marks the provider cells empty.
         covered = [w for w in w26 if (sb.week == w["week"]).sum() == 4]
         out["s2026"]["providerThrough"] = "Week %d" % max(w["week"] for w in covered)
+        sb = sb[sb.week.isin([w["week"] for w in covered])]   # ignore rows for games still held back
         for w in covered:
             g = sb[sb.week == w["week"]]
             for _, r in g.iterrows():
@@ -219,9 +227,11 @@ def main():
 
         ss_path = os.path.join(ROOT, "data", "sumerbrain_2026_season.csv")
         if os.path.exists(ss_path):
-            ss = pd.read_csv(ss_path)
+            ss = pd.read_csv(ss_path, comment="#")
+            upto = sb[sb.week <= through_week(ss_path)]   # splits may lag the game tables by a week
+            out["s2026"]["splitsThrough"] = "Week %d" % through_week(ss_path)
             for cat, g in ss.groupby("category"):
-                if (int(g.dropbacks.sum()), int(g.pressures.sum())) != (int(sb.dropbacks.sum()), int(sb.pressures.sum())):
+                if (int(g.dropbacks.sum()), int(g.pressures.sum())) != (int(upto.dropbacks.sum()), int(upto.pressures.sum())):
                     sys.exit("SumerBrain season split '%s' does not add up to the game totals" % cat)
             out["s2026"]["splits"] = {cat: [{"name": str(r.value), "n": int(r.dropbacks), "pressure": int(r.pressures)}
                                             for _, r in g.iterrows()] for cat, g in ss.groupby("category", sort=False)}

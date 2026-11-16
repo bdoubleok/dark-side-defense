@@ -510,7 +510,7 @@ function renderTrendAll() {
 function renderPlayers() {
   const P = D.s2026.players, HAS = P.some(p => p.sb);
   const espn = Object.fromEntries(E.players.map(p => [p.pfrId, p]));
-  $('rush-badge').textContent = '2026 · through ' + D.meta.through2026;
+  $('rush-badge').textContent = '2026 · through ' + D.meta.through2026 + (D.s2026.rushersThrough && D.s2026.rushersThrough !== D.meta.through2026 ? ' · SümerBrain columns through ' + D.s2026.rushersThrough : '');
   const POS = { DT: 'DT', DE: 'Edge', DS: 'S', DC: 'CB', IB: 'LB' };
   const cols = HAS
     ? ['Player', 'Rush snaps', 'Wins', 'Win rate', 'Pressures', 'Per rush snap', 'Hurries', 'QB hits', 'Sacks', 'ESPN win rate', 'PFR pressures', 'PFR times blitzed', 'PFR pressures by week']
@@ -653,6 +653,7 @@ function renderPersonnel26() {
 function renderSplits() {
   const S = D.s2026.splits;
   if (!S) { $('splits26').style.display = 'none'; return; }
+  document.querySelectorAll('#splits26 .badge').forEach(b => { b.textContent = 'provider-reported · through ' + D.s2026.splitsThrough; });
   const draw = (id, rows, head, label) => {
     const t = el('table'), hr = el('tr'), max = Math.max(...rows.filter(r => r.n >= 20).map(r => r.pressure / r.n));
     [head, 'Dropbacks', 'Pressures', 'Pressure rate'].forEach(h => hr.append(el('th', null, h)));
